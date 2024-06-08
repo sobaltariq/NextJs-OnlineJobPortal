@@ -1,0 +1,22 @@
+:root {
+  --max-width: 1440px;
+
+  --color-white-1: #ffffff;
+
+  --color-black-1: #000000;
+  --color-black-2: #2c2929;
+  --color-black-3: #444444;
+
+  --color-primary-1: #f03e3e;
+  --color-secondary-1: #183a93;
+
+  --background-color-1: #3572ef;
+  --background-color-2: #ffbf78;
+  --background-color-3: #344c64;
+
+  --roboto-font: "Roboto", sans-serif;
+
+  --tran-all-out: all 0.3s ease-in-out;
+
+  --box-shadow-1: 0px 5px 18px rgba(0, 0, 0, 0.0705882353);
+}
