@@ -29,3 +29,5 @@ export default function RootLayout({
 
 // npm i sass
 // npm i @reduxjs/toolkit
+// npm i axios
+// npm install formik yup
