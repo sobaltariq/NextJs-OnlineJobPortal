@@ -1,6 +1,9 @@
+"use client";
+import LoginAuth from "@/hocs/LoginAuth";
+import composeHOCs from "@/hocs/composeHOCs";
 import React from "react";
 
-function Page() {
+function RegisterPage() {
   return (
     <div>
       <h1>Register</h1>
@@ -27,4 +30,4 @@ function Page() {
   );
 }
 
-export default Page;
+export default composeHOCs(LoginAuth)(RegisterPage);

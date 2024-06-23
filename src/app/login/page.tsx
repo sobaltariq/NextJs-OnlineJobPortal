@@ -3,8 +3,12 @@ import MyApi from "@/api/MyApi";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/navigation";
+import composeHOCs from "@/hocs/composeHOCs";
+import LoginAuth from "@/hocs/LoginAuth";
+
+import { useSelector, useDispatch } from "react-redux";
+import { setAuthData } from "@/redux/features/auth/authSlice";
 
 // Define the types for the form values
 interface FormValues {
@@ -12,9 +16,11 @@ interface FormValues {
   password: string;
 }
 
-function Page() {
+function LoginPage() {
+  const [userType, setUserType] = useState("admin");
   const [loginError, setLoginError] = useState(null);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const initialValues: FormValues = {
     email: "",
@@ -28,29 +34,58 @@ function Page() {
   });
 
   const loginHandler = async (values: FormValues) => {
-    try {
-      const response = await MyApi.post("/admin/login", values, {
-        headers: { "Content-Type": "application/json" },
-      });
-      console.log("Logged in:", response.data);
-      router.push("/");
-    } catch (err: any) {
-      setLoginError(err.response.data?.message || "Login failed");
-      console.error("Login error:", err.response.data?.message);
+    const loginToken = localStorage.getItem("login_token");
+    if (!loginToken || loginToken === "undefined") {
+      try {
+        const endPoint =
+          userType === "admin"
+            ? "/admin/login"
+            : userType === "employer"
+            ? "/employer/login"
+            : "/job-seeker/login";
+        const response = await MyApi.post(endPoint, values, {
+          headers: { "Content-Type": "application/json" },
+        });
+
+        const { token, role } = response.data;
+
+        localStorage.setItem("login_token", token);
+        localStorage.setItem("user_role", role);
+
+        // save role in redux store
+        dispatch(setAuthData({ token, userRole: role }));
+
+        router.push("/");
+      } catch (err: any) {
+        setLoginError(err.response.data?.message || "Login failed");
+        console.error("Login error:", err.response.data?.message);
+      }
     }
   };
-
   useEffect(() => {
     setLoginError(null);
-    console.log(process.env.REACT_APP_BASE_URL);
-
-    // MyApi.post("/admin/register", {});
-    // loginHandler();
   }, []);
+
   return (
     <div>
       <h1>Login</h1>
       {loginError && <p className="error">{loginError}</p>}
+      <div className="flex justify-between items-center">
+        <button
+          onClick={() => {
+            setUserType("seeker");
+          }}
+        >
+          Job Seeker
+        </button>
+        <button
+          onClick={() => {
+            setUserType("employer");
+          }}
+        >
+          Employer
+        </button>
+      </div>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -61,7 +96,7 @@ function Page() {
             <div>
               <Field type="email" id="email" name="email" />
             </div>
-            <div>
+            <div className="mt-3 mb-3">
               <Field type="password" id="password" name="password" />
             </div>
             <button type="submit" disabled={isSubmitting}>
@@ -78,4 +113,4 @@ function Page() {
   );
 }
 
-export default Page;
+export default composeHOCs(LoginAuth)(LoginPage);
