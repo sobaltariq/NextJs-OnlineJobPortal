@@ -1,20 +1,25 @@
 "use client";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 
 import user from "../../../public/assets/user.png";
 import Link from "next/link";
 
 import "./header.scss";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { logout } from "@/redux/features/auth/authSlice";
 
 const Header: React.FC = () => {
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const dispatch = useDispatch();
+
   const router = useRouter();
 
   const logoutHandler: () => void = () => {
-    // localStorage.removeItem("login_token");
     localStorage.clear();
-    // console.log("Logout");
+    dispatch(logout());
     router.push("/login");
   };
 
@@ -35,14 +40,20 @@ const Header: React.FC = () => {
             <Link href="/contact">Contact</Link>
           </li>
         </ul>
-        <div className="profile">
+        <div className="flex gap-8">
           <input type="text" placeholder="Search..." />
-          <Link href="/profile">
-            <Image src={user} alt="user profile" height={25} width={25} />
-          </Link>
-          <Link href="/login">Login</Link>
-          <Link href="/register">Register</Link>
-          <button onClick={logoutHandler}>Logout</button>
+          {isLoggedIn && (
+            <Link href="/profile">
+              <Image src={user} alt="user profile" height={25} width={25} />
+            </Link>
+          )}
+          {!isLoggedIn && (
+            <div className="flex gap-8">
+              <Link href="/login">Login</Link>
+              <Link href="/register">Register</Link>
+            </div>
+          )}
+          {isLoggedIn && <button onClick={logoutHandler}>Logout</button>}
         </div>
       </div>
     </header>

@@ -6,18 +6,19 @@ const LoginAuth = (WrappedComponent: React.ComponentType) => {
     const router = useRouter();
     const pathname = usePathname();
 
-    const loginToken = localStorage.getItem("login_token");
     useEffect(() => {
-      if (!loginToken && !(pathname === "/register")) {
+      const loginToken = localStorage.getItem("login_token");
+      if (!loginToken && pathname !== "/register") {
         router.push("/login");
       }
-    }, [loginToken, router]);
+    }, [router, pathname]);
 
     useEffect(() => {
+      const loginToken = localStorage.getItem("login_token");
       if (loginToken && (pathname === "/register" || pathname === "/login")) {
         router.push("/profile");
       }
-    }, [router]);
+    }, [router, pathname]);
 
     return <WrappedComponent {...props} />;
   };
