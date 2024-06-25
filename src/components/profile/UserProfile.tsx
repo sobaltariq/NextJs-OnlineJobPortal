@@ -14,6 +14,8 @@ interface ProfileData {
   email: string;
   createdAt: string;
   jobPostings?: string;
+  skills: string[];
+  savedJobs: string[];
 }
 
 interface UserProfileProps {
@@ -98,6 +100,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ setChangePassword }) => {
         <h1>Profile</h1>
         {apiData && (
           <div>
+            {apiData.role === "job seeker" && <button>Edit Profile</button>}
             <div>
               <p>Name: {apiData.name}</p>
               <p>Email: {apiData.email}</p>
@@ -106,7 +109,27 @@ const UserProfile: React.FC<UserProfileProps> = ({ setChangePassword }) => {
                 Registration Date:{" "}
                 {new Date(apiData.createdAt).toLocaleDateString()}
               </p>
+              {/* for employer */}
+              {apiData.role === "employer" && (
+                <p>Job Postings: {apiData.jobPostings}</p>
+              )}
+
+              {/* for seeker */}
+              {apiData.role === "job seeker" && (
+                <>
+                  <p>
+                    Saved Jobs:{" "}
+                    {apiData.savedJobs.length > 0 ? apiData.savedJobs : "Empty"}
+                  </p>
+                  <p>
+                    Skills:{" "}
+                    {apiData.skills.length > 0 ? apiData.skills : "Empty"}
+                  </p>
+                </>
+              )}
             </div>
+
+            {/* for deletion of a user */}
             {!isDeleted ? (
               <div>
                 <button
@@ -130,6 +153,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ setChangePassword }) => {
               </div>
             )}
 
+            {/* for password changing */}
             <div>
               <button
                 onClick={() => {

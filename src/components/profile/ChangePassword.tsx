@@ -1,39 +1,37 @@
 import MyApi from "@/api/MyApi";
-import { wait3Sec } from "@/utils/CommonWait";
+import { waitSec } from "@/utils/CommonWait";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import * as Yup from "yup";
 
 interface UserProfileProps {
-  setChangePassword?: React.Dispatch<React.SetStateAction<boolean>>; // Optional prop
+  setChangePassword?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface FormValues {
   oldPassword: string;
   newPassword: string;
-}
-
-interface ApiError {
-  msg: string;
-  path: string;
+  confirmPassword: string;
 }
 
 const ChangePassword: React.FC<UserProfileProps> = ({ setChangePassword }) => {
   const [changePassError, setChangePassError] = useState<string>("");
-  const router = useRouter();
 
   const initialValues: FormValues = {
     oldPassword: "",
     newPassword: "",
+    confirmPassword: "",
   };
 
   const validationSchema = Yup.object().shape({
     oldPassword: Yup.string()
-      .min(6, "Password must be at least 6 characters")
+      .min(8, "Password must be at least 8 characters")
       .required("Old password is required"),
     newPassword: Yup.string()
-      .min(6, "Password must be at least 6 characters")
+      .min(8, "New Password must be at least 8 characters")
+      .required("New password is required"),
+    confirmPassword: Yup.string()
+      .min(8, "Confirm Password must be at least 8 characters")
       .required("New password is required"),
   });
 
@@ -56,23 +54,26 @@ const ChangePassword: React.FC<UserProfileProps> = ({ setChangePassword }) => {
       });
 
       console.log(response.data);
+      setChangePassError(response.data?.message);
 
-      wait3Sec();
-      console.log("ok");
+      await waitSec(3000);
 
-      // setChangePassword?.(false);
+      setChangePassword?.(false);
     } catch (err: any) {
       if (err.response && err.response.data) {
-        if (Array.isArray(err.response.data.errors)) {
-          setChangePassError(
-            err.response.data.errors
-              .map((error: ApiError) => `${error?.msg} (${error?.path})\n`)
-              .join(", ")
-          );
+        if (!err.response.data.errors) {
+          setChangePassError(err.response.data?.message);
+          console.log(err.response.data?.message);
+        } else {
+          setChangePassError(err.response.data?.errors[0].msg);
+          console.error("Login error:", err.response.data);
         }
-        // setChangePassError(err.response.data?.errors);
-        // console.error("Login error:", err.response?.data);
       }
+      setChangePassError(
+        err.response.data?.message ||
+          err.response.data.errors[0].msg ||
+          "An unknown error occurred"
+      );
     }
   };
 
