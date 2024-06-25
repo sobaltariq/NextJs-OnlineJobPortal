@@ -1,13 +1,15 @@
 "use client";
 import UserProfile from "@/components/profile/UserProfile";
+import ChangePassword from "@/components/profile/ChangePassword";
 import LoginAuth from "@/hocs/LoginAuth";
 import composeHOCs from "@/hocs/composeHOCs";
 import { setAuthData } from "@/redux/features/auth/authSlice";
-import { RootState } from "@/redux/store";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 const ProfilePage = () => {
+  const [changePassword, setChangePassword] = useState(false);
+
   const dispatch = useDispatch();
   useEffect(() => {
     const token = localStorage.getItem("login_token");
@@ -19,7 +21,11 @@ const ProfilePage = () => {
 
   return (
     <>
-      <UserProfile />
+      {changePassword ? (
+        <ChangePassword setChangePassword={setChangePassword} />
+      ) : (
+        <UserProfile setChangePassword={setChangePassword} />
+      )}
     </>
   );
 };

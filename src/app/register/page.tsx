@@ -17,7 +17,7 @@ interface FormValues {
 
 function RegisterPage() {
   const [userType, setUserType] = useState("admin");
-  const [registerationError, setRegisterationError] = useState(null);
+  const [registrationError, setRegistrationError] = useState(null);
   const router = useRouter();
 
   const roleOptions = [
@@ -41,7 +41,7 @@ function RegisterPage() {
     role: Yup.string().required("Role is required"),
   });
 
-  const registerationHandler = async (values: FormValues) => {
+  const registrationHandler = async (values: FormValues) => {
     localStorage.clear();
     try {
       const endPoint =
@@ -62,7 +62,7 @@ function RegisterPage() {
 
       router.push("/profile");
     } catch (err: any) {
-      setRegisterationError(err.response.data?.error);
+      setRegistrationError(err.response.data?.error);
       console.error("Login error:", err.response.data?.error);
     }
   };
@@ -70,12 +70,12 @@ function RegisterPage() {
   return (
     <div>
       <h1>Register an account</h1>
-      {registerationError && <p className="error">{registerationError}</p>}
+      {registrationError && <p className="error">{registrationError}</p>}
 
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={registerationHandler}
+        onSubmit={registrationHandler}
       >
         {({ isSubmitting }) => (
           <Form>

@@ -1,7 +1,5 @@
 "use client";
 import MyApi from "@/api/MyApi";
-import LoginAuth from "@/hocs/LoginAuth";
-import composeHOCs from "@/hocs/composeHOCs";
 import { logout } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -18,7 +16,11 @@ interface ProfileData {
   jobPostings?: string;
 }
 
-const UserProfile: React.FC = () => {
+interface UserProfileProps {
+  setChangePassword?: React.Dispatch<React.SetStateAction<boolean>>; // Optional prop
+}
+
+const UserProfile: React.FC<UserProfileProps> = ({ setChangePassword }) => {
   const [showError, setShowError] = useState<string>("");
   const [apiData, setApiData] = useState<ProfileData | null>(null);
 
@@ -28,18 +30,17 @@ const UserProfile: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const loginToken = localStorage?.getItem("login_token");
-  const userType = localStorage?.getItem("user_role");
-
-  const endPoint =
-    userType === "admin"
-      ? "/admin/"
-      : userType === "employer"
-      ? "/employer/"
-      : "/job-seeker/";
-
   const getProfileHandler = async () => {
     try {
+      const loginToken = localStorage?.getItem("login_token");
+      const userType = localStorage?.getItem("user_role");
+
+      const endPoint =
+        userType === "admin"
+          ? "/admin/"
+          : userType === "employer"
+          ? "/employer/"
+          : "/job-seeker/";
       const response = await MyApi.get(`${endPoint}/profile`, {
         headers: {
           Authorization: `Bearer ${loginToken}`,
@@ -58,6 +59,14 @@ const UserProfile: React.FC = () => {
     try {
       if (isDeleted) {
         const loginToken = localStorage?.getItem("login_token");
+        const userType = localStorage?.getItem("user_role");
+
+        const endPoint =
+          userType === "admin"
+            ? "/admin/"
+            : userType === "employer"
+            ? "/employer/"
+            : "/job-seeker/";
 
         const response = await MyApi.delete(
           `${endPoint}/delete/${apiData?.userId}`,
@@ -89,36 +98,47 @@ const UserProfile: React.FC = () => {
         <h1>Profile</h1>
         {apiData && (
           <div>
-            <p>Name: {apiData.name}</p>
-            <p>Email: {apiData.email}</p>
-            <p>Role: {apiData.role}</p>
-            <p>
-              Registration Date:{" "}
-              {new Date(apiData.createdAt).toLocaleDateString()}
-            </p>
-          </div>
-        )}
+            <div>
+              <p>Name: {apiData.name}</p>
+              <p>Email: {apiData.email}</p>
+              <p>Role: {apiData.role}</p>
+              <p>
+                Registration Date:{" "}
+                {new Date(apiData.createdAt).toLocaleDateString()}
+              </p>
+            </div>
+            {!isDeleted ? (
+              <div>
+                <button
+                  onClick={() => {
+                    setIsDeleted(true);
+                  }}
+                >
+                  Delete Account
+                </button>
+              </div>
+            ) : (
+              <div className="flex gap-8">
+                <button
+                  onClick={() => {
+                    setIsDeleted(false);
+                  }}
+                >
+                  Cancel
+                </button>
+                <button onClick={deleteProfileHandler}>Delete</button>
+              </div>
+            )}
 
-        {!isDeleted ? (
-          <div>
-            <button
-              onClick={() => {
-                setIsDeleted(true);
-              }}
-            >
-              Delete Account
-            </button>
-          </div>
-        ) : (
-          <div className="flex justify-between">
-            <button
-              onClick={() => {
-                setIsDeleted(false);
-              }}
-            >
-              Cancel
-            </button>
-            <button onClick={deleteProfileHandler}>Delete</button>
+            <div>
+              <button
+                onClick={() => {
+                  setChangePassword?.(true);
+                }}
+              >
+                Change Password
+              </button>
+            </div>
           </div>
         )}
       </div>

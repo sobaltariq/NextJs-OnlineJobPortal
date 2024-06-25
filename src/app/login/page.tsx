@@ -53,7 +53,13 @@ function LoginPage() {
         localStorage.setItem("user_role", role);
 
         // save role in redux store
-        dispatch(setAuthData({ token, userRole: role }));
+        dispatch(
+          setAuthData({
+            token,
+            role,
+            isLoggedIn: false,
+          })
+        );
 
         router.push("/");
       } catch (err: any) {
@@ -70,7 +76,7 @@ function LoginPage() {
     <div>
       <h1>Login</h1>
       {loginError && <p className="error">{loginError}</p>}
-      <div className="flex justify-between items-center">
+      <div className="flex gap-8">
         <button
           onClick={() => {
             setUserType("seeker");
