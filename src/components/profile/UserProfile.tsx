@@ -1,5 +1,6 @@
 "use client";
 import MyApi from "@/api/MyApi";
+import DeleteUserModal from "@/app/modals/DeleteUserModal";
 import { logout } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -13,7 +14,7 @@ interface ProfileData {
   name: string;
   email: string;
   createdAt: string;
-  jobPostings?: string;
+  jobPostings: string;
   skills: string[];
   savedJobs: string[];
 }
@@ -26,7 +27,16 @@ const UserProfile: React.FC<UserProfileProps> = ({ setChangePassword }) => {
   const [showError, setShowError] = useState<string>("");
   const [apiData, setApiData] = useState<ProfileData | null>(null);
 
-  const [isDeleted, setIsDeleted] = useState<boolean>(false);
+  // for deleting of a user
+  const [accountDeleteModal, setAccountDeleteModal] = useState<boolean>(false);
+
+  const handleOpenModal = () => {
+    setAccountDeleteModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setAccountDeleteModal(false);
+  };
 
   const router = useRouter();
 
@@ -59,31 +69,30 @@ const UserProfile: React.FC<UserProfileProps> = ({ setChangePassword }) => {
 
   const deleteProfileHandler = async () => {
     try {
-      if (isDeleted) {
-        const loginToken = localStorage?.getItem("login_token");
-        const userType = localStorage?.getItem("user_role");
+      const loginToken = localStorage?.getItem("login_token");
+      const userType = localStorage?.getItem("user_role");
 
-        const endPoint =
-          userType === "admin"
-            ? "/admin/"
-            : userType === "employer"
-            ? "/employer/"
-            : "/job-seeker/";
+      const endPoint =
+        userType === "admin"
+          ? "/admin/"
+          : userType === "employer"
+          ? "/employer/"
+          : "/job-seeker/";
 
-        const response = await MyApi.delete(
-          `${endPoint}/delete/${apiData?.userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${loginToken}`,
-            },
-          }
-        );
+      const response = await MyApi.delete(
+        `${endPoint}/delete/${apiData?.userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${loginToken}`,
+          },
+        }
+      );
 
-        localStorage.clear();
-        console.log(response.data);
-        router.push("/login");
-        dispatch(logout());
-      }
+      localStorage.clear();
+      console.log(response.data);
+      handleCloseModal();
+      router.push("/login");
+      dispatch(logout());
     } catch (err: any) {
       setShowError(err.response.data?.message);
       console.error("Delete User error:", err.response.data?.message);
@@ -111,7 +120,12 @@ const UserProfile: React.FC<UserProfileProps> = ({ setChangePassword }) => {
               </p>
               {/* for employer */}
               {apiData.role === "employer" && (
-                <p>Job Postings: {apiData.jobPostings}</p>
+                <p>
+                  Job Postings:{" "}
+                  {apiData.jobPostings.length > 0
+                    ? apiData.jobPostings
+                    : "Empty"}
+                </p>
               )}
 
               {/* for seeker */}
@@ -130,28 +144,22 @@ const UserProfile: React.FC<UserProfileProps> = ({ setChangePassword }) => {
             </div>
 
             {/* for deletion of a user */}
-            {!isDeleted ? (
+            <div>
               <div>
                 <button
                   onClick={() => {
-                    setIsDeleted(true);
+                    handleOpenModal();
                   }}
                 >
                   Delete Account
                 </button>
+                <DeleteUserModal
+                  accountDeleteModal={accountDeleteModal}
+                  handleCloseModal={handleCloseModal}
+                  deleteProfileHandler={deleteProfileHandler}
+                />
               </div>
-            ) : (
-              <div className="flex gap-8">
-                <button
-                  onClick={() => {
-                    setIsDeleted(false);
-                  }}
-                >
-                  Cancel
-                </button>
-                <button onClick={deleteProfileHandler}>Delete</button>
-              </div>
-            )}
+            </div>
 
             {/* for password changing */}
             <div>

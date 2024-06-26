@@ -6,7 +6,7 @@ import composeHOCs from "@/hocs/composeHOCs";
 import { setAuthData } from "@/redux/features/auth/authSlice";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import EditProfile from "@/components/profile/editProfile";
+import EditProfile from "@/components/profile/EditProfile";
 
 const ProfilePage = () => {
   const [changePassword, setChangePassword] = useState(false);
