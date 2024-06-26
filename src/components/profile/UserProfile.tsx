@@ -1,8 +1,8 @@
 "use client";
 import MyApi from "@/api/MyApi";
-import ChangePasswordModal from "@/app/modals/ChangePasswordModal";
-import DeleteUserModal from "@/app/modals/DeleteUserModal";
-import EditProfileModal from "@/app/modals/EditProfileModal";
+import ChangePasswordModal from "@/components/modals/ChangePasswordModal";
+import DeleteUserModal from "@/components/modals/DeleteUserModal";
+import EditProfileModal from "@/components/modals/EditProfileModal";
 import { logout } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -127,9 +127,20 @@ const UserProfile: React.FC = () => {
                     Saved Jobs:{" "}
                     {apiData.savedJobs.length > 0 ? apiData.savedJobs : "Empty"}
                   </p>
-                  <p>
+                  <p className="flex gap-2 justify-items-center">
                     Skills:{" "}
-                    {apiData.skills.length > 0 ? apiData.skills : "Empty"}
+                    {apiData.skills.length > 0
+                      ? apiData.skills.map((item, i) => {
+                          return (
+                            <span
+                              key={i}
+                              className="bg-red-400 py-1 px-3 rounded"
+                            >
+                              {item}{" "}
+                            </span>
+                          );
+                        })
+                      : "Empty"}
                   </p>
                 </>
               )}
