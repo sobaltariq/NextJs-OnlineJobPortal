@@ -1,5 +1,6 @@
 "use client";
 import MyApi from "@/api/MyApi";
+import ChangePasswordModal from "@/app/modals/ChangePasswordModal";
 import DeleteUserModal from "@/app/modals/DeleteUserModal";
 import { logout } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next/navigation";
@@ -19,24 +20,14 @@ interface ProfileData {
   savedJobs: string[];
 }
 
-interface UserProfileProps {
-  setChangePassword?: React.Dispatch<React.SetStateAction<boolean>>; // Optional prop
-}
-
-const UserProfile: React.FC<UserProfileProps> = ({ setChangePassword }) => {
+const UserProfile: React.FC = () => {
   const [showError, setShowError] = useState<string>("");
   const [apiData, setApiData] = useState<ProfileData | null>(null);
 
-  // for deleting of a user
   const [accountDeleteModal, setAccountDeleteModal] = useState<boolean>(false);
 
-  const handleOpenModal = () => {
-    setAccountDeleteModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setAccountDeleteModal(false);
-  };
+  const [changePasswordModal, setChangePasswordModal] =
+    useState<boolean>(false);
 
   const router = useRouter();
 
@@ -90,7 +81,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ setChangePassword }) => {
 
       localStorage.clear();
       console.log(response.data);
-      handleCloseModal();
+      setAccountDeleteModal(false);
       router.push("/login");
       dispatch(logout());
     } catch (err: any) {
@@ -145,31 +136,24 @@ const UserProfile: React.FC<UserProfileProps> = ({ setChangePassword }) => {
 
             {/* for deletion of a user */}
             <div>
-              <div>
-                <button
-                  onClick={() => {
-                    handleOpenModal();
-                  }}
-                >
-                  Delete Account
-                </button>
-                <DeleteUserModal
-                  accountDeleteModal={accountDeleteModal}
-                  handleCloseModal={handleCloseModal}
-                  deleteProfileHandler={deleteProfileHandler}
-                />
-              </div>
+              <button
+                onClick={() => {
+                  setAccountDeleteModal(true);
+                }}
+              >
+                Delete Account
+              </button>
+              <DeleteUserModal
+                accountDeleteModal={accountDeleteModal}
+                setAccountDeleteModal={setAccountDeleteModal}
+                deleteProfileHandler={deleteProfileHandler}
+              />
             </div>
 
             {/* for password changing */}
             <div>
-              <button
-                onClick={() => {
-                  setChangePassword?.(true);
-                }}
-              >
-                Change Password
-              </button>
+              <button onClick={() => {}}>Change Password</button>
+              {/* <ChangePasswordModa /> */}
             </div>
           </div>
         )}

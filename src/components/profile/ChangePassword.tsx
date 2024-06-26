@@ -4,17 +4,13 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useState } from "react";
 import * as Yup from "yup";
 
-interface UserProfileProps {
-  setChangePassword?: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
 interface FormValues {
   oldPassword: string;
   newPassword: string;
   confirmPassword: string;
 }
 
-const ChangePassword: React.FC<UserProfileProps> = ({ setChangePassword }) => {
+const ChangePassword: React.FC = () => {
   const [changePassError, setChangePassError] = useState<string>("");
 
   const initialValues: FormValues = {
@@ -57,8 +53,6 @@ const ChangePassword: React.FC<UserProfileProps> = ({ setChangePassword }) => {
       setChangePassError(response.data?.message);
 
       await waitSec(3000);
-
-      setChangePassword?.(false);
     } catch (err: any) {
       if (err.response && err.response.data) {
         if (!err.response.data.errors) {
@@ -117,22 +111,10 @@ const ChangePassword: React.FC<UserProfileProps> = ({ setChangePassword }) => {
             </div>
 
             <div className="flex gap-8">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                onClick={() => {
-                  setChangePassword?.(true);
-                }}
-              >
+              <button type="submit" disabled={isSubmitting} onClick={() => {}}>
                 Save
               </button>
-              <button
-                onClick={() => {
-                  setChangePassword?.(false);
-                }}
-              >
-                Cancel
-              </button>
+              <button onClick={() => {}}>Cancel</button>
             </div>
           </Form>
         )}

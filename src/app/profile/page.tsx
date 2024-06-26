@@ -9,7 +9,6 @@ import { useDispatch } from "react-redux";
 import EditProfile from "@/components/profile/EditProfile";
 
 const ProfilePage = () => {
-  const [changePassword, setChangePassword] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
 
   const dispatch = useDispatch();
@@ -23,13 +22,11 @@ const ProfilePage = () => {
 
   return (
     <>
-      {changePassword ? (
-        <ChangePassword setChangePassword={setChangePassword} />
-      ) : editProfile ? (
-        <EditProfile />
-      ) : (
-        <UserProfile setChangePassword={setChangePassword} />
-      )}
+      <UserProfile />
+
+      <ChangePassword />
+
+      <EditProfile />
     </>
   );
 };
