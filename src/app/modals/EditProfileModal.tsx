@@ -15,7 +15,7 @@ interface FormValues {
   confirmPassword: string;
 }
 
-const ChangePasswordModal: React.FC<ModalProps> = ({
+const EditProfileModal: React.FC<ModalProps> = ({
   isPasswordModalOpen,
   setIsPasswordModalOpen,
 }) => {
@@ -166,4 +166,4 @@ const ChangePasswordModal: React.FC<ModalProps> = ({
   );
 };
 
-export default ChangePasswordModal;
+export default EditProfileModal;

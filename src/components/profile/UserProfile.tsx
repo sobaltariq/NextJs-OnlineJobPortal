@@ -2,6 +2,7 @@
 import MyApi from "@/api/MyApi";
 import ChangePasswordModal from "@/app/modals/ChangePasswordModal";
 import DeleteUserModal from "@/app/modals/DeleteUserModal";
+import EditProfileModal from "@/app/modals/EditProfileModal";
 import { logout } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -26,7 +27,7 @@ const UserProfile: React.FC = () => {
 
   const [accountDeleteModal, setAccountDeleteModal] = useState<boolean>(false);
 
-  const [changePasswordModal, setChangePasswordModal] =
+  const [isPasswordModalOpen, setIsPasswordModalOpen] =
     useState<boolean>(false);
 
   const router = useRouter();
@@ -152,9 +153,37 @@ const UserProfile: React.FC = () => {
 
             {/* for password changing */}
             <div>
-              <button onClick={() => {}}>Change Password</button>
-              {/* <ChangePasswordModa /> */}
+              <button
+                onClick={() => {
+                  setIsPasswordModalOpen(true);
+                }}
+              >
+                Change Password
+              </button>
+              <ChangePasswordModal
+                isPasswordModalOpen={isPasswordModalOpen}
+                setIsPasswordModalOpen={setIsPasswordModalOpen}
+              />
             </div>
+
+            {/* Edit Profile */}
+            {
+              // apiData.role === "job seeker" && (
+              <div>
+                <button
+                  onClick={() => {
+                    // setIsPasswordModalOpen(true);
+                  }}
+                >
+                  Edit Profile
+                </button>
+                {/* <EditProfileModal
+                  isPasswordModalOpen={isPasswordModalOpen}
+                  setIsPasswordModalOpen={setIsPasswordModalOpen}
+                /> */}
+              </div>
+              // )
+            }
           </div>
         )}
       </div>

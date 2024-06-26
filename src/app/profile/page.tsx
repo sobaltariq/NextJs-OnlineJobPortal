@@ -8,9 +8,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import EditProfile from "@/components/profile/EditProfile";
 
-const ProfilePage = () => {
-  const [editProfile, setEditProfile] = useState(false);
-
+const ProfilePage: React.FC = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     const token = localStorage.getItem("login_token");
@@ -23,8 +21,6 @@ const ProfilePage = () => {
   return (
     <>
       <UserProfile />
-
-      <ChangePassword />
 
       <EditProfile />
     </>
