@@ -1,10 +1,9 @@
 "use client";
 import UserProfile from "@/components/profile/UserProfile";
-import ChangePassword from "@/components/profile/ChangePassword";
 import LoginAuth from "@/hocs/LoginAuth";
 import composeHOCs from "@/hocs/composeHOCs";
 import { setAuthData } from "@/redux/features/auth/authSlice";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import EditProfile from "@/components/profile/EditProfile";
 
@@ -21,8 +20,6 @@ const ProfilePage: React.FC = () => {
   return (
     <>
       <UserProfile />
-
-      <EditProfile />
     </>
   );
 };

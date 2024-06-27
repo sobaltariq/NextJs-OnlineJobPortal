@@ -27,7 +27,11 @@ function LoginPage() {
     password: "",
   };
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email("Invalid email").required("Email is required"),
+    email: Yup.string()
+      .trim()
+      .email("Invalid email")
+      .required("Email is required")
+      .transform((value) => value.toLowerCase()),
     password: Yup.string()
       .min(6, "Password must be at least 6 characters")
       .required("Password is required"),

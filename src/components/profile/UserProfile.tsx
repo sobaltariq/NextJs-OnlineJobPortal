@@ -19,6 +19,8 @@ interface ProfileData {
   jobPostings: string;
   skills: string[];
   savedJobs: string[];
+  education: string;
+  workExperience: string;
 }
 
 const UserProfile: React.FC = () => {
@@ -28,6 +30,9 @@ const UserProfile: React.FC = () => {
   const [accountDeleteModal, setAccountDeleteModal] = useState<boolean>(false);
 
   const [isPasswordModalOpen, setIsPasswordModalOpen] =
+    useState<boolean>(false);
+
+  const [isEditProfileModalOpen, setIsEditProfileModalOpen] =
     useState<boolean>(false);
 
   const router = useRouter();
@@ -123,6 +128,8 @@ const UserProfile: React.FC = () => {
               {/* for seeker */}
               {apiData.role === "job seeker" && (
                 <>
+                  <p>Education: {apiData.education}</p>
+                  <p>Work Experience: {apiData.workExperience}</p>
                   <p>
                     Saved Jobs:{" "}
                     {apiData.savedJobs.length > 0 ? apiData.savedJobs : "Empty"}
@@ -178,23 +185,22 @@ const UserProfile: React.FC = () => {
             </div>
 
             {/* Edit Profile */}
-            {
-              // apiData.role === "job seeker" && (
+            {apiData.role === "job seeker" && (
               <div>
                 <button
                   onClick={() => {
-                    // setIsPasswordModalOpen(true);
+                    setIsEditProfileModalOpen(true);
                   }}
                 >
                   Edit Profile
                 </button>
-                {/* <EditProfileModal
-                  isPasswordModalOpen={isPasswordModalOpen}
-                  setIsPasswordModalOpen={setIsPasswordModalOpen}
-                /> */}
+                <EditProfileModal
+                  isEditProfileModalOpen={isEditProfileModalOpen}
+                  setIsEditProfileModalOpen={setIsEditProfileModalOpen}
+                />
+                <p>Somir</p>
               </div>
-              // )
-            }
+            )}
           </div>
         )}
       </div>

@@ -1,42 +1,43 @@
 import MyApi from "@/api/MyApi";
 import { waitSec } from "@/utils/CommonWait";
-import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
+import {
+  ErrorMessage,
+  Field,
+  FieldArray,
+  Form,
+  Formik,
+  FormikHelpers,
+} from "formik";
 import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
 
 interface ModalProps {
-  isPasswordModalOpen: boolean;
-  setIsPasswordModalOpen: (value: boolean) => void;
+  isEditProfileModalOpen: boolean;
+  setIsEditProfileModalOpen: (value: boolean) => void;
 }
 
 interface FormValues {
-  oldPassword: string;
-  newPassword: string;
-  confirmPassword: string;
+  education: string;
+  skills: string[];
+  workExperience: string;
 }
 
 const EditProfileModal: React.FC<ModalProps> = ({
-  isPasswordModalOpen,
-  setIsPasswordModalOpen,
+  isEditProfileModalOpen,
+  setIsEditProfileModalOpen,
 }) => {
   const [changePassError, setChangePassError] = useState<string>("");
 
   const initialValues: FormValues = {
-    oldPassword: "",
-    newPassword: "",
-    confirmPassword: "",
+    education: "",
+    skills: [""],
+    workExperience: "",
   };
 
   const validationSchema = Yup.object().shape({
-    oldPassword: Yup.string()
-      .min(8, "Password must be at least 8 characters")
-      .required("Old password is required"),
-    newPassword: Yup.string()
-      .min(8, "New Password must be at least 8 characters")
-      .required("New password is required"),
-    confirmPassword: Yup.string()
-      .min(8, "Confirm Password must be at least 8 characters")
-      .required("New password is required"),
+    education: Yup.string().trim().required("Education is required"),
+    skills: Yup.array().of(Yup.string().trim().required("Skill is required")),
+    workExperience: Yup.string().trim().required("Work experience is required"),
   });
 
   const changePasswordHandler = async (
@@ -64,7 +65,7 @@ const EditProfileModal: React.FC<ModalProps> = ({
       setChangePassError(response.data?.message);
 
       await waitSec(3000);
-      setIsPasswordModalOpen(false);
+      setIsEditProfileModalOpen(false);
 
       setChangePassError("");
       resetForm();
@@ -85,10 +86,12 @@ const EditProfileModal: React.FC<ModalProps> = ({
       );
     }
   };
-
+  const onSubmit = (values: FormValues) => {
+    console.log("Form data", values);
+  };
   const handleEscape = (event: KeyboardEvent) => {
-    if (event.key === "Escape" && isPasswordModalOpen) {
-      setIsPasswordModalOpen(false);
+    if (event.key === "Escape" && isEditProfileModalOpen) {
+      setIsEditProfileModalOpen(false);
     }
   };
 
@@ -96,12 +99,16 @@ const EditProfileModal: React.FC<ModalProps> = ({
   useEffect(() => {
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [isPasswordModalOpen]);
+  }, [isEditProfileModalOpen]);
+
+  function setFieldValue(arg0: string, arg1: any[]): void {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <div
       className={`fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center ${
-        isPasswordModalOpen ? "block" : "hidden"
+        isEditProfileModalOpen ? "block" : "hidden"
       }`}
     >
       <div className="relative bg-white rounded-xl p-4 shadow-lg w-96 z-51 ">
@@ -111,36 +118,54 @@ const EditProfileModal: React.FC<ModalProps> = ({
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={changePasswordHandler}
+            onSubmit={onSubmit}
           >
-            {({ isSubmitting, resetForm }) => (
+            {({ isSubmitting, values, resetForm }) => (
               <Form>
                 <div className="mt-4">
                   <Field
-                    type="password"
-                    id="oldPassword"
-                    name="oldPassword"
-                    placeholder="Old password"
+                    type="text"
+                    id="education"
+                    name="education"
+                    placeholder="Education"
                   />
-                  <ErrorMessage name="oldPassword" component="div" />
+                  <ErrorMessage name="education" component="div" />
+                </div>
+                <div>
+                  <label>Skills</label>
+                  <FieldArray name="skills">
+                    {({ remove, push }) => (
+                      <div>
+                        {values.skills.map((skill, index) => (
+                          <div key={index}>
+                            {" "}
+                            {/* Add unique key prop */}
+                            <Field name={`skills[${index}]`} type="text" />
+                            <ErrorMessage
+                              name={`skills[${index}]`}
+                              component="div"
+                            />{" "}
+                            {/* Correct field name */}
+                            <button type="button" onClick={() => remove(index)}>
+                              Remove
+                            </button>
+                          </div>
+                        ))}
+                        <button type="button" onClick={() => push("")}>
+                          Add Skill
+                        </button>
+                      </div>
+                    )}
+                  </FieldArray>
                 </div>
                 <div className="mt-4 mb-4">
                   <Field
-                    type="password"
-                    id="newPassword"
-                    name="newPassword"
-                    placeholder="New password"
+                    type="text"
+                    id="workExperience"
+                    name="workExperience"
+                    placeholder="Work Experience in Years"
                   />
-                  <ErrorMessage name="newPassword" component="div" />
-                </div>
-                <div className="mt-4 mb-4">
-                  <Field
-                    type="password"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    placeholder="Confirm password"
-                  />
-                  <ErrorMessage name="confirmPassword" component="div" />
+                  <ErrorMessage name="workExperience" component="div" />
                 </div>
 
                 <div className="flex gap-8">
@@ -150,7 +175,7 @@ const EditProfileModal: React.FC<ModalProps> = ({
                   <button
                     type="button"
                     onClick={() => {
-                      setIsPasswordModalOpen(false);
+                      setIsEditProfileModalOpen(false);
                       resetForm();
                     }}
                   >
