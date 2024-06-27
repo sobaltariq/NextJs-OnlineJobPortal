@@ -22,7 +22,7 @@ function RegisterPage() {
 
   const roleOptions = [
     { value: "employer", label: "Employer" },
-    { value: "job-seeker", label: "Job Seeker" },
+    { value: "job seeker", label: "Job Seeker" },
   ];
 
   const initialValues: FormValues = {
@@ -51,7 +51,7 @@ function RegisterPage() {
       const endPoint =
         values.role === "employer"
           ? "/employer/register"
-          : values.role === "job-seeker"
+          : values.role === "job seeker"
           ? "/job-seeker/register"
           : "/admin/register";
 
@@ -67,7 +67,10 @@ function RegisterPage() {
       router.push("/profile");
     } catch (err: any) {
       setRegistrationError(err.response.data?.error);
-      console.error("Login error:", err.response.data?.error);
+      console.error(
+        "Register error:",
+        err.response.data?.error || err.response.data.errors[0].msg
+      );
     }
   };
 

@@ -12,6 +12,7 @@ import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
 
 interface ModalProps {
+  userId: string;
   isEditProfileModalOpen: boolean;
   setIsEditProfileModalOpen: (value: boolean) => void;
 }
@@ -23,6 +24,7 @@ interface FormValues {
 }
 
 const EditProfileModal: React.FC<ModalProps> = ({
+  userId,
   isEditProfileModalOpen,
   setIsEditProfileModalOpen,
 }) => {
@@ -48,11 +50,9 @@ const EditProfileModal: React.FC<ModalProps> = ({
     const userType = localStorage.getItem("user_role");
     try {
       const endPoint =
-        userType === "admin"
-          ? "/admin/change-password"
-          : userType === "employer"
-          ? "/employer/change-password"
-          : "/job-seeker/change-password";
+        userType === "employer"
+          ? `/employer/profile/${userId}`
+          : `/job-seeker/profile/${userId}`;
 
       const response = await MyApi.put(endPoint, values, {
         headers: {
@@ -70,25 +70,16 @@ const EditProfileModal: React.FC<ModalProps> = ({
       setChangePassError("");
       resetForm();
     } catch (err: any) {
-      if (err.response && err.response.data) {
-        if (!err.response.data.errors) {
-          setChangePassError(err.response.data?.message);
-          console.log(err.response.data?.message);
-        } else {
-          setChangePassError(err.response.data?.errors[0].msg);
-          console.error("Login error:", err.response.data);
-        }
-      }
       setChangePassError(
-        err.response.data?.message ||
-          err.response.data.errors[0].msg ||
-          "An unknown error occurred"
+        err.response.data?.message || err.response.data?.errors[0].msg
+      );
+      console.error(
+        "Edit seeker error:",
+        err.response.data?.message || err.response.data?.errors[0].msg
       );
     }
   };
-  const onSubmit = (values: FormValues) => {
-    console.log("Form data", values);
-  };
+
   const handleEscape = (event: KeyboardEvent) => {
     if (event.key === "Escape" && isEditProfileModalOpen) {
       setIsEditProfileModalOpen(false);
@@ -100,10 +91,6 @@ const EditProfileModal: React.FC<ModalProps> = ({
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
   }, [isEditProfileModalOpen]);
-
-  function setFieldValue(arg0: string, arg1: any[]): void {
-    throw new Error("Function not implemented.");
-  }
 
   return (
     <div
@@ -118,7 +105,7 @@ const EditProfileModal: React.FC<ModalProps> = ({
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={onSubmit}
+            onSubmit={changePasswordHandler}
           >
             {({ isSubmitting, values, resetForm }) => (
               <Form>
@@ -131,8 +118,7 @@ const EditProfileModal: React.FC<ModalProps> = ({
                   />
                   <ErrorMessage name="education" component="div" />
                 </div>
-                <div>
-                  <label>Skills</label>
+                <div className="mt-4 ">
                   <FieldArray name="skills">
                     {({ remove, push }) => (
                       <div>
@@ -140,7 +126,11 @@ const EditProfileModal: React.FC<ModalProps> = ({
                           <div key={index}>
                             {" "}
                             {/* Add unique key prop */}
-                            <Field name={`skills[${index}]`} type="text" />
+                            <Field
+                              name={`skills[${index}]`}
+                              type="text"
+                              placeholder="Add Skill"
+                            />
                             <ErrorMessage
                               name={`skills[${index}]`}
                               component="div"

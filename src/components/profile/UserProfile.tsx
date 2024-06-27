@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 interface ProfileData {
   message: string;
   employerId?: string;
+  seekerId: string;
   userId?: string;
   role: string;
   name: string;
@@ -106,7 +107,6 @@ const UserProfile: React.FC = () => {
         <h1>Profile</h1>
         {apiData && (
           <div>
-            {apiData.role === "job seeker" && <button>Edit Profile</button>}
             <div>
               <p>Name: {apiData.name}</p>
               <p>Email: {apiData.email}</p>
@@ -195,10 +195,10 @@ const UserProfile: React.FC = () => {
                   Edit Profile
                 </button>
                 <EditProfileModal
+                  userId={apiData.seekerId}
                   isEditProfileModalOpen={isEditProfileModalOpen}
                   setIsEditProfileModalOpen={setIsEditProfileModalOpen}
                 />
-                <p>Somir</p>
               </div>
             )}
           </div>
