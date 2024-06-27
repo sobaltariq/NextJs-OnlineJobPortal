@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 interface UserProfile {
   params: {
     userId: string;
+    userType: "employer" | "job-seeker";
   };
 }
 
@@ -39,18 +40,13 @@ const UserPage: React.FC<UserProfile> = ({ params }) => {
 
   const [apiData, setApiData] = useState<ProfileData | null>(null);
 
-  const userId = params.userId;
+  const { userId, userType } = params;
+
   const getUserProfile = async () => {
     try {
       const loginToken = localStorage?.getItem("login_token");
-      const userType = localStorage?.getItem("user_role");
 
-      const endPoint =
-        userType === "admin"
-          ? `/admin/${userId}`
-          : userType === "employer"
-          ? `/employer/${userId}`
-          : `/job-seeker/${userId}`;
+      const endPoint = `/${userType}/${userId}`;
 
       const response = await MyApi.get(endPoint, {
         headers: {
@@ -60,8 +56,8 @@ const UserPage: React.FC<UserProfile> = ({ params }) => {
       console.log(response.data);
       setApiData(response.data);
     } catch (err: any) {
-      setUserError(err.response.data?.message || "Login failed");
-      console.error("Login error:", err.response.data?.message);
+      setUserError(err.response.data?.message || "Get Single user");
+      console.error("Get Single user:", err.response.data);
     }
   };
 
