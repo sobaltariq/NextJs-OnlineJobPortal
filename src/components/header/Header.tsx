@@ -1,25 +1,26 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import user from "../../../public/assets/user.png";
 import Link from "next/link";
 
 import "./header.scss";
 import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
-import { logout } from "@/redux/features/auth/authSlice";
 
 const Header: React.FC = () => {
-  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
-  const dispatch = useDispatch();
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   const router = useRouter();
 
+  useEffect(() => {
+    // const token = localStorage.getItem("login_token");
+    setIsLoggedIn(!!localStorage.getItem("login_token"));
+  }, [isLoggedIn]);
+
   const logoutHandler: () => void = () => {
     localStorage.clear();
-    dispatch(logout());
+    setIsLoggedIn(false);
     router.push("/login");
   };
 
@@ -30,16 +31,22 @@ const Header: React.FC = () => {
           <li>
             <Link href="/">Home</Link>
           </li>
-          <li>
-            <Link href="/user/employer">Employer</Link>
-          </li>
-          <li>
-            <Link href="/user/job-seeker">Job Seeker</Link>
-          </li>
+          {isLoggedIn && (
+            <>
+              <li>
+                <Link href="/user/employer">Employer</Link>
+              </li>
+              <li>
+                <Link href="/user/job-seeker">Job Seeker</Link>
+              </li>
+            </>
+          )}
           <li>
             <Link href="/">Categories</Link>
           </li>
-
+          <li>
+            <Link href="/jobs">Jobs</Link>
+          </li>
           <li>
             <Link href="/about">About</Link>
           </li>
@@ -50,9 +57,13 @@ const Header: React.FC = () => {
         <div className="flex gap-8">
           <input type="text" placeholder="Search..." />
           {isLoggedIn && (
-            <Link href="/profile">
+            <div>
               <Image src={user} alt="user profile" height={25} width={25} />
-            </Link>
+              <div className="flex gap-2">
+                <Link href="/profile">Profile</Link>
+                <Link href="/job">Post Job</Link>
+              </div>
+            </div>
           )}
           {!isLoggedIn && (
             <div className="flex gap-8">

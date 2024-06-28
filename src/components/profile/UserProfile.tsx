@@ -128,8 +128,13 @@ const UserProfile: React.FC = () => {
               {/* for seeker */}
               {apiData.role === "job seeker" && (
                 <>
-                  <p>Education: {apiData.education}</p>
-                  <p>Work Experience: {apiData.workExperience}</p>
+                  <p>
+                    Education: {apiData.education ? apiData.education : "Empty"}
+                  </p>
+                  <p>
+                    Work Experience:{" "}
+                    {apiData.workExperience ? apiData.workExperience : "Empty"}
+                  </p>
                   <p>
                     Saved Jobs:{" "}
                     {apiData.savedJobs.length > 0 ? apiData.savedJobs : "Empty"}
