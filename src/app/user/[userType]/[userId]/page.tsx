@@ -13,7 +13,6 @@ interface JobPostings {
   applications: string[];
   companyName: string;
   createdAt: string;
-  dataPosted: string;
   description: string;
   employer: string;
   location: string;

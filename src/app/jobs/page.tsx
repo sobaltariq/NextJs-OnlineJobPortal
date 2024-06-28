@@ -1,6 +1,7 @@
 "use client";
 import MyApi from "@/api/MyApi";
-import React, { useState } from "react";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
 
 interface EmployerInterface {
   userId: string;
@@ -16,6 +17,7 @@ interface JobApplicationInterface {
 }
 
 interface JobsInterface {
+  jobId: string;
   title: string;
   applications: JobApplicationInterface[];
   createdAt: string;
@@ -26,9 +28,9 @@ interface JobsInterface {
   salary: string;
 }
 
-const Jobs = () => {
+const AllJobsPage = () => {
   const [showError, setShowError] = useState<string>("");
-  const [apiData, setApiData] = useState<JobsInterface | []>([]);
+  const [apiData, setApiData] = useState<JobsInterface[] | []>([]);
 
   const getAllJobs = async () => {
     try {
@@ -41,33 +43,50 @@ const Jobs = () => {
       console.log(response.data?.data);
       setApiData(response.data?.data);
     } catch (err: any) {
-      const errorMessage =
-        err.response && err.response.data && err.response.data.message
-          ? err.response.data.message
-          : "An error occurred while fetching jobs.";
-      setShowError(errorMessage);
-      console.error(`get jobs error: `, errorMessage);
+      if (err.response) {
+        setShowError(err.response.data?.error);
+        console.error(`get jobs error: `, err.response.data?.error);
+      }
     }
   };
 
-  useState(() => {
+  useEffect(() => {
     getAllJobs();
   }, []);
 
   return (
     <div>
-      {showError && <p>{showError}</p>}
       {apiData.length > 0 ? (
-        <div>
+        <div className="grid grid-cols-2 gap-8">
           {apiData.map((jobData: JobsInterface, i: number) => {
-            return <div key={i}>{jobData.title}</div>;
+            return (
+              <Link href={`/jobs/${jobData.jobId}`} key={i}>
+                <div className="py-4 px-2 shadow-inner rounded-lg bg-stone-200">
+                  <h3>{jobData.title}</h3>
+                  <div className="flex justify-between">
+                    <p>Salary: {jobData.salary}</p>
+                    <p>Location: {jobData.location}</p>
+                  </div>
+                  <p>
+                    Posted at:{" "}
+                    {new Date(jobData?.createdAt).toLocaleDateString()}
+                  </p>
+                  <p>
+                    Requirements:{" "}
+                    {jobData.requirements.map((item, i) => (
+                      <span key={i}>{item} </span>
+                    ))}
+                  </p>
+                </div>
+              </Link>
+            );
           })}
         </div>
       ) : (
-        <p>No user data available.</p>
+        <p>{showError}</p>
       )}
     </div>
   );
 };
 
-export default Jobs;
+export default AllJobsPage;
