@@ -1,5 +1,7 @@
 "use client";
 import MyApi from "@/api/MyApi";
+import JobCard from "@/components/cards/JobCard";
+import CreateJobModal from "@/components/modals/CreateJobModal";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -31,6 +33,8 @@ interface JobsInterface {
 const AllJobsPage = () => {
   const [showError, setShowError] = useState<string>("");
   const [apiData, setApiData] = useState<JobsInterface[] | []>([]);
+  const [userTye, setUserType] = useState<string | null>(null);
+  const [isPostJobModalOpen, setIsPostJobModalOpen] = useState<boolean>(false);
 
   const getAllJobs = async () => {
     try {
@@ -42,6 +46,7 @@ const AllJobsPage = () => {
       });
       console.log(response.data?.data);
       setApiData(response.data?.data);
+      setUserType(localStorage.getItem("user_role"));
     } catch (err: any) {
       if (err.response) {
         setShowError(err.response.data?.error);
@@ -57,30 +62,29 @@ const AllJobsPage = () => {
   return (
     <div>
       {apiData.length > 0 ? (
-        <div className="grid grid-cols-2 gap-8">
-          {apiData.map((jobData: JobsInterface, i: number) => {
-            return (
-              <Link href={`/jobs/${jobData.jobId}`} key={i}>
-                <div className="py-4 px-2 shadow-inner rounded-lg bg-stone-200">
-                  <h3>{jobData.title}</h3>
-                  <div className="flex justify-between">
-                    <p>Salary: {jobData.salary}</p>
-                    <p>Location: {jobData.location}</p>
-                  </div>
-                  <p>
-                    Posted at:{" "}
-                    {new Date(jobData?.createdAt).toLocaleDateString()}
-                  </p>
-                  <p>
-                    Requirements:{" "}
-                    {jobData.requirements.map((item, i) => (
-                      <span key={i}>{item} </span>
-                    ))}
-                  </p>
-                </div>
-              </Link>
-            );
-          })}
+        <div>
+          {userTye === "employer" && (
+            <div className="py-8">
+              <div>
+                <button
+                  onClick={() => {
+                    setIsPostJobModalOpen(true);
+                  }}
+                >
+                  Create New Job
+                </button>
+                <CreateJobModal
+                  isPostJobModalOpen={isPostJobModalOpen}
+                  setIsPostJobModalOpen={setIsPostJobModalOpen}
+                />
+              </div>
+            </div>
+          )}
+          <div className="grid grid-cols-2 gap-8">
+            {apiData.map((jobData: JobsInterface) => {
+              return <JobCard key={jobData.jobId} {...jobData} />;
+            })}
+          </div>
         </div>
       ) : (
         <p>{showError}</p>
