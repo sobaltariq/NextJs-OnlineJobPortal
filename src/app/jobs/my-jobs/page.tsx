@@ -1,6 +1,8 @@
 "use client";
 import MyApi from "@/api/MyApi";
 import JobCard from "@/components/cards/JobCard";
+import LoginAuth from "@/hocs/LoginAuth";
+import composeHOCs from "@/hocs/composeHOCs";
 import React, { useEffect, useState } from "react";
 
 interface MyJobsInterface {
@@ -50,7 +52,8 @@ const MyJobsPage = () => {
     <div>
       {apiData.length > 0 ? (
         <div>
-          <h2>Total Jobs: {apiData.length}</h2>
+          <p>{showError}</p>
+          <h2 className="py-4">Total Jobs: {apiData.length}</h2>
           <div className="grid grid-cols-2 gap-8">
             {apiData.map((myJob) => {
               return <JobCard key={myJob.jobId} isMyJob={true} {...myJob} />;
@@ -58,10 +61,10 @@ const MyJobsPage = () => {
           </div>
         </div>
       ) : (
-        <p>{showError}</p>
+        <p>No Job Found</p>
       )}
     </div>
   );
 };
 
-export default MyJobsPage;
+export default composeHOCs(LoginAuth)(MyJobsPage);

@@ -2,6 +2,8 @@
 import MyApi from "@/api/MyApi";
 import JobCard from "@/components/cards/JobCard";
 import CreateJobModal from "@/components/modals/CreateJobModal";
+import LoginAuth from "@/hocs/LoginAuth";
+import composeHOCs from "@/hocs/composeHOCs";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -82,7 +84,9 @@ const AllJobsPage = () => {
           )}
           <div className="grid grid-cols-2 gap-8">
             {apiData.map((jobData: JobsInterface) => {
-              return <JobCard key={jobData.jobId} {...jobData} />;
+              return (
+                <JobCard key={jobData.jobId} isMyJob={false} {...jobData} />
+              );
             })}
           </div>
         </div>
@@ -93,4 +97,4 @@ const AllJobsPage = () => {
   );
 };
 
-export default AllJobsPage;
+export default composeHOCs(LoginAuth)(AllJobsPage);

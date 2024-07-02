@@ -72,6 +72,7 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
             <p>Salary: {apiData.jobSalary}</p>
             <p>Location: {apiData.jobLocation}</p>
             <p>Company: {apiData.jobCompany}</p>
+            <p>Employer: {apiData.employerName}</p>
           </div>
           <p>
             Requirements:{" "}

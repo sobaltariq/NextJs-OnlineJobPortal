@@ -48,6 +48,9 @@ const Header: React.FC = () => {
             <Link href="/jobs">Jobs</Link>
           </li>
           <li>
+            <Link href="/jobs/my-jobs">My Jobs</Link>
+          </li>
+          <li>
             <Link href="/about">About</Link>
           </li>
           <li>
@@ -61,7 +64,6 @@ const Header: React.FC = () => {
               <Image src={user} alt="user profile" height={25} width={25} />
               <div className="flex gap-2">
                 <Link href="/profile">Profile</Link>
-                <Link href="/job">Post Job</Link>
               </div>
             </div>
           )}

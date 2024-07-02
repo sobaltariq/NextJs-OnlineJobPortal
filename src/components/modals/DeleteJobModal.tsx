@@ -1,40 +1,34 @@
+import MyApi from "@/api/MyApi";
+import { waitSec } from "@/utils/CommonWait";
 import React, { useState, useEffect } from "react";
 
 interface ModalProps {
-  accountDeleteModal: boolean;
-  setAccountDeleteModal: (value: boolean) => void;
+  jobDeleteModal: boolean;
+  setJobDeleteModal: (value: boolean) => void;
+  jobId: string;
 }
 
 const DeleteJobModal: React.FC<ModalProps> = ({
-  accountDeleteModal,
-  setAccountDeleteModal,
+  jobDeleteModal,
+  setJobDeleteModal,
+  jobId,
 }) => {
+  const [showError, setShowError] = useState<string>("");
   const deleteProfileHandler = async () => {
     try {
       const loginToken = localStorage?.getItem("login_token");
       const userType = localStorage?.getItem("user_role");
 
-      const endPoint =
-        userType === "admin"
-          ? "/admin/"
-          : userType === "employer"
-          ? "/employer/"
-          : "/job-seeker/";
+      const response = await MyApi.delete(`employer/job-postings/${jobId}`, {
+        headers: {
+          Authorization: `Bearer ${loginToken}`,
+        },
+      });
 
-      const response = await MyApi.delete(
-        `${endPoint}/delete/${apiData?.userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${loginToken}`,
-          },
-        }
-      );
-
-      localStorage.clear();
       console.log(response.data);
-      setAccountDeleteModal(false);
-      router.push("/login");
-      dispatch(logout());
+      setShowError("");
+      await waitSec(3000);
+      setJobDeleteModal(false);
     } catch (err: any) {
       setShowError(err.response.data?.message);
       console.error("Delete User error:", err.response.data?.message);
@@ -42,8 +36,8 @@ const DeleteJobModal: React.FC<ModalProps> = ({
   };
 
   const handleEscape = (event: KeyboardEvent) => {
-    if (event.key === "Escape" && accountDeleteModal) {
-      setAccountDeleteModal(false);
+    if (event.key === "Escape" && jobDeleteModal) {
+      setJobDeleteModal(false);
     }
   };
 
@@ -53,12 +47,12 @@ const DeleteJobModal: React.FC<ModalProps> = ({
   useEffect(() => {
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [accountDeleteModal]);
+  }, [jobDeleteModal]);
 
   return (
     <div
       className={`fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center ${
-        accountDeleteModal ? "block" : "hidden"
+        jobDeleteModal ? "block" : "hidden"
       }`}
     >
       <div className="relative bg-white rounded-xl p-4 shadow-lg w-96 z-51 ">
@@ -70,7 +64,7 @@ const DeleteJobModal: React.FC<ModalProps> = ({
           <div className="flex justify-between">
             <button
               onClick={() => {
-                setAccountDeleteModal(false);
+                setJobDeleteModal(false);
               }}
             >
               Cancel
