@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import DeleteJobModal from "../modals/DeleteJobModal";
 import EditJobModal from "../modals/EditJobModal";
+import MyApi from "@/api/MyApi";
 
 interface JobPropsInterface {
   isMyJob: boolean;
@@ -26,6 +27,30 @@ const JobCard: React.FC<JobPropsInterface> = ({
   const [jobDeleteModal, setJobDeleteModal] = useState<boolean>(false);
   const [isEditJobModalOpen, setIsEditJobModalOpen] = useState<boolean>(false);
 
+  const loginToken = localStorage.getItem("login_token");
+  const userType = localStorage.getItem("user_role");
+
+  const jobApplyNowHandler = async () => {
+    const postValue = {
+      jobPosting: `${jobId}`,
+    };
+    try {
+      const response = await MyApi.post(`/job-seeker/application/`, postValue, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${loginToken}`,
+        },
+      });
+
+      console.log(response.data);
+    } catch (err: any) {
+      console.error(
+        "Apply Job error:",
+        err.response.data?.message || err.response.data?.errors[0].msg
+      );
+    }
+  };
+
   return (
     <div className="py-4 px-2 shadow-inner rounded-lg bg-stone-200">
       <Link href={`/jobs/${jobId}`} key={jobId}>
@@ -46,6 +71,13 @@ const JobCard: React.FC<JobPropsInterface> = ({
           </div>
         </div>
       </Link>
+      {userType === "job seeker" && (
+        <div>
+          <button className="text-blue-800" onClick={jobApplyNowHandler}>
+            Apply Now
+          </button>
+        </div>
+      )}
       {isMyJob && (
         <div className="flex justify-between pt-2">
           <div>

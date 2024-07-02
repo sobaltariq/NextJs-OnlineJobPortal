@@ -1,6 +1,5 @@
 "use client";
 import MyApi from "@/api/MyApi";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 interface JobParamsInterface {
@@ -37,7 +36,7 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
 
   const { jobId } = params;
 
-  const getJob = async () => {
+  const getOneJob = async () => {
     try {
       const loginToken = localStorage?.getItem("login_token");
       const userRole = localStorage?.getItem("user_role");
@@ -59,7 +58,7 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
   };
 
   useEffect(() => {
-    getJob();
+    getOneJob();
   }, []);
   return (
     <div>
@@ -87,7 +86,7 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
           </div>
           {userType === "job seeker" && (
             <div>
-              <Link href={"/"}>Apply Now</Link>
+              <p>Apply Now</p>
             </div>
           )}
         </div>

@@ -51,11 +51,14 @@ const Header: React.FC = () => {
             <Link href="/jobs/my-jobs">My Jobs</Link>
           </li>
           <li>
+            <Link href="/applications">My Applications</Link>
+          </li>
+          {/* <li>
             <Link href="/about">About</Link>
           </li>
           <li>
             <Link href="/contact">Contact</Link>
-          </li>
+          </li> */}
         </ul>
         <div className="flex gap-8">
           <input type="text" placeholder="Search..." />
