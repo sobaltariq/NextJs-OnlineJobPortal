@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 
 interface JobPropsInterface {
+  isMyJob: boolean;
   jobId: string;
   title: string;
   salary: string;
@@ -11,6 +12,7 @@ interface JobPropsInterface {
 }
 
 const JobCard: React.FC<JobPropsInterface> = ({
+  isMyJob = false,
   jobId,
   title,
   salary,
@@ -26,13 +28,19 @@ const JobCard: React.FC<JobPropsInterface> = ({
           <p>Salary: {salary}</p>
           <p>Location: {location}</p>
         </div>
-        <p>Posted at: {new Date(createdAt).toLocaleDateString()}</p>
-        <p>
-          Requirements:{" "}
-          {requirements.map((item, i) => (
-            <span key={i}>{item} </span>
-          ))}
-        </p>
+        <div className="flex justify-between">
+          <div>
+            <p>Posted at: {new Date(createdAt).toLocaleDateString()}</p>
+            <p>
+              Requirements:{" "}
+              {requirements.map((item, i) => (
+                <span key={i}>{item} </span>
+              ))}
+            </p>
+          </div>
+
+          {isMyJob && <button className="text-red-500">Delete</button>}
+        </div>
       </div>
     </Link>
   );

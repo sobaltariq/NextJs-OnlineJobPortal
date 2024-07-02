@@ -19,11 +19,12 @@ interface MyJobsInterface {
 const MyJobsPage = () => {
   const [showError, setShowError] = useState<string>("");
   const [apiData, setApiData] = useState<MyJobsInterface[] | []>([]);
+  const [userType, setUserType] = useState<string | null>(null);
 
   const getMyJobs = async () => {
     try {
       const loginToken = localStorage?.getItem("login_token");
-      const userType = localStorage?.getItem("user_role");
+      const userRole = localStorage?.getItem("user_role");
 
       const endPoint = `employer/job-postings/my-jobs`;
 
@@ -34,6 +35,7 @@ const MyJobsPage = () => {
       });
       console.log(response.data?.data);
       setApiData(response.data?.data);
+      setUserType(userRole);
     } catch (err: any) {
       setShowError(err.response.data?.message || err.response.data?.error);
       console.error("Get Single user:", err.response.data);
@@ -51,7 +53,7 @@ const MyJobsPage = () => {
           <h2>Total Jobs: {apiData.length}</h2>
           <div className="grid grid-cols-2 gap-8">
             {apiData.map((myJob) => {
-              return <JobCard key={myJob.jobId} {...myJob} />;
+              return <JobCard key={myJob.jobId} isMyJob={true} {...myJob} />;
             })}
           </div>
         </div>

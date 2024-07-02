@@ -33,15 +33,16 @@ interface JobsInterface {
 const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
   const [showError, setShowError] = useState<string>("");
   const [apiData, setApiData] = useState<JobsInterface | null>(null);
+  const [userType, setUserType] = useState<string | null>(null);
 
   const { jobId } = params;
 
   const getJob = async () => {
     try {
       const loginToken = localStorage?.getItem("login_token");
-      const userType = localStorage?.getItem("user_role");
+      const userRole = localStorage?.getItem("user_role");
 
-      const endPoint = `/${userType}/job-postings/${jobId}`;
+      const endPoint = `/employer/job-postings/${jobId}`;
 
       const response = await MyApi.get(endPoint, {
         headers: {
@@ -50,9 +51,10 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
       });
       console.log(response.data?.data);
       setApiData(response.data?.data);
+      setUserType(userRole);
     } catch (err: any) {
-      setShowError(err.response.data?.message || "Get Single user");
-      console.error("Get Single user:", err.response.data);
+      setShowError(err.response.data?.message || "Get Single Job");
+      console.error("Get Single Job:", err.response);
     }
   };
 
@@ -82,9 +84,11 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
             <h4>About Job</h4>
             <p>{apiData.jobDescription}</p>
           </div>
-          <div>
-            <Link href={"/"}>Apply Now</Link>
-          </div>
+          {userType === "job seeker" && (
+            <div>
+              <Link href={"/"}>Apply Now</Link>
+            </div>
+          )}
         </div>
       ) : (
         <p>{showError}</p>

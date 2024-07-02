@@ -25,7 +25,7 @@ const ProfileCard: React.FC<UserProfile> = ({ profileData }) => {
           <p>{profileData.role}</p>
         </div>
         <p>{profileData.email}</p>
-        <p>{profileData.createdAt}</p>
+        <p>{new Date(profileData.createdAt).toLocaleDateString()}</p>
       </Link>
     </div>
   );

@@ -42,7 +42,7 @@ const EditProfileModal: React.FC<ModalProps> = ({
     workExperience: Yup.string().trim().required("Work experience is required"),
   });
 
-  const changePasswordHandler = async (
+  const editProfileHandler = async (
     values: FormValues,
     { resetForm }: FormikHelpers<FormValues>
   ) => {
@@ -100,12 +100,12 @@ const EditProfileModal: React.FC<ModalProps> = ({
     >
       <div className="relative bg-white rounded-xl p-4 shadow-lg w-96 z-51 ">
         <div className="border-solid border-2 border-sky-500 p-4 rounded-lg">
-          <h1>Change Password</h1>
+          <h1>Edit Profile</h1>
           {changePassError && <p className="">{changePassError}</p>}
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={changePasswordHandler}
+            onSubmit={editProfileHandler}
           >
             {({ isSubmitting, values, resetForm }) => (
               <Form>

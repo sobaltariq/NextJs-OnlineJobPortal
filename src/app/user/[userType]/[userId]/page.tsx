@@ -1,6 +1,8 @@
 "use client";
 import MyApi from "@/api/MyApi";
-import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import React, { Fragment, useEffect, useState } from "react";
+import { string } from "yup";
 
 interface UserProfile {
   params: {
@@ -10,28 +12,24 @@ interface UserProfile {
 }
 
 interface JobPostings {
-  applications: string[];
-  companyName: string;
-  createdAt: string;
-  description: string;
-  employer: string;
-  location: string;
-  requirements: string[];
-  salary: string;
-  title: string;
+  jobPostId: string;
+  jobPostTitle: string;
 }
 
 interface ProfileData {
   message: string;
   employerId?: string;
+  seekerId?: string;
   userId?: string;
-  role: string;
-  name: string;
-  email: string;
-  createdAt: string;
-  jobPostings: JobPostings;
-  skills: string[];
-  savedJobs: string[];
+  userRole: string;
+  userName: string;
+  userEmail: string;
+  userCreatedAt: string;
+  jobPostings: JobPostings[];
+  seekerSkills: string[];
+  seekerEducation: string;
+  seekerWorkExperience: string;
+  seekerSavedJobs: string[];
 }
 
 const UserPage: React.FC<UserProfile> = ({ params }) => {
@@ -52,8 +50,8 @@ const UserPage: React.FC<UserProfile> = ({ params }) => {
           Authorization: `Bearer ${loginToken}`,
         },
       });
-      console.log(response.data);
-      setApiData(response.data);
+      console.log(response.data?.data);
+      setApiData(response.data?.data);
     } catch (err: any) {
       setUserError(err.response.data?.message || "Get Single user");
       console.error("Get Single user:", err.response.data);
@@ -69,30 +67,57 @@ const UserPage: React.FC<UserProfile> = ({ params }) => {
       {userError && <p>{userError}</p>}
       {apiData && (
         <div>
-          <p>Name: {apiData?.name}</p>
-          <p>User Type: {apiData?.role}</p>
+          <p>Name: {apiData?.userName}</p>
+          <p>User Type: {apiData?.userRole}</p>
           <p>
             Registration Date:{" "}
-            {new Date(apiData?.createdAt).toLocaleDateString()}
+            {new Date(apiData?.userCreatedAt).toLocaleDateString()}
           </p>
-          {apiData.role === "employer" && (
-            <p>
-              Job Postings:{" "}
-              {/* {apiData.jobPostings.length > 0 ? apiData.jobPostings : "Empty"} */}
-            </p>
+          {apiData.userRole === "employer" && (
+            <div className="flex gap-2">
+              <p>Job Postings: </p>{" "}
+              <div className="flex gap-4">
+                {apiData.jobPostings.length <= 0
+                  ? "Empty"
+                  : apiData.jobPostings.map((job, i) => {
+                      return (
+                        <Fragment key={i}>
+                          <Link
+                            href={`/jobs/${job.jobPostId}`}
+                            className="bg-neutral-200 px-2"
+                          >
+                            {job.jobPostTitle}
+                          </Link>{" "}
+                        </Fragment>
+                      );
+                    })}
+              </div>
+            </div>
           )}
 
           {/* for seeker */}
-          {apiData.role === "job seeker" && (
+          {apiData.userRole === "job seeker" && (
             <>
               <p>
                 Saved Jobs:{" "}
-                {apiData.savedJobs.length > 0 ? apiData.savedJobs : "Empty"}
+                {apiData.seekerSavedJobs.length > 0
+                  ? apiData.seekerSavedJobs
+                  : "Empty"}
+              </p>
+              <p>
+                Education:{" "}
+                {apiData.seekerEducation ? apiData.seekerEducation : "Empty"}
+              </p>
+              <p>
+                Work Experience:{" "}
+                {apiData.seekerWorkExperience
+                  ? apiData.seekerWorkExperience
+                  : "Empty"}
               </p>
               <p className="flex gap-2 justify-items-center">
                 Skills:{" "}
-                {apiData.skills.length > 0
-                  ? apiData.skills.map((item, i) => {
+                {apiData.seekerSkills.length > 0
+                  ? apiData.seekerSkills.map((item, i) => {
                       return (
                         <span key={i} className="bg-red-400 py-1 px-3 rounded">
                           {item}{" "}
