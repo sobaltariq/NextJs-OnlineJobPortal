@@ -60,9 +60,15 @@ function RegisterPage() {
       });
 
       console.log("Registration response:", response.data);
+      const { token, role, email, id } = response.data;
 
-      localStorage.setItem("login_token", response.data?.token);
-      localStorage.setItem("user_role", response.data?.role);
+      const loggedInUser = {
+        id,
+        email,
+      };
+      localStorage.setItem("login_token", token);
+      localStorage.setItem("user_role", role);
+      localStorage.setItem("logged_in", JSON.stringify(loggedInUser));
 
       router.push("/profile");
     } catch (err: any) {

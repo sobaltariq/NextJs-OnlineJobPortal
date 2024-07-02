@@ -1,5 +1,6 @@
 "use client";
 import MyApi from "@/api/MyApi";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 interface MyApplicationsInterface {
@@ -42,7 +43,7 @@ const MyApplicationsPage: React.FC = () => {
 
   return (
     <div>
-      {apiData ? (
+      {apiData.length > 0 ? (
         <div>
           <h2 className="pb-4">
             My Applications: <span>{apiData.length}</span>
@@ -55,7 +56,9 @@ const MyApplicationsPage: React.FC = () => {
                   className="py-4 px-2 shadow-inner rounded-lg bg-stone-200 w-[49%]"
                 >
                   <div>
-                    <h3>{app.jobTitle}</h3>
+                    <h3>
+                      <Link href={`/jobs/${app.jobId}`}>{app.jobTitle}</Link>
+                    </h3>
                     <p>
                       Status: <span>{app.appStatus}</span>
                     </p>
@@ -75,7 +78,9 @@ const MyApplicationsPage: React.FC = () => {
           </div>
         </div>
       ) : (
-        <p>No Application Found</p>
+        <div>
+          {showError ? <p>{showError}</p> : <p>No Application Found</p>}
+        </div>
       )}
     </div>
   );

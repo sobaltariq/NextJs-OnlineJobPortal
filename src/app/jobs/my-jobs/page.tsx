@@ -1,32 +1,47 @@
 "use client";
 import MyApi from "@/api/MyApi";
+import ApplicationsOnMyJob from "@/components/applications/ApplicationsOnMyJob";
 import JobCard from "@/components/cards/JobCard";
 import LoginAuth from "@/hocs/LoginAuth";
 import composeHOCs from "@/hocs/composeHOCs";
 import React, { useEffect, useState } from "react";
 
+interface JobApplicationInterface {
+  appId: string;
+  appJobSeeker: string;
+  appStatus: "pending" | "rejected" | "accepted";
+  appCreatedAt: string;
+}
+
 interface MyJobsInterface {
   jobId: string;
-  title: string;
-  applications: string[];
-  companyName: string;
-  createdAt: string;
-  description: string;
-  employer: string;
-  location: string;
-  requirements: string[];
-  salary: string;
+  jobTitle: string;
+  jobCreatedAt: string;
+  jobDescription: string;
+  jobLocation: string;
+  jobRequirements: string[];
+  jobSalary: string;
+  jobCompany: string;
+  employerUserId: string;
+  employerName: string;
+  applications: JobApplicationInterface[];
 }
 
 const MyJobsPage = () => {
   const [showError, setShowError] = useState<string>("");
   const [apiData, setApiData] = useState<MyJobsInterface[] | []>([]);
   const [userType, setUserType] = useState<string | null>(null);
+  const [loggedInUser, setLoggedInUser] = useState<any>(null);
 
   const getMyJobs = async () => {
     try {
       const loginToken = localStorage?.getItem("login_token");
       const userRole = localStorage?.getItem("user_role");
+      const loggedIn = localStorage.getItem("logged_in");
+      if (loggedIn) {
+        const user = JSON.parse(loggedIn);
+        setLoggedInUser(user);
+      }
 
       const endPoint = `employer/job-postings/my-jobs`;
 
@@ -55,13 +70,20 @@ const MyJobsPage = () => {
           <p>{showError}</p>
           <h2 className="py-4">Total Jobs: {apiData.length}</h2>
           <div className="grid grid-cols-2 gap-8">
-            {apiData.map((myJob) => {
-              return <JobCard key={myJob.jobId} isMyJob={true} {...myJob} />;
+            {apiData.map((jobData: MyJobsInterface) => {
+              return (
+                <JobCard
+                  key={jobData.jobId}
+                  loggedInUserId={loggedInUser?.id}
+                  {...jobData}
+                />
+              );
             })}
           </div>
+          {userType && <ApplicationsOnMyJob />}
         </div>
       ) : (
-        <p>No Job Found</p>
+        <div>{showError ? <p>{showError}</p> : <p>No Job Found</p>}</div>
       )}
     </div>
   );

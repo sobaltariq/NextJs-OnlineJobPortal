@@ -51,10 +51,16 @@ function LoginPage() {
           headers: { "Content-Type": "application/json" },
         });
 
-        const { token, role } = response.data;
+        console.log(response.data);
 
+        const { token, role, email, id } = response.data;
+        const loggedInUser = {
+          id,
+          email,
+        };
         localStorage.setItem("login_token", token);
         localStorage.setItem("user_role", role);
+        localStorage.setItem("logged_in", JSON.stringify(loggedInUser));
 
         // save role in redux store
         dispatch(
