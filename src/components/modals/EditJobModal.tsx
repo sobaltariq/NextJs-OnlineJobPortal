@@ -146,28 +146,33 @@ const EditJobModal: React.FC<ModalProps> = ({
                   <ErrorMessage name="companyName" component="div" />
                 </div>
                 <div className="mt-4 ">
-                  <FieldArray name="skills">
+                  <FieldArray name="requirements">
                     {({ remove, push }) => (
                       <div>
-                        {values.requirements.map((requirement, index) => (
-                          <div key={index}>
-                            {" "}
-                            {/* Add unique key prop */}
-                            <Field
-                              name={`requirements[${index}]`}
-                              type="text"
-                              placeholder="Add requirement"
-                            />
-                            <ErrorMessage
-                              name={`requirement[${index}]`}
-                              component="div"
-                            />{" "}
-                            {/* Correct field name */}
-                            <button type="button" onClick={() => remove(index)}>
-                              Remove
-                            </button>
-                          </div>
-                        ))}
+                        {values.requirements.map(
+                          (requirement: any, index: number) => (
+                            <div key={index}>
+                              {" "}
+                              {/* Add unique key prop */}
+                              <Field
+                                name={`requirements[${index}]`}
+                                type="text"
+                                placeholder="Add requirement"
+                              />
+                              <ErrorMessage
+                                name={`requirements[${index}]`}
+                                component="div"
+                              />{" "}
+                              {/* Correct field name */}
+                              <button
+                                type="button"
+                                onClick={() => remove(index)}
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          )
+                        )}
                         <button type="button" onClick={() => push("")}>
                           Add requirement
                         </button>

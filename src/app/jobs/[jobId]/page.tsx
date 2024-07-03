@@ -1,11 +1,17 @@
 "use client";
 import MyApi from "@/api/MyApi";
+import ApplicationsOnMyJob from "@/components/applications/ApplicationsOnMyJob";
 import React, { useEffect, useState } from "react";
 
 interface JobParamsInterface {
   params: {
     jobId: string;
   };
+}
+
+interface LoginInterface {
+  id: string;
+  email: string;
 }
 
 interface JobApplicationInterface {
@@ -21,7 +27,7 @@ interface JobsInterface {
   applications: JobApplicationInterface[];
   jobCreatedAt: string;
   jobDescription: string;
-  employerId: string;
+  employerUserId: string;
   employerName: string;
   jobLocation: string;
   jobRequirements: string[];
@@ -33,6 +39,7 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
   const [showError, setShowError] = useState<string>("");
   const [apiData, setApiData] = useState<JobsInterface | null>(null);
   const [userType, setUserType] = useState<string | null>(null);
+  const [loggedInUser, setLoggedInUser] = useState<any>(null);
 
   const { jobId } = params;
 
@@ -40,6 +47,7 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
     try {
       const loginToken = localStorage?.getItem("login_token");
       const userRole = localStorage?.getItem("user_role");
+      const loggedIn = localStorage.getItem("logged_in");
 
       const endPoint = `/employer/job-postings/${jobId}`;
 
@@ -51,6 +59,10 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
       console.log(response.data?.data);
       setApiData(response.data?.data);
       setUserType(userRole);
+      if (loggedIn) {
+        const user: LoginInterface = JSON.parse(loggedIn);
+        setLoggedInUser(user);
+      }
     } catch (err: any) {
       setShowError(err.response.data?.message || "Get Single Job");
       console.error("Get Single Job:", err.response);
@@ -89,6 +101,10 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
               <p>Apply Now</p>
             </div>
           )}
+
+          {/* {apiData.employerUserId === loggedInUser?.id && ( */}
+          <ApplicationsOnMyJob jobIdParam={jobId} />
+          {/* )} */}
         </div>
       ) : (
         <p>{showError}</p>

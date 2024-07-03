@@ -1,6 +1,5 @@
 "use client";
 import MyApi from "@/api/MyApi";
-import ApplicationsOnMyJob from "@/components/applications/ApplicationsOnMyJob";
 import JobCard from "@/components/cards/JobCard";
 import LoginAuth from "@/hocs/LoginAuth";
 import composeHOCs from "@/hocs/composeHOCs";
@@ -80,7 +79,6 @@ const MyJobsPage = () => {
               );
             })}
           </div>
-          {userType && <ApplicationsOnMyJob />}
         </div>
       ) : (
         <div>{showError ? <p>{showError}</p> : <p>No Job Found</p>}</div>
