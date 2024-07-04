@@ -71,25 +71,25 @@ const AllJobsPage = () => {
 
   return (
     <div>
+      {userTye === "employer" && (
+        <div className="py-8">
+          <div>
+            <button
+              onClick={() => {
+                setIsPostJobModalOpen(true);
+              }}
+            >
+              Create New Job
+            </button>
+            <CreateJobModal
+              isPostJobModalOpen={isPostJobModalOpen}
+              setIsPostJobModalOpen={setIsPostJobModalOpen}
+            />
+          </div>
+        </div>
+      )}
       {apiData.length > 0 ? (
         <div>
-          {userTye === "employer" && (
-            <div className="py-8">
-              <div>
-                <button
-                  onClick={() => {
-                    setIsPostJobModalOpen(true);
-                  }}
-                >
-                  Create New Job
-                </button>
-                <CreateJobModal
-                  isPostJobModalOpen={isPostJobModalOpen}
-                  setIsPostJobModalOpen={setIsPostJobModalOpen}
-                />
-              </div>
-            </div>
-          )}
           <div className="grid grid-cols-2 gap-8">
             {apiData.map((jobData: JobsInterface) => {
               return (

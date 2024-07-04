@@ -102,9 +102,9 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
             </div>
           )}
 
-          {/* {apiData.employerUserId === loggedInUser?.id && ( */}
-          <ApplicationsOnMyJob jobIdParam={jobId} />
-          {/* )} */}
+          {apiData.employerUserId === loggedInUser?.id && (
+            <ApplicationsOnMyJob jobIdParam={jobId} />
+          )}
         </div>
       ) : (
         <p>{showError}</p>
