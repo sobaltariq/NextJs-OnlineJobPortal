@@ -1,0 +1,188 @@
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+
+  --max-width: 1600px;
+  --max-height: 995px;
+
+  --color-white-1: #ffffff;
+
+  --color-black-1: #000000;
+  --color-black-2: #2c2929;
+  --color-black-3: #444444;
+
+  --color-secondary-1: #001b4d;
+  --color-secondary-2: #4585c5;
+  --color-secondary-3: #492d7e;
+}
+
+// Mixins
+@mixin flex-center($justify: center, $align: center) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+@mixin font-size-weight($size, $weight) {
+  font-size: $size;
+  font-weight: $weight;
+}
+
+h1 {
+  @include font-size-weight(24px, 500);
+  padding-bottom: 2rem;
+}
+
+input {
+  padding: 0.5rem 0.75rem;
+  outline: none;
+  border-radius: 0.5rem;
+  @include font-size-weight(16px, 400);
+  border: 1px solid var(--color-secondary-3);
+}
+
+.common-button {
+  font-size: 18px;
+  font-weight: 400;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-secondary-2);
+  color: var(--color-white-1);
+  border-radius: 25px;
+  width: max-content;
+}
+
+// header
+header {
+  background-color: var(--color-secondary-2) !important;
+  .header-wrapper {
+    @include flex-center(space-between, center);
+    padding: 1rem 2rem;
+    background-color: var(--color-secondary-3);
+    border-radius: 3rem;
+    ul {
+      @include flex-center(space-between, center);
+      gap: 2rem;
+
+      li {
+        a {
+          @include font-size-weight(18px, 400);
+          color: var(--color-white-1);
+        }
+      }
+    }
+
+    .side-header {
+      @include flex-center(space-between, center);
+      gap: 2rem;
+      input {
+        padding: 0.2rem 0.75rem;
+      }
+      div {
+        @include flex-center(space-between, center);
+        gap: 2rem;
+        a {
+          @include font-size-weight(18px, 400);
+          color: var(--color-white-1);
+        }
+      }
+      button {
+        @extend .common-button;
+        background-color: var(--color-secondary-1);
+        padding: 2px 1rem;
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+// footer
+footer {
+  background-color: var(--color-secondary-2) !important;
+  .footer-wrapper {
+    p {
+      @include font-size-weight(16px, 400);
+      color: var(--color-white-1);
+    }
+  }
+}
+
+// login
+.login-page {
+  @include flex-center(center, center);
+  min-height: 70dvh;
+  .page-wrapper {
+    @include flex-center(center, center);
+    flex-direction: column;
+    width: 400px;
+    background-color: var(--color-white-1);
+    padding: 2rem;
+    border-radius: 25px;
+
+    .user-type {
+      @include flex-center(space-between, center);
+      width: 100%;
+      padding: 1rem 0;
+
+      button {
+        @extend .common-button;
+      }
+    }
+
+    form {
+      width: 100%;
+
+      div {
+        input {
+          width: 100%;
+        }
+      }
+      button {
+        @extend .common-button;
+        background-color: var(--color-secondary-1);
+        width: 100%;
+        margin-top: 0.25rem;
+      }
+    }
+  }
+}
+
+// profile
+.user-profile-page {
+  min-height: 70dvh;
+  @include flex-center(center, center);
+
+  .profile-wrapper {
+    @include flex-center(center, center);
+    flex-direction: column;
+    width: 600px;
+    background-color: var(--color-white-1);
+    padding: 2rem;
+    border-radius: 25px;
+
+    .profile-details {
+      width: 100%;
+      padding-bottom: 1rem;
+
+      div {
+        margin: 0.5rem 0;
+        p {
+          @include font-size-weight(16px, 400);
+
+          &:nth-child(2) {
+            border-radius: 5px;
+            padding: 0.5rem 0.75rem;
+            background-color: var(--color-secondary-2);
+            color: var(--color-white-1);
+
+            a {
+              padding: 0.2rem 1rem;
+              border-radius: 10px;
+              background-color: var(--color-secondary-3);
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -2,7 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "../app/css-const.css";
+:root {
+  --max-width: 1440px;
+  --color-white-1: #ffffff;
+  --color-secondary: #dddddd;
+}
 
 * {
   margin: 0;
@@ -17,7 +21,7 @@ body {
 
 .width-container {
   max-width: var(--max-width);
-  background-color: var(--background-color-2);
+  background-color: var(--color-secondary);
   margin: 0 auto;
   padding: 2rem 1.5rem;
 }
@@ -33,5 +37,4 @@ button {
   border: none;
   background: none;
   cursor: pointer;
-  color: #551a8b;
 }

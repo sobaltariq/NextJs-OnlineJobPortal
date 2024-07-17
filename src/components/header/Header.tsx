@@ -2,21 +2,20 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
-import user from "../../../public/assets/user.png";
 import Link from "next/link";
 
-import "./header.scss";
 import { useRouter } from "next/navigation";
 
 const Header: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [userRole, setUserRole] = useState<string>("");
 
   const router = useRouter();
 
   useEffect(() => {
-    // const token = localStorage.getItem("login_token");
+    setUserRole(localStorage.getItem("user_role") || "");
     setIsLoggedIn(!!localStorage.getItem("login_token"));
-  }, [isLoggedIn]);
+  }, [isLoggedIn, userRole]);
 
   const logoutHandler: () => void = () => {
     localStorage.clear();
@@ -26,7 +25,7 @@ const Header: React.FC = () => {
 
   return (
     <header className="width-container">
-      <div>
+      <div className="header-wrapper">
         <ul>
           <li>
             <Link href="/">Home</Link>
@@ -39,39 +38,28 @@ const Header: React.FC = () => {
               <li>
                 <Link href="/user/job-seeker">Job Seeker</Link>
               </li>
+              <li>
+                <Link href="/jobs/my-jobs">My Jobs</Link>
+              </li>
+              {userRole === "job seeker" && (
+                <li>
+                  <Link href="/applications">My Applications</Link>
+                </li>
+              )}
             </>
           )}
-          <li>
-            <Link href="/">Categories</Link>
-          </li>
-          <li>
-            <Link href="/jobs">Jobs</Link>
-          </li>
-          <li>
-            <Link href="/jobs/my-jobs">My Jobs</Link>
-          </li>
-          <li>
-            <Link href="/applications">My Applications</Link>
-          </li>
-          {/* <li>
-            <Link href="/about">About</Link>
-          </li>
-          <li>
-            <Link href="/contact">Contact</Link>
-          </li> */}
         </ul>
-        <div className="flex gap-8">
-          <input type="text" placeholder="Search..." />
+        <div className="side-header">
           {isLoggedIn && (
-            <div>
-              <Image src={user} alt="user profile" height={25} width={25} />
-              <div className="flex gap-2">
+            <>
+              <input type="text" placeholder="Search..." />
+              <div>
                 <Link href="/profile">Profile</Link>
               </div>
-            </div>
+            </>
           )}
           {!isLoggedIn && (
-            <div className="flex gap-8">
+            <div className="">
               <Link href="/login">Login</Link>
               <Link href="/register">Register</Link>
             </div>

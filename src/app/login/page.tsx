@@ -83,46 +83,48 @@ function LoginPage() {
   }, []);
 
   return (
-    <div>
-      <h1>Login</h1>
-      {loginError && <p className="error">{loginError}</p>}
-      <div className="flex gap-8">
-        <button
-          onClick={() => {
-            setUserType("seeker");
-          }}
+    <div className="login-page">
+      <div className="page-wrapper">
+        <h1>Login</h1>
+        {loginError && <p className="error">{loginError}</p>}
+        <div className="user-type">
+          <button
+            onClick={() => {
+              setUserType("seeker");
+            }}
+          >
+            Job Seeker
+          </button>
+          <button
+            onClick={() => {
+              setUserType("employer");
+            }}
+          >
+            Employer
+          </button>
+        </div>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={loginHandler}
         >
-          Job Seeker
-        </button>
-        <button
-          onClick={() => {
-            setUserType("employer");
-          }}
-        >
-          Employer
-        </button>
+          {({ isSubmitting }) => (
+            <Form>
+              <div>
+                <Field type="email" id="email" name="email" />
+                <ErrorMessage name="email" component="div" />
+              </div>
+              <div className="mt-3 mb-3">
+                <Field type="password" id="password" name="password" />
+                <ErrorMessage name="password" component="div" />
+              </div>
+              <button type="submit" disabled={isSubmitting}>
+                Submit
+              </button>
+            </Form>
+          )}
+        </Formik>
       </div>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={loginHandler}
-      >
-        {({ isSubmitting }) => (
-          <Form>
-            <div>
-              <Field type="email" id="email" name="email" />
-              <ErrorMessage name="email" component="div" />
-            </div>
-            <div className="mt-3 mb-3">
-              <Field type="password" id="password" name="password" />
-              <ErrorMessage name="password" component="div" />
-            </div>
-            <button type="submit" disabled={isSubmitting}>
-              Submit
-            </button>
-          </Form>
-        )}
-      </Formik>
     </div>
   );
 }
