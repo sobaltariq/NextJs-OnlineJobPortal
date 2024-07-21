@@ -12,6 +12,8 @@
   --color-black-2: #2c2929;
   --color-black-3: #444444;
 
+  --color-red-1: #ef4444;
+
   --color-secondary-1: #001b4d;
   --color-secondary-2: #4585c5;
   --color-secondary-3: #492d7e;
@@ -29,9 +31,37 @@
   font-weight: $weight;
 }
 
+@mixin button-border($border-color, $color) {
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  border: 2px solid var($border-color);
+  @include font-size-weight(18px, 400);
+  background: none;
+  color: var($color);
+}
+
+@mixin common-button($bg-color) {
+  font-size: 18px;
+  font-weight: 400;
+  padding: 0.5rem 1rem;
+  background-color: var($bg-color);
+  color: var(--color-white-1);
+  border-radius: 25px;
+  width: max-content;
+  @include font-size-weight(18px, 400);
+}
+
 h1 {
   @include font-size-weight(24px, 500);
   padding-bottom: 2rem;
+}
+h2 {
+  @include font-size-weight(22px, 500);
+  padding-bottom: 0.5rem;
+}
+h3 {
+  @include font-size-weight(20px, 500);
+  padding-bottom: 0.5rem;
 }
 
 input {
@@ -42,14 +72,22 @@ input {
   border: 1px solid var(--color-secondary-3);
 }
 
-.common-button {
-  font-size: 18px;
-  font-weight: 400;
-  padding: 0.5rem 1rem;
-  background-color: var(--color-secondary-2);
-  color: var(--color-white-1);
-  border-radius: 25px;
-  width: max-content;
+// scrollbar
+/* width */
+.s-bar::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* Track */
+.s-bar::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px var(--color-secondary-2);
+  border-radius: 10px;
+}
+
+/* Handle */
+.s-bar::-webkit-scrollbar-thumb {
+  background: var(--color-secondary-1);
+  border-radius: 10px;
 }
 
 // header
@@ -87,8 +125,7 @@ header {
         }
       }
       button {
-        @extend .common-button;
-        background-color: var(--color-secondary-1);
+        @include common-button(--color-secondary-1);
         padding: 2px 1rem;
         font-size: 16px;
       }
@@ -125,7 +162,7 @@ footer {
       padding: 1rem 0;
 
       button {
-        @extend .common-button;
+        @include common-button(--color-secondary-2);
       }
     }
 
@@ -138,10 +175,68 @@ footer {
         }
       }
       button {
-        @extend .common-button;
-        background-color: var(--color-secondary-1);
+        @include common-button(--color-secondary-1);
         width: 100%;
         margin-top: 0.25rem;
+      }
+    }
+  }
+}
+
+// register
+.register-page {
+  @include flex-center(center, center);
+  min-height: 70dvh;
+  .register-wrapper {
+    @include flex-center(center, center);
+    flex-direction: column;
+    width: 400px;
+    background-color: var(--color-white-1);
+    padding: 2rem;
+    border-radius: 25px;
+    form {
+      width: 100%;
+
+      div {
+        input {
+          width: 100%;
+        }
+        select {
+          width: 100%;
+          padding: 0.5rem 0.75rem;
+          outline: none;
+          border-radius: 0.5rem;
+          font-size: 16px;
+          font-weight: 400;
+          border: 1px solid var(--color-secondary-3);
+        }
+      }
+      button {
+        @include common-button(--color-secondary-1);
+        width: 100%;
+        margin-top: 0.25rem;
+      }
+    }
+  }
+}
+
+// profile, single job, single user
+.info-box {
+  margin: 0.5rem 0;
+  p {
+    @include font-size-weight(16px, 400);
+
+    &:nth-child(2) {
+      border-radius: 5px;
+      padding: 0.5rem 0.75rem;
+      background-color: var(--color-secondary-2);
+      color: var(--color-white-1);
+
+      a,
+      span {
+        padding: 0.2rem 1rem;
+        border-radius: 10px;
+        background-color: var(--color-secondary-3);
       }
     }
   }
@@ -163,26 +258,174 @@ footer {
     .profile-details {
       width: 100%;
       padding-bottom: 1rem;
+    }
+
+    .bottom-buttons-wrapper {
+      @include flex-center(space-between, center);
+      width: 100%;
+      margin-top: 2rem;
 
       div {
-        margin: 0.5rem 0;
-        p {
-          @include font-size-weight(16px, 400);
+        button {
+          @include common-button(--color-secondary-2);
+        }
+        .del-btn {
+          @include button-border(--color-red-1, --color-red-1);
+        }
+      }
+    }
+  }
+}
 
-          &:nth-child(2) {
-            border-radius: 5px;
-            padding: 0.5rem 0.75rem;
-            background-color: var(--color-secondary-2);
-            color: var(--color-white-1);
+// job card
+.job-card {
+  background-color: var(--color-white-1);
+  padding: 1.5rem;
+  border-radius: 25px;
 
-            a {
-              padding: 0.2rem 1rem;
-              border-radius: 10px;
-              background-color: var(--color-secondary-3);
+  .job-card-link {
+    padding-bottom: 0.5rem;
+    div {
+      p {
+        @include font-size-weight(18px, 400);
+        span {
+          @include font-size-weight(18px, 300);
+        }
+      }
+    }
+  }
+
+  .card-bottom {
+    div {
+      button {
+        @include common-button(--color-secondary-2);
+      }
+      .del-btn {
+        @include button-border(--color-red-1, --color-red-1);
+      }
+    }
+  }
+}
+
+// home for all jobs
+.home-page {
+  .home-top {
+    div {
+      button {
+        @include common-button(--color-secondary-3);
+      }
+    }
+  }
+}
+
+// employer and seeker
+.users-page {
+  min-height: 70dvh;
+}
+
+// seeker application page
+.applications-page {
+  min-height: 70dvh;
+  .applications-wrapper {
+    div {
+      .job-card {
+        div {
+          h2 {
+            color: var(--color-secondary-3);
+          }
+          p {
+            @include font-size-weight(18px, 400);
+            span {
+              @include font-size-weight(18px, 300);
             }
           }
         }
       }
+    }
+  }
+}
+
+// single job
+.single-job-page {
+  min-height: 70dvh;
+  width: 100%;
+  @include flex-center(center, center);
+  .single-job-wrapper {
+    &[data-is-employer="true"] {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 2rem;
+      width: 100%;
+    }
+    &[data-is-employer="false"] {
+      width: 700px;
+    }
+
+    > div {
+      width: 100%;
+      background-color: var(--color-white-1);
+      padding: 2rem;
+      border-radius: 25px;
+      height: max-content;
+    }
+    .my-job-applications {
+      div {
+        .app-card {
+          @include flex-center(flex-start, center);
+          flex-direction: column;
+          gap: 1rem;
+          margin-top: 2rem;
+          overflow-y: scroll;
+          padding-right: 0.5rem;
+          height: 500px;
+
+          > div {
+            @include button-border(--color-secondary-2, --color-black-2);
+            padding: 1rem;
+            width: 100%;
+
+            a {
+              div {
+                p {
+                  @include font-size-weight(18px, 400);
+                  span {
+                    @include font-size-weight(16px, 300);
+                  }
+                }
+              }
+            }
+
+            > div {
+              button {
+                @include button-border(
+                  --color-secondary-3,
+                  --color-secondary-1
+                );
+                width: 10rem;
+                font-weight: 600;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// single user
+.single-user-page {
+  min-height: 70dvh;
+  @include flex-center(center, center);
+
+  .single-user-wrapper {
+    @include flex-center(center, center);
+    flex-direction: column;
+    width: 600px;
+    background-color: var(--color-white-1);
+    padding: 2rem;
+    border-radius: 25px;
+    div {
+      width: 100%;
     }
   }
 }

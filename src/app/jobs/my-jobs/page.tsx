@@ -67,7 +67,7 @@ const MyJobsPage = () => {
       {apiData.length > 0 ? (
         <div>
           <p>{showError}</p>
-          <h2 className="py-4">Total Jobs: {apiData.length}</h2>
+          <h2 className="pb-8">Total Jobs: {apiData.length}</h2>
           <div className="grid grid-cols-2 gap-8">
             {apiData.map((jobData: MyJobsInterface) => {
               return (

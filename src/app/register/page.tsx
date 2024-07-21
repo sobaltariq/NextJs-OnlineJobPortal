@@ -81,55 +81,62 @@ function RegisterPage() {
   };
 
   return (
-    <div>
-      <h1>Register an account</h1>
-      {registrationError && <p className="error">{registrationError}</p>}
+    <div className="register-page">
+      <div className="register-wrapper">
+        <h1>Register</h1>
+        {registrationError && <p className="error">{registrationError}</p>}
 
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={registrationHandler}
-      >
-        {({ isSubmitting }) => (
-          <Form>
-            <div>
-              <Field type="text" id="name" name="name" placeholder="Name" />
-              <ErrorMessage name="name" component="div" />
-            </div>
-            <div>
-              <Field type="email" id="email" name="email" placeholder="Email" />
-              <ErrorMessage name="email" component="div" />
-            </div>
-            <div>
-              <Field
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Password"
-              />
-              <ErrorMessage name="password" component="div" />
-            </div>
-            <div>
-              <Field as="select" id="role" name="role">
-                <option value="" label="Select role" />
-                {roleOptions.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                    label={option.label}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </Field>
-              <ErrorMessage name="role" component="div" />
-            </div>
-            <button type="submit" disabled={isSubmitting}>
-              Register
-            </button>
-          </Form>
-        )}
-      </Formik>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={registrationHandler}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <div>
+                <Field type="text" id="name" name="name" placeholder="Name" />
+                <ErrorMessage name="name" component="div" />
+              </div>
+              <div className="my-3">
+                <Field
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Email"
+                />
+                <ErrorMessage name="email" component="div" />
+              </div>
+              <div>
+                <Field
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Password"
+                />
+                <ErrorMessage name="password" component="div" />
+              </div>
+              <div className="my-3">
+                <Field as="select" id="role" name="role">
+                  <option value="" label="Select role" />
+                  {roleOptions.map((option) => (
+                    <option
+                      key={option.value}
+                      value={option.value}
+                      label={option.label}
+                    >
+                      {option.label}
+                    </option>
+                  ))}
+                </Field>
+                <ErrorMessage name="role" component="div" />
+              </div>
+              <button type="submit" disabled={isSubmitting}>
+                Register
+              </button>
+            </Form>
+          )}
+        </Formik>
+      </div>
     </div>
   );
 }

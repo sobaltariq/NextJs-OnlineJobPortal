@@ -71,26 +71,39 @@ const JobCard: React.FC<JobPropsInterface> = ({
   };
 
   return (
-    <div className="py-4 px-2 shadow-inner rounded-lg bg-stone-200">
-      <Link href={`/jobs/${jobId}`} key={jobId}>
+    <div className="job-card">
+      <Link href={`/jobs/${jobId}`} key={jobId} className="job-card-link">
         <h3>{jobTitle}</h3>
-        <div className="flex justify-between">
-          <p>Salary: {jobSalary}</p>
-          <p>Location: {jobLocation}</p>
+        <div className="flex justify-between py-1">
+          <p>
+            Salary: <span>{jobSalary}</span>
+          </p>
+          <p>
+            Location: <span>{jobLocation}</span>
+          </p>
         </div>
         <div className="flex justify-between">
-          <p>Total Applications: {applications.length}</p>
-          <p>Posted at: {new Date(jobCreatedAt).toLocaleDateString()}</p>
+          <p>
+            Total Applications: <span>{applications.length}</span>
+          </p>
+          <p>
+            Posted at:{" "}
+            <span>{new Date(jobCreatedAt).toLocaleDateString()}</span>
+          </p>
         </div>
-        <p>
-          Requirements:{" "}
-          {jobRequirements.map((item, i) => (
-            <span key={i}>{item} </span>
-          ))}
-        </p>
+        <div>
+          <p className="py-1">
+            Requirements:{" "}
+            {jobRequirements.map((item, i) => (
+              <span key={i} className="item">
+                {item}{" "}
+              </span>
+            ))}
+          </p>
+        </div>
       </Link>
       {userType === "job seeker" && (
-        <div>
+        <div className="card-bottom pt-4">
           <button className="text-blue-800" onClick={jobApplyNowHandler}>
             Apply Now
           </button>
@@ -98,10 +111,10 @@ const JobCard: React.FC<JobPropsInterface> = ({
       )}
       {employerUserId === loggedInUserId && (
         <React.Fragment>
-          <div className="flex justify-between pt-2">
+          <div className="card-bottom flex justify-between pt-4">
             <div>
               <button
-                className="text-red-500"
+                className="del-btn"
                 onClick={() => {
                   setJobDeleteModal(true);
                 }}

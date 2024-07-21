@@ -69,9 +69,9 @@ const AllJobsPage = () => {
   }, []);
 
   return (
-    <div>
+    <div className="home-page">
       {userTye === "employer" && (
-        <div className="py-8">
+        <div className="home-top pb-8">
           <div>
             <button
               onClick={() => {
@@ -88,8 +88,8 @@ const AllJobsPage = () => {
         </div>
       )}
       {apiData.length > 0 ? (
-        <div>
-          <div className="grid grid-cols-2 gap-8">
+        <div className="jobs-container">
+          <div className="jobs-wrapper grid grid-cols-2 gap-8">
             {apiData.map((jobData: JobsInterface) => {
               return (
                 <JobCard

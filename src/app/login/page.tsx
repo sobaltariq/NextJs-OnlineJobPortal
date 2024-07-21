@@ -119,7 +119,7 @@ function LoginPage() {
                 <ErrorMessage name="password" component="div" />
               </div>
               <button type="submit" disabled={isSubmitting}>
-                Submit
+                Login
               </button>
             </Form>
           )}

@@ -74,51 +74,58 @@ const ApplicationsOnMyJob: React.FC<ApplicationParamsInterface> = ({
   };
 
   return (
-    <div className="py-8">
+    <div className="my-job-applications pt-8">
       {apiData.length > 0 ? (
         <div>
           {showError && <p>{showError}</p>}
-          <h2 className="pb-4">Applications On MyJob</h2>
-          <div className="grid grid-cols-2 gap-8">
+          <h2 className="">Job Applications</h2>
+          <div className="app-card  s-bar">
             {apiData.map((app: JobApplicationInterface) => {
               return (
-                <div
-                  key={app.appId}
-                  className="py-4 px-2 shadow-inner rounded-lg bg-stone-200"
-                >
+                <div key={app.appId} className="">
                   <Link href={`/user/job-seeker/${app.seekerId}`}>
                     <h3>Name:{app?.seekerUserName}</h3>
-                    <p>
-                      Applied At:{" "}
-                      {new Date(app?.appCreatedAt).toLocaleDateString()}
-                    </p>
-                    <p>Email: {app?.seekerUserEmail}</p>
-                    <p>Status: {app?.appStatus}</p>
-                  </Link>
-                  <div>
-                    <div className="flex justify-between pt-4">
-                      {app.appStatus !== "pending" && (
-                        <button
-                          onClick={() => changeAppStatus("pending", app.appId)}
-                        >
-                          Pending
-                        </button>
-                      )}
-                      {app.appStatus !== "accepted" && (
-                        <button
-                          onClick={() => changeAppStatus("accepted", app.appId)}
-                        >
-                          Accept
-                        </button>
-                      )}
-                      {app.appStatus !== "rejected" && (
-                        <button
-                          onClick={() => changeAppStatus("rejected", app.appId)}
-                        >
-                          Reject
-                        </button>
-                      )}
+                    <div>
+                      <p>
+                        Applied At:{" "}
+                        <span>
+                          {new Date(app?.appCreatedAt).toLocaleDateString()}
+                        </span>
+                      </p>
                     </div>
+                    <div>
+                      <p>
+                        Email: <span>{app?.seekerUserEmail}</span>
+                      </p>
+                    </div>
+                    <div>
+                      <p>
+                        Status: <span>{app?.appStatus}</span>
+                      </p>
+                    </div>
+                  </Link>
+                  <div className="flex justify-between pt-4">
+                    {app.appStatus !== "pending" && (
+                      <button
+                        onClick={() => changeAppStatus("pending", app.appId)}
+                      >
+                        Pending
+                      </button>
+                    )}
+                    {app.appStatus !== "accepted" && (
+                      <button
+                        onClick={() => changeAppStatus("accepted", app.appId)}
+                      >
+                        Accept
+                      </button>
+                    )}
+                    {app.appStatus !== "rejected" && (
+                      <button
+                        onClick={() => changeAppStatus("rejected", app.appId)}
+                      >
+                        Reject
+                      </button>
+                    )}
                   </div>
                 </div>
               );

@@ -118,23 +118,23 @@ const ProfilePage: React.FC = () => {
         <div className="profile-wrapper">
           <h1>Profile</h1>
           <div className="profile-details">
-            <div>
+            <div className="info-box">
               <p>Name:</p> <p>{apiData?.userName}</p>
             </div>
-            <div>
+            <div className="info-box">
               <p>Email: </p> <p>{apiData.userEmail}</p>
             </div>
-            <div>
+            <div className="info-box">
               <p>Role: </p>
               <p>{apiData.userRole}</p>
             </div>
-            <div>
+            <div className="info-box">
               <p>Registration Date:</p>{" "}
               <p>{new Date(apiData.userCreatedAt).toLocaleDateString()}</p>
             </div>
             {/* for employer */}
             {apiData.userRole === "employer" && (
-              <div className="">
+              <div className="info-box">
                 <p>Job Postings: </p>{" "}
                 <p className="">
                   {apiData.jobPostings.length <= 0
@@ -157,89 +157,103 @@ const ProfilePage: React.FC = () => {
             {/* for seeker */}
             {apiData.userRole === "job seeker" && (
               <>
-                <p>
-                  Education:{" "}
-                  {apiData.seekerEducation ? apiData.seekerEducation : "Empty"}
-                </p>
-                <p>
-                  Work Experience:{" "}
-                  {apiData.seekerWorkExperience
-                    ? apiData.seekerWorkExperience
-                    : "Empty"}
-                </p>
-                <p>
-                  Saved Jobs:{" "}
-                  {apiData.seekerSavedJobs.length > 0
-                    ? apiData.seekerSavedJobs
-                    : "Empty"}
-                </p>
-                <p className="flex gap-2 justify-items-center">
-                  Skills:{" "}
-                  {apiData.seekerSkills.length > 0
-                    ? apiData.seekerSkills.map((item, i) => {
-                        return (
-                          <span
-                            key={i}
-                            className="bg-red-400 py-1 px-3 rounded"
-                          >
-                            {item}{" "}
-                          </span>
-                        );
-                      })
-                    : "Empty"}
-                </p>
+                <div className="info-box">
+                  <p>Education:</p>
+                  <p>
+                    {apiData.seekerEducation
+                      ? apiData.seekerEducation
+                      : "Empty"}
+                  </p>
+                </div>
+                <div className="info-box">
+                  <p>Work Experience:</p>
+                  <p>
+                    {apiData.seekerWorkExperience
+                      ? apiData.seekerWorkExperience
+                      : "Empty"}
+                  </p>
+                </div>
+                <div className="info-box">
+                  <p>Saved Jobs:</p>
+                  <p>
+                    {apiData.seekerSavedJobs.length > 0
+                      ? apiData.seekerSavedJobs
+                      : "Empty"}
+                  </p>
+                </div>
+                <div className="info-box">
+                  <p className="flex gap-2 justify-items-center">Skills:</p>
+                  <p>
+                    {apiData.seekerSkills.length <= 0
+                      ? "Empty"
+                      : apiData.seekerSkills.map((item, i) => {
+                          return (
+                            <Fragment key={i}>
+                              <span className="bg-neutral-200 px-2 select-none">
+                                {item}
+                              </span>{" "}
+                            </Fragment>
+                          );
+                        })}
+                  </p>
+                </div>
               </>
             )}
           </div>
 
-          {/* for deletion of a user */}
-          <div>
-            <button
-              onClick={() => {
-                setAccountDeleteModal(true);
-              }}
-            >
-              Delete Account
-            </button>
-            <DeleteUserModal
-              accountDeleteModal={accountDeleteModal}
-              setAccountDeleteModal={setAccountDeleteModal}
-              deleteProfileHandler={deleteProfileHandler}
-            />
-          </div>
-
-          {/* for password changing */}
-          <div>
-            <button
-              onClick={() => {
-                setIsPasswordModalOpen(true);
-              }}
-            >
-              Change Password
-            </button>
-            <ChangePasswordModal
-              isPasswordModalOpen={isPasswordModalOpen}
-              setIsPasswordModalOpen={setIsPasswordModalOpen}
-            />
-          </div>
-
-          {/* Edit Profile */}
-          {apiData.userRole === "job seeker" && (
+          <div className="bottom-buttons-wrapper">
+            {/* for deletion of a user */}
             <div>
               <button
+                className="del-btn"
                 onClick={() => {
-                  setIsEditProfileModalOpen(true);
+                  setAccountDeleteModal(true);
                 }}
               >
-                Edit Profile
+                Delete Account
               </button>
-              <EditProfileModal
-                userId={apiData.seekerId}
-                isEditProfileModalOpen={isEditProfileModalOpen}
-                setIsEditProfileModalOpen={setIsEditProfileModalOpen}
+              <DeleteUserModal
+                accountDeleteModal={accountDeleteModal}
+                setAccountDeleteModal={setAccountDeleteModal}
+                deleteProfileHandler={deleteProfileHandler}
               />
             </div>
-          )}
+
+            {/* for password changing */}
+            <div>
+              <button
+                className="cp-btn"
+                onClick={() => {
+                  setIsPasswordModalOpen(true);
+                }}
+              >
+                Change Password
+              </button>
+              <ChangePasswordModal
+                isPasswordModalOpen={isPasswordModalOpen}
+                setIsPasswordModalOpen={setIsPasswordModalOpen}
+              />
+            </div>
+
+            {/* Edit Profile */}
+            {apiData.userRole === "job seeker" && (
+              <div>
+                <button
+                  className="edit-btn"
+                  onClick={() => {
+                    setIsEditProfileModalOpen(true);
+                  }}
+                >
+                  Edit Profile
+                </button>
+                <EditProfileModal
+                  userId={apiData.seekerId}
+                  isEditProfileModalOpen={isEditProfileModalOpen}
+                  setIsEditProfileModalOpen={setIsEditProfileModalOpen}
+                />
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

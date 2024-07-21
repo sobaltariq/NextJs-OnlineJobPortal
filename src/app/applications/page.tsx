@@ -42,34 +42,36 @@ const MyApplicationsPage: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <div className="applications-page">
       {apiData.length > 0 ? (
-        <div>
-          <h2 className="pb-4">
+        <div className="applications-wrapper">
+          <h1>
             My Applications: <span>{apiData.length}</span>
-          </h2>
-          <div className="flex justify-between flex-wrap gap-4">
+          </h1>
+          <div className="grid grid-cols-2 gap-8">
             {apiData.map((app: MyApplicationsInterface, i: number) => {
               return (
-                <div
-                  key={i}
-                  className="py-4 px-2 shadow-inner rounded-lg bg-stone-200 w-[49%]"
-                >
+                <div key={i} className="job-card">
                   <div>
-                    <h3>
+                    <h2>
                       <Link href={`/jobs/${app.jobId}`}>{app.jobTitle}</Link>
-                    </h3>
-                    <p>
-                      Status: <span>{app.appStatus}</span>
-                    </p>
+                    </h2>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between py-2">
                     <p>
                       Job Posted:{" "}
-                      {new Date(app.jobCreatedAt).toLocaleDateString()}
+                      <span>
+                        {new Date(app.jobCreatedAt).toLocaleDateString()}
+                      </span>
                     </p>
                     <p>
-                      Applied Date: {new Date(app.appDate).toLocaleDateString()}
+                      Applied Date:{" "}
+                      <span>{new Date(app.appDate).toLocaleDateString()}</span>
+                    </p>
+                  </div>
+                  <div>
+                    <p>
+                      Status: <span>{app.appStatus}</span>
                     </p>
                   </div>
                 </div>

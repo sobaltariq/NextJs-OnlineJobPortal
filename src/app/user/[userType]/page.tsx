@@ -1,6 +1,6 @@
 "use client";
 import MyApi from "@/api/MyApi";
-import ProfileCard from "@/components/profileCard/ProfileCard";
+import ProfileCard from "@/components/cards/ProfileCard";
 import React, { useEffect, useState } from "react";
 
 interface ParamsData {
@@ -31,7 +31,7 @@ interface ProfileData {
   name: string;
   email: string;
   createdAt: string;
-  jobPostings: JobPostings;
+  jobPostings: JobPostings[];
   skills: string[];
   savedJobs: string[];
 }
@@ -64,20 +64,18 @@ const UserTypePage: React.FC<ParamsData> = ({ params }) => {
     // console.log(userType);
   }, []);
   return (
-    <div>
+    <div className="users-page">
+      {showError && <p>{showError}</p>}
       <div>
-        {showError && <p>{showError}</p>}
-        <div>
-          {apiData.length > 0 ? (
-            <div>
-              {apiData.map((user: ProfileData, index: number) => (
-                <ProfileCard key={index} profileData={user} />
-              ))}
-            </div>
-          ) : (
-            <p>No user data available.</p>
-          )}
-        </div>
+        {apiData.length > 0 ? (
+          <div className="grid grid-cols-2 gap-8">
+            {apiData.map((user: ProfileData, index: number) => (
+              <ProfileCard key={index} profileData={user} />
+            ))}
+          </div>
+        ) : (
+          <p>No user data available.</p>
+        )}
       </div>
     </div>
   );

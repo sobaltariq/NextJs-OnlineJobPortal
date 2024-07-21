@@ -63,20 +63,27 @@ const UserPage: React.FC<UserProfile> = ({ params }) => {
   }, []);
 
   return (
-    <div>
+    <div className="single-user-page">
       {userError && <p>{userError}</p>}
       {apiData && (
-        <div>
-          <p>Name: {apiData?.userName}</p>
-          <p>User Type: {apiData?.userRole}</p>
-          <p>
-            Registration Date:{" "}
-            {new Date(apiData?.userCreatedAt).toLocaleDateString()}
-          </p>
+        <div className="single-user-wrapper">
+          <div className="info-box">
+            <p>Name</p>
+            <p>{apiData?.userName}</p>
+          </div>
+          <div className="info-box">
+            <p>User Type</p>
+            <p>{apiData?.userRole}</p>
+          </div>
+          <div className="info-box">
+            <p>Registration Date</p>
+            <p>{new Date(apiData?.userCreatedAt).toLocaleDateString()}</p>
+          </div>
+
           {apiData.userRole === "employer" && (
-            <div className="flex gap-2">
-              <p>Job Postings: </p>{" "}
-              <div className="flex gap-4">
+            <div className="info-box">
+              <p>Job Postings</p>
+              <p>
                 {apiData.jobPostings.length <= 0
                   ? "Empty"
                   : apiData.jobPostings.map((job, i) => {
@@ -91,41 +98,48 @@ const UserPage: React.FC<UserProfile> = ({ params }) => {
                         </Fragment>
                       );
                     })}
-              </div>
+              </p>
             </div>
           )}
-
           {/* for seeker */}
           {apiData.userRole === "job seeker" && (
             <>
-              <p>
-                Saved Jobs:{" "}
-                {apiData.seekerSavedJobs.length > 0
-                  ? apiData.seekerSavedJobs
-                  : "Empty"}
-              </p>
-              <p>
-                Education:{" "}
-                {apiData.seekerEducation ? apiData.seekerEducation : "Empty"}
-              </p>
-              <p>
-                Work Experience:{" "}
-                {apiData.seekerWorkExperience
-                  ? apiData.seekerWorkExperience
-                  : "Empty"}
-              </p>
-              <p className="flex gap-2 justify-items-center">
-                Skills:{" "}
-                {apiData.seekerSkills.length > 0
-                  ? apiData.seekerSkills.map((item, i) => {
-                      return (
-                        <span key={i} className="bg-red-400 py-1 px-3 rounded">
-                          {item}{" "}
-                        </span>
-                      );
-                    })
-                  : "Empty"}
-              </p>
+              <div className="info-box">
+                <p>Saved Jobs</p>
+                <p>
+                  {apiData.seekerSavedJobs.length > 0
+                    ? apiData.seekerSavedJobs
+                    : "Empty"}
+                </p>
+              </div>
+              <div className="info-box">
+                <p>Education</p>
+                <p>
+                  {apiData.seekerEducation ? apiData.seekerEducation : "Empty"}
+                </p>
+              </div>
+              <div className="info-box">
+                <p>Work Experience</p>
+                <p>
+                  {apiData.seekerWorkExperience
+                    ? apiData.seekerWorkExperience
+                    : "Empty"}
+                </p>
+              </div>
+              <div className="info-box">
+                <p className="">Skills</p>
+                <p>
+                  {apiData.seekerSkills.length > 0
+                    ? apiData.seekerSkills.map((item, i) => {
+                        return (
+                          <Fragment key={i}>
+                            <span>{item}</span>{" "}
+                          </Fragment>
+                        );
+                      })
+                    : "Empty"}
+                </p>
+              </div>
             </>
           )}
         </div>

@@ -38,9 +38,11 @@ const Header: React.FC = () => {
               <li>
                 <Link href="/user/job-seeker">Job Seeker</Link>
               </li>
-              <li>
-                <Link href="/jobs/my-jobs">My Jobs</Link>
-              </li>
+              {userRole === "employer" && (
+                <li>
+                  <Link href="/jobs/my-jobs">My Jobs</Link>
+                </li>
+              )}
               {userRole === "job seeker" && (
                 <li>
                   <Link href="/applications">My Applications</Link>

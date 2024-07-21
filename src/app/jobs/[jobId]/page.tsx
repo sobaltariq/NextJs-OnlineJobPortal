@@ -1,7 +1,7 @@
 "use client";
 import MyApi from "@/api/MyApi";
 import ApplicationsOnMyJob from "@/components/applications/ApplicationsOnMyJob";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 interface JobParamsInterface {
   params: {
@@ -73,41 +73,67 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
     getOneJob();
   }, []);
   return (
-    <div>
+    <div className="single-job-page">
       {apiData ? (
-        <div>
-          <h1>{apiData.jobTitle}</h1>
+        <div
+          className="single-job-wrapper"
+          data-is-employer={
+            apiData.employerUserId === loggedInUser?.id ? "true" : "false"
+          }
+        >
+          <div>
+            <h1>{apiData.jobTitle}</h1>
 
-          <div>
-            <p>Date: {new Date(apiData?.jobCreatedAt).toLocaleDateString()}</p>
-            <p>Salary: {apiData.jobSalary}</p>
-            <p>Location: {apiData.jobLocation}</p>
-            <p>Company: {apiData.jobCompany}</p>
-            <p>Employer: {apiData.employerName}</p>
-          </div>
-          <p>
-            Requirements:{" "}
-            {apiData.jobRequirements.map((item, i) => (
-              <span key={i}>{item} </span>
-            ))}
-          </p>
-          <p>Applications: {apiData.applications.length}</p>
-          <div>
-            <h4>About Job</h4>
-            <p>{apiData.jobDescription}</p>
-          </div>
-          {userType === "job seeker" && (
-            <div>
-              <p>Apply Now</p>
+            <div className="info-box">
+              <p>Date</p>
+              <p>{new Date(apiData?.jobCreatedAt).toLocaleDateString()}</p>
             </div>
-          )}
+            <div className="info-box">
+              <p>Salary</p>
+              <p>{apiData.jobSalary}</p>
+            </div>
+            <div className="info-box">
+              <p>Location</p>
+              <p>{apiData.jobLocation}</p>
+            </div>
+            <div className="info-box">
+              <p>Company</p>
+              <p>{apiData.jobCompany}</p>
+            </div>
+            <div className="info-box">
+              <p>Employer</p>
+              <p>{apiData.employerName}</p>
+            </div>
+            <div className="info-box">
+              <p>Applications</p>
+              <p>{apiData.applications.length}</p>
+            </div>
+            <div className="info-box">
+              <h4>About Job</h4>
+              <p>{apiData.jobDescription}</p>
+            </div>
 
+            <div className="info-box mb-0">
+              <p>Requirements</p>
+              <p>
+                {apiData.jobRequirements.map((item, i) => {
+                  return (
+                    <Fragment key={i}>
+                      <span className="px-2 select-none">{item}</span>{" "}
+                    </Fragment>
+                  );
+                })}
+              </p>
+            </div>
+          </div>
           {apiData.employerUserId === loggedInUser?.id && (
             <ApplicationsOnMyJob jobIdParam={jobId} />
           )}
         </div>
       ) : (
-        <p>{showError}</p>
+        <div className="single-job-wrapper">
+          <p>{showError}</p>
+        </div>
       )}
     </div>
   );
