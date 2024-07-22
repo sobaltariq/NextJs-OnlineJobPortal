@@ -100,13 +100,13 @@ const ChangePasswordModal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className={`fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center ${
-        isPasswordModalOpen ? "block" : "hidden"
-      }`}
+      className={`modal-container fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center 
+        ${isPasswordModalOpen ? "flex" : "hidden"}
+      `}
     >
-      <div className="relative bg-white rounded-xl p-4 shadow-lg w-96 z-51 ">
-        <div className="border-solid border-2 border-sky-500 p-4 rounded-lg">
-          <h1>Change Password</h1>
+      <div className="modal-wrapper relative">
+        <div className="">
+          <h3>Change Password</h3>
           {changePassError && <p className="">{changePassError}</p>}
           <Formik
             initialValues={initialValues}
@@ -114,8 +114,8 @@ const ChangePasswordModal: React.FC<ModalProps> = ({
             onSubmit={changePasswordHandler}
           >
             {({ isSubmitting, resetForm }) => (
-              <Form>
-                <div className="mt-4">
+              <Form className="pt-4">
+                <div className="">
                   <Field
                     type="password"
                     id="oldPassword"
@@ -124,7 +124,7 @@ const ChangePasswordModal: React.FC<ModalProps> = ({
                   />
                   <ErrorMessage name="oldPassword" component="div" />
                 </div>
-                <div className="mt-4 mb-4">
+                <div className="my-4">
                   <Field
                     type="password"
                     id="newPassword"
@@ -133,7 +133,7 @@ const ChangePasswordModal: React.FC<ModalProps> = ({
                   />
                   <ErrorMessage name="newPassword" component="div" />
                 </div>
-                <div className="mt-4 mb-4">
+                <div className="">
                   <Field
                     type="password"
                     id="confirmPassword"
@@ -143,10 +143,7 @@ const ChangePasswordModal: React.FC<ModalProps> = ({
                   <ErrorMessage name="confirmPassword" component="div" />
                 </div>
 
-                <div className="flex gap-8">
-                  <button type="submit" disabled={isSubmitting}>
-                    Save
-                  </button>
+                <div className="flex justify-between pt-8">
                   <button
                     type="button"
                     onClick={() => {
@@ -155,6 +152,9 @@ const ChangePasswordModal: React.FC<ModalProps> = ({
                     }}
                   >
                     Cancel
+                  </button>
+                  <button type="submit" disabled={isSubmitting}>
+                    Save
                   </button>
                 </div>
               </Form>

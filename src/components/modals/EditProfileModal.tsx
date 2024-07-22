@@ -94,13 +94,13 @@ const EditProfileModal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className={`fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center ${
+      className={`modal-container fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center ${
         isEditProfileModalOpen ? "block" : "hidden"
       }`}
     >
-      <div className="relative bg-white rounded-xl p-4 shadow-lg w-96 z-51 ">
-        <div className="border-solid border-2 border-sky-500 p-4 rounded-lg">
-          <h1>Edit Profile</h1>
+      <div className="modal-wrapper relative">
+        <div className="">
+          <h3>Edit Profile</h3>
           {changePassError && <p className="">{changePassError}</p>}
           <Formik
             initialValues={initialValues}
@@ -109,7 +109,7 @@ const EditProfileModal: React.FC<ModalProps> = ({
           >
             {({ isSubmitting, values, resetForm }) => (
               <Form>
-                <div className="mt-4">
+                <div className="">
                   <Field
                     type="text"
                     id="education"
@@ -118,10 +118,10 @@ const EditProfileModal: React.FC<ModalProps> = ({
                   />
                   <ErrorMessage name="education" component="div" />
                 </div>
-                <div className="mt-4 ">
+                <div className="my-4 ">
                   <FieldArray name="skills">
                     {({ remove, push }) => (
-                      <div>
+                      <div className="req">
                         {values.skills.map((skill, index) => (
                           <div key={index}>
                             {" "}
@@ -136,19 +136,24 @@ const EditProfileModal: React.FC<ModalProps> = ({
                               component="div"
                             />{" "}
                             {/* Correct field name */}
-                            <button type="button" onClick={() => remove(index)}>
-                              Remove
-                            </button>
+                            <div className="flex justify-between pt-2">
+                              <button
+                                type="button"
+                                onClick={() => remove(index)}
+                              >
+                                Remove
+                              </button>
+                              <button type="button" onClick={() => push("")}>
+                                Add Skill
+                              </button>
+                            </div>
                           </div>
                         ))}
-                        <button type="button" onClick={() => push("")}>
-                          Add Skill
-                        </button>
                       </div>
                     )}
                   </FieldArray>
                 </div>
-                <div className="mt-4 mb-4">
+                <div className="">
                   <Field
                     type="text"
                     id="workExperience"
@@ -158,10 +163,7 @@ const EditProfileModal: React.FC<ModalProps> = ({
                   <ErrorMessage name="workExperience" component="div" />
                 </div>
 
-                <div className="flex gap-8">
-                  <button type="submit" disabled={isSubmitting}>
-                    Save
-                  </button>
+                <div className="flex justify-between pt-8">
                   <button
                     type="button"
                     onClick={() => {
@@ -170,6 +172,9 @@ const EditProfileModal: React.FC<ModalProps> = ({
                     }}
                   >
                     Cancel
+                  </button>
+                  <button type="submit" disabled={isSubmitting}>
+                    Save
                   </button>
                 </div>
               </Form>

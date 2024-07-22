@@ -260,12 +260,12 @@ footer {
       padding-bottom: 1rem;
     }
 
-    .bottom-buttons-wrapper {
+    > .bottom-buttons-wrapper {
       @include flex-center(space-between, center);
       width: 100%;
       margin-top: 2rem;
 
-      div {
+      > div {
         button {
           @include common-button(--color-secondary-2);
         }
@@ -426,6 +426,49 @@ footer {
     border-radius: 25px;
     div {
       width: 100%;
+    }
+  }
+}
+
+// ##### modals #####
+.modal-container {
+  .modal-wrapper {
+    background-color: var(--color-white-1);
+    padding: 1rem;
+    border-radius: 25px;
+    min-width: 400px;
+
+    > div {
+      border: 2px solid var(--color-secondary-3);
+      padding: 0.75rem;
+      border: 2px solid var(--color-secondary-3);
+      border-radius: 20px;
+
+      > form {
+        > div {
+          input {
+            width: 100%;
+          }
+          div {
+            width: 100%;
+          }
+          > .req {
+            > div {
+              > div {
+                button {
+                  @include common-button(--color-secondary-1);
+                  &:nth-child(1) {
+                    @include button-border(--color-red-1, --color-red-1);
+                  }
+                  font-size: 16px !important;
+                  font-weight: 300 !important;
+                  padding: 0.2rem 0.75rem !important;
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

@@ -27,17 +27,17 @@ const DeleteUserModal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className={`fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center ${
+      className={`modal-container fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center ${
         accountDeleteModal ? "block" : "hidden"
       }`}
     >
-      <div className="relative bg-white rounded-xl p-4 shadow-lg w-96 z-51 ">
-        <div className="border-solid border-2 border-sky-500 p-4 rounded-lg">
-          <div className="flex justify-center flex-col items-center gap-4 mb-6">
-            <p>Are You Sure</p>
+      <div className="modal-wrapper relative">
+        <div className="">
+          <div className="flex justify-center flex-col items-center">
+            <h3>Are You Sure</h3>
             <p>Confirm to delete your account</p>
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between pt-8">
             <button
               onClick={() => {
                 setAccountDeleteModal(false);
@@ -45,7 +45,9 @@ const DeleteUserModal: React.FC<ModalProps> = ({
             >
               Cancel
             </button>
-            <button onClick={deleteProfileHandler}>Delete</button>
+            <button className="del-btn" onClick={deleteProfileHandler}>
+              Delete
+            </button>
           </div>
         </div>
       </div>

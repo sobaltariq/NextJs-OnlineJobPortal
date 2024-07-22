@@ -5,21 +5,30 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "@/redux/features/auth/authSlice";
+import { RootState } from "@/redux/store";
 
 const Header: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [userRole, setUserRole] = useState<string>("");
+  const dispatch = useDispatch();
+  const { isLoggedIn, userRole } = useSelector(
+    (state: RootState) => state.auth
+  );
+
+  // const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  // const [userRole, setUserRole] = useState<string>("");
 
   const router = useRouter();
 
-  useEffect(() => {
-    setUserRole(localStorage.getItem("user_role") || "");
-    setIsLoggedIn(!!localStorage.getItem("login_token"));
-  }, [isLoggedIn, userRole]);
+  // useEffect(() => {
+  //   setUserRole(localStorage.getItem("user_role") || "");
+  //   setIsLoggedIn(!!localStorage.getItem("login_token"));
+  // }, [isLoggedIn, userRole]);
 
   const logoutHandler: () => void = () => {
-    localStorage.clear();
-    setIsLoggedIn(false);
+    // localStorage.clear();
+    // setIsLoggedIn(false);
+    dispatch(logout());
     router.push("/login");
   };
 

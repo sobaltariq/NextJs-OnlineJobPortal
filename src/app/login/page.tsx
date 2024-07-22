@@ -67,7 +67,7 @@ function LoginPage() {
           setAuthData({
             token,
             role,
-            isLoggedIn: false,
+            isLoggedIn: true,
           })
         );
 

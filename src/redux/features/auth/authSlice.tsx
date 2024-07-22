@@ -7,9 +7,9 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  isLoggedIn: false,
-  loginToken: null,
-  userRole: null,
+  isLoggedIn: !!localStorage.getItem("login_token"),
+  loginToken: localStorage.getItem("login_token"),
+  userRole: localStorage.getItem("user_role"),
 };
 
 const authSlice = createSlice({
@@ -24,14 +24,17 @@ const authSlice = createSlice({
         role: string;
       }>
     ) => {
-      state.isLoggedIn = true;
+      state.isLoggedIn = action.payload.isLoggedIn;
       state.loginToken = action.payload.token;
       state.userRole = action.payload.role;
+      localStorage.setItem("login_token", action.payload.token);
+      localStorage.setItem("user_role", action.payload.role);
     },
     logout: (state) => {
       state.isLoggedIn = false;
       state.loginToken = null;
       state.userRole = null;
+      localStorage.clear();
     },
   },
 });

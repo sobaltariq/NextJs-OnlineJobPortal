@@ -103,13 +103,13 @@ const EditJobModal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className={`fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center ${
+      className={`modal-container fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center ${
         isEditJobModalOpen ? "block" : "hidden"
       }`}
     >
-      <div className="relative bg-white rounded-xl p-4 shadow-lg w-96 z-51 ">
-        <div className="border-solid border-2 border-sky-500 p-4 rounded-lg">
-          <h1>Edit Job</h1>
+      <div className="modal-wrapper relative">
+        <div className="">
+          <h3>Edit Job</h3>
           {showError && <p className="">{showError}</p>}
           <Formik
             initialValues={initialValues}
@@ -118,7 +118,7 @@ const EditJobModal: React.FC<ModalProps> = ({
           >
             {({ isSubmitting, values, resetForm }) => (
               <Form>
-                <div className="mt-4">
+                <div className="">
                   <Field
                     type="text"
                     id="title"
@@ -127,7 +127,7 @@ const EditJobModal: React.FC<ModalProps> = ({
                   />
                   <ErrorMessage name="title" component="div" />
                 </div>
-                <div className="mt-4">
+                <div className="my-4">
                   <Field
                     type="text"
                     id="description"
@@ -136,7 +136,7 @@ const EditJobModal: React.FC<ModalProps> = ({
                   />
                   <ErrorMessage name="description" component="div" />
                 </div>
-                <div className="mt-4">
+                <div className="">
                   <Field
                     type="text"
                     id="companyName"
@@ -145,10 +145,10 @@ const EditJobModal: React.FC<ModalProps> = ({
                   />
                   <ErrorMessage name="companyName" component="div" />
                 </div>
-                <div className="mt-4 ">
+                <div className="my-4 ">
                   <FieldArray name="requirements">
                     {({ remove, push }) => (
-                      <div>
+                      <div className="req">
                         {values.requirements.map(
                           (requirement: any, index: number) => (
                             <div key={index}>
@@ -164,45 +164,46 @@ const EditJobModal: React.FC<ModalProps> = ({
                                 component="div"
                               />{" "}
                               {/* Correct field name */}
-                              <button
-                                type="button"
-                                onClick={() => remove(index)}
-                              >
-                                Remove
-                              </button>
+                              <div className="flex justify-between pt-2">
+                                <button
+                                  type="button"
+                                  onClick={() => remove(index)}
+                                >
+                                  Remove
+                                </button>
+                                <button type="button" onClick={() => push("")}>
+                                  Add requirement
+                                </button>
+                              </div>
                             </div>
                           )
                         )}
-                        <button type="button" onClick={() => push("")}>
-                          Add requirement
-                        </button>
                       </div>
                     )}
                   </FieldArray>
                 </div>
-                <div className="mt-4 mb-4">
-                  <Field
-                    type="text"
-                    id="location"
-                    name="location"
-                    placeholder="Location"
-                  />
-                  <ErrorMessage name="location" component="div" />
-                </div>
-                <div className="mt-4 mb-4">
-                  <Field
-                    type="text"
-                    id="salary"
-                    name="salary"
-                    placeholder="Salary"
-                  />
-                  <ErrorMessage name="salary" component="div" />
+                <div className="flex justify-between gap-4">
+                  <div className="">
+                    <Field
+                      type="text"
+                      id="location"
+                      name="location"
+                      placeholder="Location"
+                    />
+                    <ErrorMessage name="location" component="div" />
+                  </div>
+                  <div className="">
+                    <Field
+                      type="text"
+                      id="salary"
+                      name="salary"
+                      placeholder="Salary"
+                    />
+                    <ErrorMessage name="salary" component="div" />
+                  </div>
                 </div>
 
-                <div className="flex gap-8">
-                  <button type="submit" disabled={isSubmitting}>
-                    Save
-                  </button>
+                <div className="flex justify-between pt-8">
                   <button
                     type="button"
                     onClick={() => {
@@ -211,6 +212,9 @@ const EditJobModal: React.FC<ModalProps> = ({
                     }}
                   >
                     Cancel
+                  </button>
+                  <button type="submit" disabled={isSubmitting}>
+                    Save
                   </button>
                 </div>
               </Form>
