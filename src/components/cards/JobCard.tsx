@@ -44,7 +44,8 @@ const JobCard: React.FC<JobPropsInterface> = ({
   const [jobDeleteModal, setJobDeleteModal] = useState<boolean>(false);
   const [isEditJobModalOpen, setIsEditJobModalOpen] = useState<boolean>(false);
 
-  const [loggedInUser, setLoggedInUser] = useState<any | null>(null);
+  const [seekerId, setSeekerId] = useState<string | null>(null);
+  const [isApplied, setIsApplied] = useState<boolean>(false);
 
   const loginToken = localStorage.getItem("login_token");
   const userType = localStorage.getItem("user_role");
@@ -62,6 +63,8 @@ const JobCard: React.FC<JobPropsInterface> = ({
       });
 
       console.log(response.data);
+
+      setIsApplied(true);
     } catch (err: any) {
       console.error(
         "Apply Job error:",
@@ -69,6 +72,24 @@ const JobCard: React.FC<JobPropsInterface> = ({
       );
     }
   };
+
+  useEffect(() => {
+    const callSeekerForId = async () => {
+      const response = await MyApi.get(`job-seeker`, {
+        headers: {
+          Authorization: `Bearer ${loginToken}`,
+        },
+      });
+      const seekerData = response.data.data;
+      seekerData.map((seeker: any) => {
+        if (loggedInUserId === seeker?.userId) {
+          // console.log(seeker?.seekerId);
+          setSeekerId(seeker?.seekerId);
+        }
+      });
+    };
+    callSeekerForId();
+  }, [loggedInUserId, loginToken]);
 
   return (
     <div className="job-card">
@@ -102,13 +123,22 @@ const JobCard: React.FC<JobPropsInterface> = ({
           </p>
         </div>
       </Link>
-      {userType === "job seeker" && (
-        <div className="card-bottom pt-4">
-          <button className="text-blue-800" onClick={jobApplyNowHandler}>
-            Apply Now
-          </button>
-        </div>
-      )}
+      {userType === "job seeker" &&
+        !applications.some((app) => app.appJobSeeker === seekerId) && (
+          <div
+            className="card-bottom pt-4"
+            style={{ display: isApplied ? "none" : "block" }}
+          >
+            <button
+              className="text-blue-800"
+              onClick={() => {
+                jobApplyNowHandler();
+              }}
+            >
+              Apply Now
+            </button>
+          </div>
+        )}
       {employerUserId === loggedInUserId && (
         <React.Fragment>
           <div className="card-bottom flex justify-between pt-4">

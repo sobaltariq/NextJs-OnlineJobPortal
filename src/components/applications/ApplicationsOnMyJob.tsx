@@ -23,11 +23,12 @@ const ApplicationsOnMyJob: React.FC<ApplicationParamsInterface> = ({
 }) => {
   const [showError, setShowError] = useState<string>("");
   const [apiData, setApiData] = useState<JobApplicationInterface[] | []>([]);
-  // const [userType, setUserType] = useState<string | null>(null);
+  const [appStatus, setAppStatus] = useState<boolean>(false);
 
   useEffect(() => {
     getApplicationsOnMyJob();
-  }, []);
+    setAppStatus(false);
+  }, [appStatus]);
 
   const getApplicationsOnMyJob = async () => {
     try {
@@ -67,6 +68,7 @@ const ApplicationsOnMyJob: React.FC<ApplicationParamsInterface> = ({
         }
       );
       console.log(response.data);
+      setAppStatus(true);
     } catch (err: any) {
       setShowError(err.response.data?.message || err.response.data?.error);
       console.error("Set Applications Status:", err.response);
@@ -105,26 +107,26 @@ const ApplicationsOnMyJob: React.FC<ApplicationParamsInterface> = ({
                     </div>
                   </Link>
                   <div className="flex justify-between pt-4">
-                    {app.appStatus !== "pending" && (
-                      <button
-                        onClick={() => changeAppStatus("pending", app.appId)}
-                      >
-                        Pending
-                      </button>
-                    )}
-                    {app.appStatus !== "accepted" && (
-                      <button
-                        onClick={() => changeAppStatus("accepted", app.appId)}
-                      >
-                        Accept
-                      </button>
-                    )}
-                    {app.appStatus !== "rejected" && (
-                      <button
-                        onClick={() => changeAppStatus("rejected", app.appId)}
-                      >
-                        Reject
-                      </button>
+                    {/* <button
+                      onClick={() => changeAppStatus("pending", app.appId)}
+                    >
+                      Pending
+                    </button> */}
+                    {app.appStatus == "accepted" ||
+                    app.appStatus == "rejected" ? null : (
+                      <>
+                        <button
+                          onClick={() => changeAppStatus("accepted", app.appId)}
+                        >
+                          Accept
+                        </button>
+
+                        <button
+                          onClick={() => changeAppStatus("rejected", app.appId)}
+                        >
+                          Reject
+                        </button>
+                      </>
                     )}
                   </div>
                 </div>

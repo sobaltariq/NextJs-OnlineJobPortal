@@ -6,6 +6,8 @@ import * as Yup from "yup";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import MyApi from "@/api/MyApi";
+import { useDispatch } from "react-redux";
+import { setAuthData } from "@/redux/features/auth/authSlice";
 
 // Define the types for the form values
 interface FormValues {
@@ -19,6 +21,7 @@ function RegisterPage() {
   const [userType, setUserType] = useState("admin");
   const [registrationError, setRegistrationError] = useState(null);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const roleOptions = [
     { value: "employer", label: "Employer" },
@@ -70,7 +73,16 @@ function RegisterPage() {
       localStorage.setItem("user_role", role);
       localStorage.setItem("logged_in", JSON.stringify(loggedInUser));
 
-      router.push("/profile");
+      // save role in redux store
+      dispatch(
+        setAuthData({
+          token,
+          role,
+          isLoggedIn: true,
+        })
+      );
+
+      router.push("/");
     } catch (err: any) {
       setRegistrationError(err.response.data?.error);
       console.error(

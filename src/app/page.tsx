@@ -66,7 +66,7 @@ const AllJobsPage = () => {
 
   useEffect(() => {
     getAllJobs();
-  }, []);
+  }, [isPostJobModalOpen]);
 
   return (
     <div className="home-page">
@@ -89,6 +89,7 @@ const AllJobsPage = () => {
       )}
       {apiData.length > 0 ? (
         <div className="jobs-container">
+          <p>{showError}</p>
           <div className="jobs-wrapper grid grid-cols-2 gap-8">
             {apiData.map((jobData: JobsInterface) => {
               return (
@@ -102,7 +103,12 @@ const AllJobsPage = () => {
           </div>
         </div>
       ) : (
-        <p>{showError}</p>
+        <p
+          style={{ height: "70dvh" }}
+          className="flex justify-center items-center"
+        >
+          Job Not Found
+        </p>
       )}
     </div>
   );
