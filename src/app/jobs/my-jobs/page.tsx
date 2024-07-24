@@ -81,7 +81,18 @@ const MyJobsPage = () => {
           </div>
         </div>
       ) : (
-        <div>{showError ? <p>{showError}</p> : <p>No Job Found</p>}</div>
+        <div>
+          {showError ? (
+            <p>{showError}</p>
+          ) : (
+            <p
+              className="flex justify-center items-center"
+              style={{ height: "70dvh" }}
+            >
+              No Job Found
+            </p>
+          )}
+        </div>
       )}
     </div>
   );

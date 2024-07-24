@@ -114,7 +114,7 @@ const ProfilePage: React.FC = () => {
   return (
     <div className="user-profile-page">
       {showError && <p>{showError}</p>}
-      {apiData && (
+      {apiData ? (
         <div className="profile-wrapper">
           <h1>Profile</h1>
           <div className="profile-details">
@@ -255,6 +255,13 @@ const ProfilePage: React.FC = () => {
             )}
           </div>
         </div>
+      ) : (
+        <p
+          className="flex justify-center items-center"
+          style={{ height: "70dvh" }}
+        >
+          Profile Not Found
+        </p>
       )}
     </div>
   );

@@ -81,7 +81,16 @@ const MyApplicationsPage: React.FC = () => {
         </div>
       ) : (
         <div>
-          {showError ? <p>{showError}</p> : <p>No Application Found</p>}
+          {showError ? (
+            <p>{showError}</p>
+          ) : (
+            <p
+              className="flex justify-center items-center"
+              style={{ height: "70dvh" }}
+            >
+              No Application Found
+            </p>
+          )}
         </div>
       )}
     </div>

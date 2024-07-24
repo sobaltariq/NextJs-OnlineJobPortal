@@ -54,7 +54,7 @@ const DeleteJobModal: React.FC<ModalProps> = ({
       }`}
     >
       <div className="modal-wrapper relative">
-        <div className="border-solid border-2 border-sky-500 p-4 rounded-lg">
+        <div className="">
           <div className="flex justify-center flex-col items-center">
             <h3>Are You Sure</h3>
             <p>Confirm to delete your account</p>

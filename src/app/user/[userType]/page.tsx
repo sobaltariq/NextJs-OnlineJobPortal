@@ -74,7 +74,12 @@ const UserTypePage: React.FC<ParamsData> = ({ params }) => {
             ))}
           </div>
         ) : (
-          <p>No user data available.</p>
+          <p
+            className="flex justify-center items-center"
+            style={{ height: "70dvh" }}
+          >
+            User Not Found.
+          </p>
         )}
       </div>
     </div>
