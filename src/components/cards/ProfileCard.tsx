@@ -36,19 +36,19 @@ const ProfileCard: React.FC<UserProfile> = ({ profileData }) => {
       <Link href={`${roleLink}/`} className="job-card-link">
         <div className="flex justify-between">
           <p>
-            Name: <span>{profileData.name}</span>
+            Name: <span className="capitalize">{profileData.name}</span>
           </p>
         </div>
         <div className="flex justify-between pt-4">
           <p>
-            User Type: <span>{profileData.role}</span>
+            User Type: <span className="capitalize">{profileData.role}</span>
           </p>
           {profileData.role === "employer" && (
             <p>
               Total Jobs:{" "}
               <span>
                 {profileData.jobPostings.length <= 0
-                  ? "Empty"
+                  ? "0"
                   : profileData.jobPostings.length}
               </span>
             </p>

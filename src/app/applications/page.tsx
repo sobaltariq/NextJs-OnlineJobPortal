@@ -1,7 +1,11 @@
 "use client";
 import MyApi from "@/api/MyApi";
+import { isChatEnabled } from "@/redux/features/chatSlicer";
+import { RootState } from "@/redux/store";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 interface MyApplicationsInterface {
   appDate: string;
@@ -12,14 +16,16 @@ interface MyApplicationsInterface {
 }
 
 const MyApplicationsPage: React.FC = () => {
+  const router = useRouter();
   const [showError, setShowError] = useState<string>("");
   const [apiData, setApiData] = useState<MyApplicationsInterface[]>([]);
-  const [userType, setUserType] = useState<string | null>(null);
+
+  const dispatch = useDispatch();
+  const { isChat } = useSelector((state: RootState) => state.chat);
 
   const getMyApplications = async () => {
     try {
       const loginToken = localStorage?.getItem("login_token");
-      const userRole = localStorage?.getItem("user_role");
 
       const endPoint = `job-seeker/application/my-applications`;
 
@@ -30,7 +36,6 @@ const MyApplicationsPage: React.FC = () => {
       });
       console.log(response.data);
       setApiData(response.data?.data);
-      setUserType(userRole);
     } catch (err: any) {
       setShowError(err.response.data?.message || err.response.data?.error);
       console.error("Get Single Application:", err.response.data);
@@ -40,6 +45,11 @@ const MyApplicationsPage: React.FC = () => {
   useEffect(() => {
     getMyApplications();
   }, []);
+
+  const chatHandler = () => {
+    dispatch(isChatEnabled(!isChat));
+    router.push("/chat");
+  };
 
   return (
     <div className="applications-page">
@@ -53,7 +63,7 @@ const MyApplicationsPage: React.FC = () => {
               return (
                 <div key={i} className="job-card">
                   <div>
-                    <h2>
+                    <h2 className="capitalize">
                       <Link href={`/jobs/${app.jobId}`}>{app.jobTitle}</Link>
                     </h2>
                   </div>
@@ -69,10 +79,14 @@ const MyApplicationsPage: React.FC = () => {
                       <span>{new Date(app.appDate).toLocaleDateString()}</span>
                     </p>
                   </div>
-                  <div>
+                  <div className="flex justify-between py-2">
                     <p>
-                      Status: <span>{app.appStatus}</span>
+                      Status:{" "}
+                      <span className="capitalize">{app.appStatus}</span>
                     </p>
+                    {app.appStatus === "accepted" && (
+                      <button onClick={chatHandler}>Chat Now</button>
+                    )}
                   </div>
                 </div>
               );

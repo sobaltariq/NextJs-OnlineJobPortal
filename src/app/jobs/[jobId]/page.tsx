@@ -82,7 +82,7 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
           }
         >
           <div>
-            <h1>{apiData.jobTitle}</h1>
+            <h1 className="capitalize">{apiData.jobTitle}</h1>
 
             <div className="info-box">
               <p>Date</p>
@@ -98,11 +98,11 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
             </div>
             <div className="info-box">
               <p>Company</p>
-              <p>{apiData.jobCompany}</p>
+              <p className="capitalize">{apiData.jobCompany}</p>
             </div>
             <div className="info-box">
               <p>Employer</p>
-              <p>{apiData.employerName}</p>
+              <p className="capitalize">{apiData.employerName}</p>
             </div>
             <div className="info-box">
               <p>Applications</p>
@@ -119,7 +119,7 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
                 {apiData.jobRequirements.map((item, i) => {
                   return (
                     <Fragment key={i}>
-                      <span className="px-2 select-none">{item}</span>{" "}
+                      <span className="px-2 select-none ">{item}</span>{" "}
                     </Fragment>
                   );
                 })}

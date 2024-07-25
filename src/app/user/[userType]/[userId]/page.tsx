@@ -69,11 +69,11 @@ const UserPage: React.FC<UserProfile> = ({ params }) => {
         <div className="single-user-wrapper">
           <div className="info-box">
             <p>Name</p>
-            <p>{apiData?.userName}</p>
+            <p className="capitalize">{apiData?.userName}</p>
           </div>
           <div className="info-box">
             <p>User Type</p>
-            <p>{apiData?.userRole}</p>
+            <p className="capitalize">{apiData?.userRole}</p>
           </div>
           <div className="info-box">
             <p>Registration Date</p>
@@ -85,7 +85,7 @@ const UserPage: React.FC<UserProfile> = ({ params }) => {
               <p>Job Postings</p>
               <p>
                 {apiData.jobPostings.length <= 0
-                  ? "Empty"
+                  ? "0"
                   : apiData.jobPostings.map((job, i) => {
                       return (
                         <Fragment key={i}>

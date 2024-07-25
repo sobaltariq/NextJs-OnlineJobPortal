@@ -15,15 +15,7 @@ const Header: React.FC = () => {
     (state: RootState) => state.auth
   );
 
-  // const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  // const [userRole, setUserRole] = useState<string>("");
-
   const router = useRouter();
-
-  // useEffect(() => {
-  //   setUserRole(localStorage.getItem("user_role") || "");
-  //   setIsLoggedIn(!!localStorage.getItem("login_token"));
-  // }, [isLoggedIn, userRole]);
 
   const logoutHandler: () => void = () => {
     // localStorage.clear();

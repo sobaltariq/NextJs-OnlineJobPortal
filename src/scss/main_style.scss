@@ -17,6 +17,8 @@
   --color-secondary-1: #001b4d;
   --color-secondary-2: #4585c5;
   --color-secondary-3: #492d7e;
+
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 // Mixins
@@ -339,6 +341,10 @@ footer {
               @include font-size-weight(18px, 300);
             }
           }
+          button {
+            @include button-border(--color-secondary-1, --color-secondary-1);
+            padding: 0.3rem 1.5rem;
+          }
         }
       }
     }
@@ -466,6 +472,71 @@ footer {
                 }
               }
             }
+          }
+        }
+      }
+    }
+  }
+}
+
+// chat
+.chat-page {
+  width: 100%;
+  // height: 500px;
+  height: 92dvh;
+  @include flex-center(center, center);
+
+  .chat-wrapper {
+    width: 800px;
+    background-color: var(--color-white-1);
+    padding: 2rem;
+    border-radius: 25px;
+    box-shadow: var(--shadow);
+    height: 100%;
+    @include flex-center(space-between, center);
+    flex-direction: column;
+
+    .chat-container {
+      border: 2px solid var(--color-secondary-3);
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      height: 100%;
+      width: 100%;
+      @include flex-center(flex-end, flex-start);
+      flex-direction: column;
+
+      > div {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+
+        .message-list {
+          background-color: var(--color-secondary-2);
+          overflow-y: scroll;
+
+          > div {
+          }
+        }
+      }
+      form {
+        width: 100%;
+
+        > div {
+          display: flex;
+          justify-content: space-between;
+          gap: 1rem;
+          border: 2px solid var(--color-secondary-3);
+          padding: 0.5rem 1rem;
+          border-radius: 10px;
+
+          > input {
+            width: 100%;
+            border: none;
+            padding: 0;
+          }
+          button {
+            @include common-button(--color-secondary-2);
           }
         }
       }

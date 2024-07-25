@@ -94,7 +94,7 @@ const JobCard: React.FC<JobPropsInterface> = ({
   return (
     <div className="job-card">
       <Link href={`/jobs/${jobId}`} key={jobId} className="job-card-link">
-        <h3>{jobTitle}</h3>
+        <h3 className="capitalize">{jobTitle}</h3>
         <div className="flex justify-between py-1">
           <p>
             Salary: <span>{jobSalary}</span>
