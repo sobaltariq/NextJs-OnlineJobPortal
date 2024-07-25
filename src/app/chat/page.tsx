@@ -35,28 +35,16 @@ const ChatPage = () => {
     <div className="chat-page">
       {isChat ? (
         <div className="chat-wrapper">
-          <h1>Chat</h1>
           <div className="chat-container">
             <div>
               <div className="message-list s-bar">
-                <div className={`message`}>ok good</div>
-                <div className={`message`}>ok good</div>
-                <div className={`message`}>ok good</div>
-                <div className={`message`}>ok good</div>
-                <div className={`message`}>ok good</div>
-                <div className={`message`}>ok good</div>
-                <div className={`message`}>ok good</div>
-                <div className={`message`}>ok good</div>
-                <div className={`message`}>ok good</div>
-                <div className={`message`}>ok good</div>
-                <div className={`message`}>ok good</div>
-                <div className={`message`}>ok good</div>
-                <div className={`message`}>ok good</div>
-                <div className={`message`}>ok good</div>
-                <div className={`message`}>ok good</div>
-                <div className={`message`}>ok good</div>
-                <div className={`message`}>ok good</div>
-                <div className={`message`}>ok good</div>
+                <div className={`message`}>
+                  <div className="msg-top flex justify-between mb-2">
+                    <h5>Name</h5>
+                    <p>Date</p>
+                  </div>
+                  <p>Message goes here....</p>
+                </div>
                 <div className={`message`}>ok good</div>
                 <div className={`message`}>ok good</div>
                 <div className={`message`}>ok good</div>
