@@ -564,6 +564,10 @@ footer {
           }
           button {
             @include common-button(--color-secondary-2);
+
+            &:disabled {
+              @include common-button(--color-white-2);
+            }
           }
         }
       }

@@ -5,8 +5,8 @@ export interface ChatInterface {
   isChat: boolean;
 }
 const initialState: ChatInterface = {
-  // isChat: false,
-  isChat: true,
+  isChat: false,
+  // isChat: true,
 };
 
 export const chatSlice = createSlice({

@@ -1,7 +1,11 @@
 "use client";
 import MyApi from "@/api/MyApi";
+import { isChatEnabled } from "@/redux/features/chatSlicer";
+import { RootState } from "@/redux/store";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 interface ApplicationParamsInterface {
   jobIdParam: string;
@@ -24,6 +28,10 @@ const ApplicationsOnMyJob: React.FC<ApplicationParamsInterface> = ({
   const [showError, setShowError] = useState<string>("");
   const [apiData, setApiData] = useState<JobApplicationInterface[] | []>([]);
   const [appStatus, setAppStatus] = useState<boolean>(false);
+
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { isChat } = useSelector((state: RootState) => state.chat);
 
   useEffect(() => {
     getApplicationsOnMyJob();
@@ -75,6 +83,11 @@ const ApplicationsOnMyJob: React.FC<ApplicationParamsInterface> = ({
     }
   };
 
+  const chatHandler = () => {
+    dispatch(isChatEnabled(!isChat));
+    router.push("/chat");
+  };
+
   return (
     <div className="my-job-applications pt-8">
       {apiData.length > 0 ? (
@@ -107,13 +120,9 @@ const ApplicationsOnMyJob: React.FC<ApplicationParamsInterface> = ({
                     </div>
                   </Link>
                   <div className="flex justify-between pt-4">
-                    {/* <button
-                      onClick={() => changeAppStatus("pending", app.appId)}
-                    >
-                      Pending
-                    </button> */}
-                    {app.appStatus == "accepted" ||
-                    app.appStatus == "rejected" ? null : (
+                    {app.appStatus == "accepted" ? (
+                      <button onClick={chatHandler}>Chat Now</button>
+                    ) : app.appStatus == "rejected" ? null : (
                       <>
                         <button
                           onClick={() => changeAppStatus("accepted", app.appId)}
