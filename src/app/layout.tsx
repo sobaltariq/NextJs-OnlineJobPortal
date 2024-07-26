@@ -32,3 +32,4 @@ export default function RootLayout({
 // npm i @reduxjs/toolkit
 // npm i axios
 // npm install formik yup
+// npm install socket.io-client

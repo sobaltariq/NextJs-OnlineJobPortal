@@ -18,6 +18,7 @@
   --color-secondary-1: #001b4d;
   --color-secondary-2: #4585c5;
   --color-secondary-3: #492d7e;
+  --color-secondary-4: #e8f0fe;
 
   --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -551,14 +552,15 @@ footer {
           display: flex;
           justify-content: space-between;
           gap: 1rem;
-          border: 2px solid var(--color-secondary-3);
-          padding: 0.5rem 1rem;
-          border-radius: 10px;
+          border-top: 2px solid var(--color-secondary-3);
+          padding-top: 0.5rem;
+          // padding: 0.5rem 1rem;
+          // border-radius: 10px;
 
           > input {
             width: 100%;
             border: none;
-            padding: 0;
+            background-color: var(--color-secondary-4);
           }
           button {
             @include common-button(--color-secondary-2);
