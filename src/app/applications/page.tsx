@@ -1,6 +1,9 @@
 "use client";
 import MyApi from "@/api/MyApi";
-import { isChatEnabled } from "@/redux/features/chatSlicer";
+import {
+  isChatEnabled,
+  setChatApplicationId,
+} from "@/redux/features/chatSlicer";
 import { RootState } from "@/redux/store";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -8,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 interface MyApplicationsInterface {
+  appId: string;
   appDate: string;
   appStatus: string;
   jobId: string;
@@ -21,7 +25,9 @@ const MyApplicationsPage: React.FC = () => {
   const [apiData, setApiData] = useState<MyApplicationsInterface[]>([]);
 
   const dispatch = useDispatch();
-  const { isChat } = useSelector((state: RootState) => state.chat);
+  const { isChat, chatApplicationId } = useSelector(
+    (state: RootState) => state.chat
+  );
 
   const getMyApplications = async () => {
     try {
@@ -85,7 +91,14 @@ const MyApplicationsPage: React.FC = () => {
                       <span className="capitalize">{app.appStatus}</span>
                     </p>
                     {app.appStatus === "accepted" && (
-                      <button onClick={chatHandler}>Chat Now</button>
+                      <button
+                        onClick={() => {
+                          chatHandler();
+                          dispatch(setChatApplicationId(app.appId));
+                        }}
+                      >
+                        Chat Now
+                      </button>
                     )}
                   </div>
                 </div>
