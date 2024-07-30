@@ -66,31 +66,32 @@ const ChatPage = () => {
       const handleError = (err: any) => {
         console.error("Connection Error:", err);
       };
+      console.log("chatApplicationId", chatApplicationId);
 
       socket.emit("joinRoom", chatApplicationId);
 
-      const handleRoomJoined = () => {
-        setJoined(true);
-        // setLoading(false);
-      };
+      // const handleRoomJoined = () => {
+      //   setJoined(true);
+      //   // setLoading(false);
+      // };
 
-      const handleMessage = (message: ChatMessageInterface) => {
-        console.log("Received message:", message); // Debug log
-        setMessagesList((prevMessages) => [...prevMessages, message]);
-      };
+      // const handleMessage = (message: ChatMessageInterface) => {
+      //   console.log("Received message:", message); // Debug log
+      //   setMessagesList((prevMessages) => [...prevMessages, message]);
+      // };
 
-      socket.on("connect", handleConnect);
-      socket.on("disconnect", handleDisconnect);
-      socket.on("roomJoined", handleRoomJoined);
-      socket.on("receiveMessage", handleMessage);
-      socket.on("connect_error", handleError);
+      // socket.on("connect", handleConnect);
+      // socket.on("disconnect", handleDisconnect);
+      // socket.on("roomJoined", handleRoomJoined);
+      // socket.on("receiveMessage", handleMessage);
+      // socket.on("connect_error", handleError);
 
       return () => {
-        socket.off("connect", handleConnect);
-        socket.off("disconnect", handleDisconnect);
-        socket.off("roomJoined", handleRoomJoined);
-        socket.off("receiveMessage", handleMessage);
-        socket.off("connect_error", handleError);
+        // socket.off("connect", handleConnect);
+        // socket.off("disconnect", handleDisconnect);
+        // socket.off("roomJoined", handleRoomJoined);
+        // socket.off("receiveMessage", handleMessage);
+        // socket.off("connect_error", handleError);
       };
     }
   }, [chatApplicationId]);
@@ -137,7 +138,7 @@ const ChatPage = () => {
           <div className="chat-container">
             <div>
               <div className="message-list s-bar">
-                {messagesList.map((msg, i) => {
+                {/* {messagesList.map((msg, i) => {
                   return (
                     <div className={`message`} key={i}>
                       <div className="msg-top flex justify-between mb-2">
@@ -147,7 +148,7 @@ const ChatPage = () => {
                       <p>{msg.content}</p>
                     </div>
                   );
-                })}
+                })} */}
               </div>
             </div>
             <Formik initialValues={initialValues} onSubmit={sendMessage}>

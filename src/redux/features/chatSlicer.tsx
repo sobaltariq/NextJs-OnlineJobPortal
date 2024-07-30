@@ -6,8 +6,8 @@ export interface ChatInterface {
   chatApplicationId: string;
 }
 const initialState: ChatInterface = {
-  // isChat: false,
-  isChat: true,
+  isChat: false,
+  // isChat: true,
   chatApplicationId: "",
 };
 
