@@ -1,6 +1,9 @@
 "use client";
 import MyApi from "@/api/MyApi";
-import { isChatEnabled } from "@/redux/features/chatSlicer";
+import {
+  isChatEnabled,
+  setChatApplicationId,
+} from "@/redux/features/chatSlicer";
 import { RootState } from "@/redux/store";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -31,7 +34,9 @@ const ApplicationsOnMyJob: React.FC<ApplicationParamsInterface> = ({
 
   const router = useRouter();
   const dispatch = useDispatch();
-  const { isChat } = useSelector((state: RootState) => state.chat);
+  const { isChat, chatApplicationId } = useSelector(
+    (state: RootState) => state.chat
+  );
 
   useEffect(() => {
     getApplicationsOnMyJob();
@@ -121,7 +126,14 @@ const ApplicationsOnMyJob: React.FC<ApplicationParamsInterface> = ({
                   </Link>
                   <div className="flex justify-between pt-4">
                     {app.appStatus == "accepted" ? (
-                      <button onClick={chatHandler}>Chat Now</button>
+                      <button
+                        onClick={() => {
+                          chatHandler();
+                          dispatch(setChatApplicationId(app.appId));
+                        }}
+                      >
+                        Chat Now
+                      </button>
                     ) : app.appStatus == "rejected" ? null : (
                       <>
                         <button

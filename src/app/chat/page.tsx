@@ -8,14 +8,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { io, Socket } from "socket.io-client";
 
-interface MyApplicationsInterface {
-  appDate: string;
-  appStatus: string;
-  jobId: string;
-  jobTitle: string;
-  jobCreatedAt: string;
-}
-
 interface ChatMessageInterface {
   applicationId: string;
   content: string;
@@ -35,23 +27,45 @@ const ChatPage = () => {
   const { isChat, chatApplicationId } = useSelector(
     (state: RootState) => state.chat
   );
+  const token = localStorage.getItem("login_token");
 
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [messagesList, setMessagesList] = useState<ChatMessageInterface[]>([]);
-  const [apiData, setApiData] = useState<MyApplicationsInterface[]>([]);
-  const [joined, setJoined] = useState<boolean>(false);
+  const [isRoomJoined, setIsRoomJoined] = useState<boolean>(false);
 
   const socket = useRef<Socket | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const getMyApplications = async () => {
+      try {
+        const endPoint = `chat/${chatApplicationId}`;
+
+        const response = await MyApi.get(endPoint, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log(response.data?.data);
+        setMessagesList(response.data?.data?.messages);
+      } catch (err: any) {
+        console.error("Get Chat History:", err.response.data);
+      }
+    };
+
+    getMyApplications();
+  }, [chatApplicationId, token]);
 
   useEffect(() => {
     if (chatApplicationId) {
-      const token = localStorage.getItem("login_token");
-      const socket = io("http://localhost:5010", {
+      const newSocket = io("http://localhost:5010", {
         transports: ["websocket"], // Use WebSocket transport
         auth: {
           token: `Bearer ${token}`,
         },
       });
+
+      socket.current = newSocket;
 
       const handleConnect = () => {
         console.log("Connected to WebSocket server");
@@ -68,64 +82,76 @@ const ChatPage = () => {
       };
       console.log("chatApplicationId", chatApplicationId);
 
-      socket.emit("joinRoom", chatApplicationId);
+      newSocket.emit("joinRoom", chatApplicationId);
 
-      // const handleRoomJoined = () => {
-      //   setJoined(true);
-      //   // setLoading(false);
-      // };
+      const handleRoomJoined = () => {
+        setIsRoomJoined(!isRoomJoined);
+        // setLoading(false);
+      };
 
-      // const handleMessage = (message: ChatMessageInterface) => {
-      //   console.log("Received message:", message); // Debug log
-      //   setMessagesList((prevMessages) => [...prevMessages, message]);
-      // };
+      const handleMessageReceived = (message: ChatMessageInterface) => {
+        console.log("Received message:", message); // Debug log
+        setMessagesList((prevMessages) => [...prevMessages, message]);
+      };
 
-      // socket.on("connect", handleConnect);
-      // socket.on("disconnect", handleDisconnect);
-      // socket.on("roomJoined", handleRoomJoined);
-      // socket.on("receiveMessage", handleMessage);
-      // socket.on("connect_error", handleError);
+      // newSocket.emit("getChatHistory", chatApplicationId);
+
+      newSocket.on("connect", handleConnect);
+      newSocket.on("disconnect", handleDisconnect);
+      newSocket.on("connect_error", handleError);
+
+      newSocket.on("roomJoined", handleRoomJoined);
+      newSocket.on("receiveMessage", handleMessageReceived);
 
       return () => {
-        // socket.off("connect", handleConnect);
-        // socket.off("disconnect", handleDisconnect);
-        // socket.off("roomJoined", handleRoomJoined);
-        // socket.off("receiveMessage", handleMessage);
-        // socket.off("connect_error", handleError);
+        newSocket.off("connect", handleConnect);
+        newSocket.off("disconnect", handleDisconnect);
+        newSocket.off("connect_error", handleError);
+
+        newSocket.off("roomJoined", handleRoomJoined);
+        newSocket.off("receiveMessage", handleMessageReceived);
       };
     }
   }, [chatApplicationId]);
 
   useEffect(() => {
     if (!isChat && !chatApplicationId) {
-      // router.push("/");
+      router.push("/");
       console.log(isChat);
     }
-  }, [isChat]);
+  }, [chatApplicationId, isChat, router]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollTo({
+      top: messagesEndRef.current.scrollHeight,
+      behavior: "smooth",
+      // top: 100000000000,
+      // behavior: "smooth",
+    });
+  }, [messagesList, chatApplicationId, isChat]);
 
   const sendMessage = (
     values: FormValuesInterface,
     { resetForm }: FormikHelpers<FormValuesInterface>
   ) => {
-    const chat: ChatMessageInterface = {
+    const chatMessage: ChatMessageInterface = {
       applicationId: chatApplicationId,
       content: values.message,
     };
 
-    if (chat.content.trim() === "") return;
+    if (chatMessage.content.trim() === "") return;
 
-    // console.log("message: ", chat.message, "message list: ", messagesList);
+    console.log("message: ", chatMessage, "message list: ", messagesList);
+    if (socket.current) {
+      socket.current.emit("sendMessage", chatMessage);
+    } else {
+      console.error("Socket is not initialized");
+    }
 
-    socket.current?.emit("sendMessage", chat);
-    setMessagesList((prevMessages) => [...prevMessages, chat]);
-    // Clear the input field
     resetForm();
     // setNewMessage("");
   };
 
-  // const sendMessage = () => {
-  //   console.log("sent");
-  // };
   const initialValues: FormValuesInterface = {
     message: "",
   };
@@ -134,39 +160,46 @@ const ChatPage = () => {
     <div className="chat-page">
       {isChat && chatApplicationId ? (
         <div className="chat-wrapper">
-          <h2>Chat</h2>
-          <div className="chat-container">
-            <div>
-              <div className="message-list s-bar">
-                {/* {messagesList.map((msg, i) => {
-                  return (
-                    <div className={`message`} key={i}>
-                      <div className="msg-top flex justify-between mb-2">
-                        <h5>{"Anonymous"}</h5>
-                        <p>{new Date().toLocaleTimeString()}</p>
+          {/* <h2>Chat Room: {chatApplicationId}</h2> */}
+          {!isRoomJoined && (
+            <p className="flex justify-center items-center h-full">
+              Joining room...
+            </p>
+          )}
+          {isRoomJoined && (
+            <div className="chat-container">
+              <div>
+                <div className="message-list s-bar" ref={messagesEndRef}>
+                  {messagesList.map((msg, i) => {
+                    return (
+                      <div className={`message`} key={i}>
+                        <div className="msg-top flex justify-between mb-2">
+                          <h5>{"Anonymous"}</h5>
+                          <p>{new Date().toLocaleTimeString()}</p>
+                        </div>
+                        <p>{msg.content}</p>
                       </div>
-                      <p>{msg.content}</p>
-                    </div>
-                  );
-                })} */}
+                    );
+                  })}
+                </div>
               </div>
+              <Formik initialValues={initialValues} onSubmit={sendMessage}>
+                {({ isSubmitting, values }) => (
+                  <Form className="mt-8">
+                    <div>
+                      <Field type="text" id="message" name="message" />
+                      <button
+                        type="submit"
+                        disabled={isSubmitting || values.message.trim() === ""}
+                      >
+                        Send
+                      </button>
+                    </div>
+                  </Form>
+                )}
+              </Formik>
             </div>
-            <Formik initialValues={initialValues} onSubmit={sendMessage}>
-              {({ isSubmitting, values }) => (
-                <Form className="mt-8">
-                  <div>
-                    <Field type="text" id="message" name="message" />
-                    <button
-                      type="submit"
-                      // disabled={isSubmitting || values.message.trim() === ""}
-                    >
-                      Send
-                    </button>
-                  </div>
-                </Form>
-              )}
-            </Formik>
-          </div>
+          )}
         </div>
       ) : null}
     </div>
