@@ -49,6 +49,7 @@ const MyApplicationsPage: React.FC = () => {
   };
 
   useEffect(() => {
+    dispatch(isChatEnabled(false));
     getMyApplications();
   }, []);
 

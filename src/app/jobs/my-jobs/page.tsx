@@ -3,7 +3,9 @@ import MyApi from "@/api/MyApi";
 import JobCard from "@/components/cards/JobCard";
 import LoginAuth from "@/hocs/LoginAuth";
 import composeHOCs from "@/hocs/composeHOCs";
+import { RootState } from "@/redux/store";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 interface JobApplicationInterface {
   appId: string;
@@ -31,6 +33,8 @@ const MyJobsPage = () => {
   const [apiData, setApiData] = useState<MyJobsInterface[] | []>([]);
   const [userType, setUserType] = useState<string | null>(null);
   const [loggedInUser, setLoggedInUser] = useState<any>(null);
+
+  const { jobDeleted } = useSelector((state: RootState) => state.jobs);
 
   const getMyJobs = async () => {
     try {
@@ -60,7 +64,7 @@ const MyJobsPage = () => {
 
   useEffect(() => {
     getMyJobs();
-  }, []);
+  }, [jobDeleted]);
 
   return (
     <div>

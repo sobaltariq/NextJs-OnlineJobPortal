@@ -13,10 +13,20 @@ interface ChatMessageInterface {
   content: string;
 }
 
+interface ReceivedMessageInterface {
+  sender: string;
+  content: string;
+  timestamp: string;
+}
+
 interface FormValuesInterface {
   message: string;
 }
 
+interface UserInterface {
+  userId: string;
+  userName: string;
+}
 // let socket: Socket | null = null;
 
 // const socket = io("http://localhost:5010");
@@ -30,14 +40,18 @@ const ChatPage = () => {
   const token = localStorage.getItem("login_token");
 
   const [isConnected, setIsConnected] = useState<boolean>(false);
-  const [messagesList, setMessagesList] = useState<ChatMessageInterface[]>([]);
+  const [messagesList, setMessagesList] = useState<ReceivedMessageInterface[]>(
+    []
+  );
   const [isRoomJoined, setIsRoomJoined] = useState<boolean>(false);
+  //  for name
+  const [usersList, setUsersList] = useState<string[]>([]);
 
   const socket = useRef<Socket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const getMyApplications = async () => {
+    const getMyChatHistory = async () => {
       try {
         const endPoint = `chat/${chatApplicationId}`;
 
@@ -46,15 +60,44 @@ const ChatPage = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(response.data?.data);
+        console.log("getMyChatHistory", response.data?.data);
         setMessagesList(response.data?.data?.messages);
+
+        const messages = response.data?.data?.messages || [];
+        const uniqueSenders: string[] = Array.from(
+          new Set(messages.map((msg: any) => msg.sender))
+        );
+        console.log("uniqueSenders", uniqueSenders);
+
+        const userDataPromises = uniqueSenders.map((userId) => getUser(userId));
+        const usersData: any = await Promise.all(userDataPromises);
+        console.log("usersData", usersData);
+
+        setUsersList(usersData);
       } catch (err: any) {
         console.error("Get Chat History:", err.response.data);
       }
     };
 
-    getMyApplications();
+    getMyChatHistory();
   }, [chatApplicationId, token]);
+
+  const getUser = async (id: string): Promise<UserInterface | null> => {
+    try {
+      const endPoint = `chat/users/${id}`;
+
+      const response = await MyApi.get(endPoint, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("getUser", response.data?.data);
+      return response.data?.data;
+    } catch (err: any) {
+      console.error("getUser:", err.response.data);
+      return null;
+    }
+  };
 
   useEffect(() => {
     if (chatApplicationId) {
@@ -89,7 +132,7 @@ const ChatPage = () => {
         // setLoading(false);
       };
 
-      const handleMessageReceived = (message: ChatMessageInterface) => {
+      const handleMessageReceived = (message: ReceivedMessageInterface) => {
         console.log("Received message:", message); // Debug log
         setMessagesList((prevMessages) => [...prevMessages, message]);
       };
@@ -150,7 +193,15 @@ const ChatPage = () => {
 
     resetForm();
     // setNewMessage("");
+    console.log(usersList);
   };
+
+  function formatTime(timestamp: string) {
+    const date = new Date(timestamp);
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    return `${hours}:${minutes}`;
+  }
 
   const initialValues: FormValuesInterface = {
     message: "",
@@ -173,10 +224,18 @@ const ChatPage = () => {
                   {messagesList.map((msg, i) => {
                     return (
                       <div className={`message`} key={i}>
-                        <div className="msg-top flex justify-between mb-2">
-                          <h5>{"Anonymous"}</h5>
-                          <p>{new Date().toLocaleTimeString()}</p>
-                        </div>
+                        {usersList && (
+                          <div className="msg-top flex justify-between mb-2">
+                            <h5>
+                              {usersList.find(
+                                (user: string) =>
+                                  user && user.userId === msg.sender
+                              )?.userName || "Unknown User"}
+                              :
+                            </h5>
+                            <p>{formatTime(msg.timestamp)}</p>
+                          </div>
+                        )}
                         <p>{msg.content}</p>
                       </div>
                     );

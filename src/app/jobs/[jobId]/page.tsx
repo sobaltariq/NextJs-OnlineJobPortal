@@ -1,7 +1,9 @@
 "use client";
 import MyApi from "@/api/MyApi";
 import ApplicationsOnMyJob from "@/components/applications/ApplicationsOnMyJob";
+import { isChatEnabled } from "@/redux/features/chatSlicer";
 import React, { Fragment, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 interface JobParamsInterface {
   params: {
@@ -41,6 +43,8 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
   const [userType, setUserType] = useState<string | null>(null);
   const [loggedInUser, setLoggedInUser] = useState<any>(null);
 
+  const dispatch = useDispatch();
+
   const { jobId } = params;
 
   const getOneJob = async () => {
@@ -70,6 +74,7 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
   };
 
   useEffect(() => {
+    dispatch(isChatEnabled(false));
     getOneJob();
   }, []);
   return (

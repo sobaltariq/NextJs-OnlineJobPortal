@@ -1,6 +1,9 @@
 import MyApi from "@/api/MyApi";
+import { isJobDeleted } from "@/redux/features/jobsSlicer";
+import { RootState } from "@/redux/store";
 import { waitSec } from "@/utils/CommonWait";
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 interface ModalProps {
   jobDeleteModal: boolean;
@@ -14,6 +17,9 @@ const DeleteJobModal: React.FC<ModalProps> = ({
   jobId,
 }) => {
   const [showError, setShowError] = useState<string>("");
+  const { jobDeleted } = useSelector((state: RootState) => state.jobs);
+  const dispatch = useDispatch();
+
   const deleteProfileHandler = async () => {
     try {
       const loginToken = localStorage?.getItem("login_token");
@@ -27,7 +33,9 @@ const DeleteJobModal: React.FC<ModalProps> = ({
 
       console.log(response.data);
       setShowError("");
-      await waitSec(3000);
+      dispatch(isJobDeleted(true));
+      await waitSec(1000);
+      dispatch(isJobDeleted(false));
       setJobDeleteModal(false);
     } catch (err: any) {
       setShowError(err.response.data?.message);

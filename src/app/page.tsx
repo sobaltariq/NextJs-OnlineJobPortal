@@ -4,7 +4,10 @@ import JobCard from "@/components/cards/JobCard";
 import CreateJobModal from "@/components/modals/CreateJobModal";
 import LoginAuth from "@/hocs/LoginAuth";
 import composeHOCs from "@/hocs/composeHOCs";
+import { isJobDeleted } from "@/redux/features/jobsSlicer";
+import { RootState } from "@/redux/store";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 interface LoginInterface {
   id: string;
@@ -39,6 +42,8 @@ const AllJobsPage = () => {
   const [isPostJobModalOpen, setIsPostJobModalOpen] = useState<boolean>(false);
   const [loggedInUser, setLoggedInUser] = useState<LoginInterface | null>(null);
 
+  const { jobDeleted } = useSelector((state: RootState) => state.jobs);
+
   const getAllJobs = async () => {
     try {
       const loginToken = localStorage.getItem("login_token");
@@ -66,7 +71,7 @@ const AllJobsPage = () => {
 
   useEffect(() => {
     getAllJobs();
-  }, [isPostJobModalOpen]);
+  }, [isPostJobModalOpen, jobDeleted]);
 
   return (
     <div className="home-page">
