@@ -99,7 +99,7 @@ const ApplicationsOnMyJob: React.FC<ApplicationParamsInterface> = ({
         <div>
           {showError && <p>{showError}</p>}
           <h2 className="">Job Applications</h2>
-          <div className="app-card  s-bar">
+          <div className="app-card s-bar">
             {apiData.map((app: JobApplicationInterface) => {
               return (
                 <div key={app.appId} className="">

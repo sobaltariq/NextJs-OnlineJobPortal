@@ -22,6 +22,7 @@
   --color-secondary-4: #e8f0fe;
   --color-secondary-5: #2870b7;
   --color-secondary-6: #683fb7;
+  --color-secondary-7: #f9f9f9;
 
   --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
@@ -83,17 +84,23 @@ input {
 
 // scrollbar
 /* width */
+body::-webkit-scrollbar {
+  width: 5px;
+}
+
 .s-bar::-webkit-scrollbar {
   width: 3px;
 }
 
 /* Track */
+body::-webkit-scrollbar-track,
 .s-bar::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px var(--color-secondary-2);
   border-radius: 10px;
 }
 
 /* Handle */
+body::-webkit-scrollbar-thumb,
 .s-bar::-webkit-scrollbar-thumb {
   background: var(--color-secondary-1);
   border-radius: 10px;
@@ -141,67 +148,71 @@ header {
         gap: 2rem;
         padding-right: 2rem;
         position: relative;
-        .search-results {
-          position: absolute;
-          top: 50px;
-          background-color: var(--color-white-1);
-          border-radius: 0.5rem;
-          width: 250px;
-          box-shadow: var(--shadow);
-          z-index: 5;
-          padding: 0.75rem;
-          > div {
-            overflow-y: scroll;
-            max-height: 200px;
-            padding-right: 5px;
 
-            > p {
-              border-bottom: 1px solid var(--color-secondary-5);
-              padding: 0.5rem 0;
-              transition: var(--transition-1);
+        .search-container {
+          .search-results {
+            position: absolute;
+            top: 50px;
+            background-color: var(--color-white-1);
+            border-radius: 0.5rem;
+            width: 275px;
+            box-shadow: var(--shadow);
+            z-index: 5;
+            padding: 0.75rem;
 
-              &:last-child {
-                border: none;
-                padding-bottom: 0;
-              }
-              &:first-child {
-                padding-top: 0;
-              }
-              a {
-                padding: 0.75rem 0.5rem;
-                color: var(--color-black-2);
-                border-radius: 0.5rem;
+            > div {
+              overflow-y: scroll;
+              max-height: 200px;
+              padding-right: 5px;
 
-                &:hover {
-                  background-color: var(--color-white-2);
+              > p {
+                border-bottom: 1px solid var(--color-secondary-5);
+                padding: 0.5rem 0;
+                transition: var(--transition-1);
+
+                &:last-child {
+                  border: none;
+                  padding-bottom: 0;
+                }
+                &:first-child {
+                  padding-top: 0;
+                }
+                a {
+                  padding: 0.75rem 0.5rem;
+                  color: var(--color-black-2);
+                  border-radius: 0.5rem;
+
+                  &:hover {
+                    background-color: var(--color-secondary-4);
+                  }
                 }
               }
             }
           }
-        }
-        .search {
-          border-radius: 0.5rem;
-          border: 1px solid var(--color-secondary-3);
-          background-color: var(--color-white-1);
-          width: 250px;
-          justify-content: flex-start;
-          padding-right: 0.75rem;
+          .search {
+            border-radius: 0.5rem;
+            border: 1px solid var(--color-secondary-3);
+            background-color: var(--color-white-1);
+            width: 275px;
+            justify-content: flex-start;
+            padding-right: 0.75rem;
 
-          label {
-            padding: 0.2rem 0.75rem;
-            padding-right: 0;
-            flex: 1 1;
+            label {
+              padding: 0.2rem 0.75rem;
+              padding-right: 0;
+              flex: 1 1;
 
-            input {
-              background: transparent;
-              border: none;
-              border-radius: 0;
-              padding: 0;
-              width: 90%;
+              input {
+                background: transparent;
+                border: none;
+                border-radius: 0;
+                padding: 0;
+                width: 90%;
+              }
             }
-          }
-          &:last-child {
-            cursor: pointer;
+            > svg {
+              cursor: pointer;
+            }
           }
         }
 
@@ -341,6 +352,7 @@ footer {
   margin: 0.5rem 0;
   p {
     @include font-size-weight(16px, 400);
+    line-height: 2;
 
     &:nth-child(2) {
       border-radius: 5px;
@@ -348,7 +360,11 @@ footer {
       background-color: var(--color-secondary-2);
       color: var(--color-white-1);
 
-      a,
+      a {
+        padding: 0.2rem 1rem;
+        border-radius: 10px;
+        background-color: var(--color-secondary-3);
+      }
       span {
         padding: 0.2rem 1rem;
         border-radius: 10px;
@@ -408,8 +424,9 @@ footer {
   padding: 1.5rem;
   border-radius: 12px;
   transition: var(--transition-1);
+  box-shadow: var(--shadow);
   &:hover {
-    box-shadow: var(--shadow);
+    background-color: var(--color-secondary-7);
   }
 
   .job-card-link {
@@ -524,7 +541,6 @@ footer {
       background-color: var(--color-white-1);
       padding: 2rem;
       border-radius: 25px;
-      height: max-content;
     }
     .my-job-applications {
       div {
@@ -535,15 +551,17 @@ footer {
           margin-top: 2rem;
           overflow-y: scroll;
           padding-right: 0.5rem;
-          max-height: 578px;
+          max-height: 100dvh;
 
           > div {
             @include button-border(--color-secondary-2, --color-black-2);
+            border-radius: 12px;
             padding: 1rem;
             width: 100%;
             transition: var(--transition-1);
+            box-shadow: var(--shadow);
             &:hover {
-              box-shadow: var(--shadow);
+              background-color: var(--color-secondary-7);
             }
 
             a {
