@@ -1,6 +1,7 @@
 "use client";
 import MyApi from "@/api/MyApi";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { Fragment, useEffect, useState } from "react";
 import { string } from "yup";
 
@@ -37,11 +38,17 @@ const UserPage: React.FC<UserProfile> = ({ params }) => {
 
   const [apiData, setApiData] = useState<ProfileData | null>(null);
 
+  const router = useRouter();
+
   const { userId, userType } = params;
 
   const getUserProfile = async () => {
     try {
       const loginToken = localStorage?.getItem("login_token");
+
+      if (!loginToken) {
+        router.push("/login");
+      }
 
       const endPoint = `/${userType}/${userId}`;
 

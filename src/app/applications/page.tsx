@@ -1,5 +1,7 @@
 "use client";
 import MyApi from "@/api/MyApi";
+import composeHOCs from "@/hocs/composeHOCs";
+import LoginAuth from "@/hocs/LoginAuth";
 import {
   isChatEnabled,
   setChatApplicationId,
@@ -125,4 +127,4 @@ const MyApplicationsPage: React.FC = () => {
   );
 };
 
-export default MyApplicationsPage;
+export default composeHOCs(LoginAuth)(MyApplicationsPage);

@@ -33,3 +33,4 @@ export default function RootLayout({
 // npm i axios
 // npm install formik yup
 // npm install socket.io-client
+// npm install react-icons --save

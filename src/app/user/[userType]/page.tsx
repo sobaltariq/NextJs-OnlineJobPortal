@@ -1,6 +1,7 @@
 "use client";
 import MyApi from "@/api/MyApi";
 import ProfileCard from "@/components/cards/ProfileCard";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 interface ParamsData {
@@ -40,11 +41,17 @@ const UserTypePage: React.FC<ParamsData> = ({ params }) => {
   const [apiData, setApiData] = useState<ProfileData[]>([]);
   const [showError, setShowError] = useState<string>("");
 
+  const router = useRouter();
+
   const { userType } = params;
 
   const getAllUsers = async () => {
     try {
       const loginToken = localStorage?.getItem("login_token");
+
+      if (!loginToken) {
+        router.push("/login");
+      }
 
       const response = await MyApi.get(`${userType}`, {
         headers: {

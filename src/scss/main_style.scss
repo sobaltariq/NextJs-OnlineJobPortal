@@ -100,9 +100,17 @@ input {
 }
 
 // header
+.link {
+  &:hover {
+    background-color: var(--color-secondary-5);
+  }
+}
 .active {
   background-color: var(--color-secondary-2);
+  box-shadow: var(--shadow);
+  opacity: 1;
 }
+
 header {
   background-color: var(--color-secondary-2) !important;
   .header-wrapper {
@@ -132,8 +140,69 @@ header {
         @include flex-center(space-between, center);
         gap: 2rem;
         padding-right: 2rem;
-        input {
-          padding: 0.2rem 0.75rem;
+        position: relative;
+        .search-results {
+          position: absolute;
+          top: 50px;
+          background-color: var(--color-white-1);
+          border-radius: 0.5rem;
+          width: 250px;
+          box-shadow: var(--shadow);
+          z-index: 5;
+          padding: 0.75rem;
+          > div {
+            overflow-y: scroll;
+            max-height: 200px;
+            padding-right: 5px;
+
+            > p {
+              border-bottom: 1px solid var(--color-secondary-5);
+              padding: 0.5rem 0;
+              transition: var(--transition-1);
+
+              &:last-child {
+                border: none;
+                padding-bottom: 0;
+              }
+              &:first-child {
+                padding-top: 0;
+              }
+              a {
+                padding: 0.75rem 0.5rem;
+                color: var(--color-black-2);
+                border-radius: 0.5rem;
+
+                &:hover {
+                  background-color: var(--color-white-2);
+                }
+              }
+            }
+          }
+        }
+        .search {
+          border-radius: 0.5rem;
+          border: 1px solid var(--color-secondary-3);
+          background-color: var(--color-white-1);
+          width: 250px;
+          justify-content: flex-start;
+          padding-right: 0.75rem;
+
+          label {
+            padding: 0.2rem 0.75rem;
+            padding-right: 0;
+            flex: 1 1;
+
+            input {
+              background: transparent;
+              border: none;
+              border-radius: 0;
+              padding: 0;
+              width: 90%;
+            }
+          }
+          &:last-child {
+            cursor: pointer;
+          }
         }
 
         a {
@@ -196,6 +265,7 @@ footer {
     background-color: var(--color-white-1);
     padding: 2rem;
     border-radius: 25px;
+    box-shadow: var(--shadow);
 
     .user-type {
       @include flex-center(space-between, center);
@@ -238,6 +308,8 @@ footer {
     background-color: var(--color-white-1);
     padding: 2rem;
     border-radius: 25px;
+    box-shadow: var(--shadow);
+
     form {
       width: 100%;
 
@@ -334,7 +406,7 @@ footer {
 .job-card {
   background-color: var(--color-white-1);
   padding: 1.5rem;
-  border-radius: 25px;
+  border-radius: 12px;
   transition: var(--transition-1);
   &:hover {
     box-shadow: var(--shadow);

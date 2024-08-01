@@ -35,7 +35,7 @@ interface JobsInterface {
   applications: JobApplicationInterface[];
 }
 
-const AllJobsPage = () => {
+const AllJobsPage: React.FC = () => {
   const [showError, setShowError] = useState<string>("");
   const [apiData, setApiData] = useState<JobsInterface[] | []>([]);
   const [userTye, setUserType] = useState<string | null>(null);

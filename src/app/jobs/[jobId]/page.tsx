@@ -2,6 +2,7 @@
 import MyApi from "@/api/MyApi";
 import ApplicationsOnMyJob from "@/components/applications/ApplicationsOnMyJob";
 import { isChatEnabled } from "@/redux/features/chatSlicer";
+import { useRouter } from "next/navigation";
 import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
@@ -45,6 +46,8 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
 
   const dispatch = useDispatch();
 
+  const router = useRouter();
+
   const { jobId } = params;
 
   const getOneJob = async () => {
@@ -52,6 +55,10 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
       const loginToken = localStorage?.getItem("login_token");
       const userRole = localStorage?.getItem("user_role");
       const loggedIn = localStorage.getItem("logged_in");
+
+      if (!loginToken) {
+        router.push("/login");
+      }
 
       const endPoint = `/employer/job-postings/${jobId}`;
 
@@ -75,6 +82,7 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
 
   useEffect(() => {
     dispatch(isChatEnabled(false));
+
     getOneJob();
   }, []);
   return (
@@ -137,7 +145,7 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
         </div>
       ) : (
         <div className="single-job-wrapper">
-          <p>{showError}</p>
+          <p>{showError || "Job Not Found"}</p>
         </div>
       )}
     </div>

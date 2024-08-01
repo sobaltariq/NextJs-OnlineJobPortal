@@ -4,12 +4,14 @@ interface AuthState {
   isLoggedIn: boolean;
   loginToken: String | null;
   userRole: String | null;
+  isSearch: boolean;
 }
 
 const initialState: AuthState = {
   isLoggedIn: !!localStorage.getItem("login_token"),
   loginToken: localStorage.getItem("login_token"),
   userRole: localStorage.getItem("user_role"),
+  isSearch: false,
 };
 
 const authSlice = createSlice({
@@ -36,8 +38,11 @@ const authSlice = createSlice({
       state.userRole = null;
       localStorage.clear();
     },
+    setSearch: (state, action: PayloadAction<boolean>) => {
+      state.isSearch = action.payload;
+    },
   },
 });
 
-export const { setAuthData, logout } = authSlice.actions;
+export const { setAuthData, logout, setSearch } = authSlice.actions;
 export default authSlice.reducer;
