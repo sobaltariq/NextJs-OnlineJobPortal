@@ -64,7 +64,7 @@ const EditProfileModal: React.FC<ModalProps> = ({
       console.log(response.data);
       setChangePassError(response.data?.message);
 
-      await waitSec(3000);
+      await waitSec(1000);
       setIsEditProfileModalOpen(false);
 
       setChangePassError("");

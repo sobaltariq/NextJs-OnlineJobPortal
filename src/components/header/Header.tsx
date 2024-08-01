@@ -1,10 +1,9 @@
 "use client";
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 import Link from "next/link";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/redux/features/auth/authSlice";
 import { RootState } from "@/redux/store";
@@ -16,6 +15,7 @@ const Header: React.FC = () => {
   );
 
   const router = useRouter();
+  const pathname = usePathname();
 
   const logoutHandler: () => void = () => {
     // localStorage.clear();
@@ -28,24 +28,40 @@ const Header: React.FC = () => {
     <header className="width-container">
       <div className="header-wrapper">
         <ul>
-          <li>
+          <li className={`link ${pathname === "/" ? "active" : ""}`}>
             <Link href="/">Home</Link>
           </li>
           {isLoggedIn && (
             <>
-              <li>
+              <li
+                className={`link ${
+                  pathname === "/user/employer" ? "active" : ""
+                }`}
+              >
                 <Link href="/user/employer">Employer</Link>
               </li>
-              <li>
+              <li
+                className={`link ${
+                  pathname === "/user/job-seeker" ? "active" : ""
+                }`}
+              >
                 <Link href="/user/job-seeker">Job Seeker</Link>
               </li>
               {userRole === "employer" && (
-                <li>
+                <li
+                  className={`link ${
+                    pathname === "/jobs/my-jobs" ? "active" : ""
+                  }`}
+                >
                   <Link href="/jobs/my-jobs">My Jobs</Link>
                 </li>
               )}
               {userRole === "job seeker" && (
-                <li>
+                <li
+                  className={`link ${
+                    pathname === "/applications" ? "active" : ""
+                  }`}
+                >
                   <Link href="/applications">My Applications</Link>
                 </li>
               )}
@@ -54,20 +70,32 @@ const Header: React.FC = () => {
         </ul>
         <div className="side-header">
           {isLoggedIn && (
-            <>
+            <div className="logged-in">
               <input type="text" placeholder="Search..." />
-              <div>
+              <div
+                className={`link ${pathname === "/profile" ? "active" : ""}`}
+              >
                 <Link href="/profile">Profile</Link>
               </div>
-            </>
-          )}
-          {!isLoggedIn && (
-            <div className="">
-              <Link href="/login">Login</Link>
-              <Link href="/register">Register</Link>
+              {isLoggedIn && <button onClick={logoutHandler}>Logout</button>}
             </div>
           )}
-          {isLoggedIn && <button onClick={logoutHandler}>Logout</button>}
+          {!isLoggedIn && (
+            <div className="logged-out">
+              <Link
+                href="/login"
+                className={`link ${pathname === "/login" ? "active" : ""}`}
+              >
+                Login
+              </Link>
+              <Link
+                href="/register"
+                className={`link ${pathname === "/register" ? "active" : ""}`}
+              >
+                Register
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </header>

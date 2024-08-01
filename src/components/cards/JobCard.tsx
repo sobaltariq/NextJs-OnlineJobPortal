@@ -130,7 +130,7 @@ const JobCard: React.FC<JobPropsInterface> = ({
             style={{ display: isApplied ? "none" : "block" }}
           >
             <button
-              className="text-blue-800"
+              className="apply-btn"
               onClick={() => {
                 jobApplyNowHandler();
               }}

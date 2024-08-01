@@ -7,6 +7,12 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { io, Socket } from "socket.io-client";
+import { waitSec } from "@/utils/CommonWait";
+
+interface LoginInterface {
+  id: string;
+  email: string;
+}
 
 interface ChatMessageInterface {
   applicationId: string;
@@ -37,7 +43,10 @@ const ChatPage = () => {
   const { isChat, chatApplicationId } = useSelector(
     (state: RootState) => state.chat
   );
+
+  const [loggedInUser, setLoggedInUser] = useState<LoginInterface | null>(null);
   const token = localStorage.getItem("login_token");
+  const loggedIn = localStorage.getItem("logged_in");
 
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [messagesList, setMessagesList] = useState<ReceivedMessageInterface[]>(
@@ -45,7 +54,7 @@ const ChatPage = () => {
   );
   const [isRoomJoined, setIsRoomJoined] = useState<boolean>(false);
   //  for name
-  const [usersList, setUsersList] = useState<string[]>([]);
+  const [usersList, setUsersList] = useState<UserInterface[]>([]);
 
   const socket = useRef<Socket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -60,6 +69,12 @@ const ChatPage = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+
+        if (loggedIn) {
+          const user: LoginInterface = JSON.parse(loggedIn);
+          setLoggedInUser(user);
+        }
+
         console.log("getMyChatHistory", response.data?.data);
         setMessagesList(response.data?.data?.messages);
 
@@ -137,8 +152,6 @@ const ChatPage = () => {
         setMessagesList((prevMessages) => [...prevMessages, message]);
       };
 
-      // newSocket.emit("getChatHistory", chatApplicationId);
-
       newSocket.on("connect", handleConnect);
       newSocket.on("disconnect", handleDisconnect);
       newSocket.on("connect_error", handleError);
@@ -165,12 +178,17 @@ const ChatPage = () => {
   }, [chatApplicationId, isChat, router]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollTo({
-      top: messagesEndRef.current.scrollHeight,
-      behavior: "smooth",
-      // top: 100000000000,
-      // behavior: "smooth",
-    });
+    const scrollToBottom = async () => {
+      await waitSec(2000);
+      if (messagesEndRef.current) {
+        messagesEndRef.current.scrollTo({
+          top: messagesEndRef.current.scrollHeight,
+          behavior: "smooth",
+        });
+      }
+    };
+
+    scrollToBottom();
   }, [messagesList, chatApplicationId, isChat]);
 
   const sendMessage = (
@@ -223,12 +241,17 @@ const ChatPage = () => {
                 <div className="message-list s-bar" ref={messagesEndRef}>
                   {messagesList.map((msg, i) => {
                     return (
-                      <div className={`message`} key={i}>
+                      <div
+                        className={`message ${
+                          loggedInUser?.id === msg.sender ? "mr-20 my" : "ml-20"
+                        } `}
+                        key={i}
+                      >
                         {usersList && (
                           <div className="msg-top flex justify-between mb-2">
-                            <h5>
+                            <h5 className="capitalize">
                               {usersList.find(
-                                (user: string) =>
+                                (user: UserInterface) =>
                                   user && user.userId === msg.sender
                               )?.userName || "Unknown User"}
                               :
@@ -260,7 +283,11 @@ const ChatPage = () => {
             </div>
           )}
         </div>
-      ) : null}
+      ) : (
+        <p className="flex justify-center items-center h-full">
+          Something went wrong
+        </p>
+      )}
     </div>
   );
 };

@@ -73,7 +73,7 @@ const EditJobModal: React.FC<ModalProps> = ({
       console.log(response.data);
       setShowError(response.data?.message);
 
-      await waitSec(3000);
+      await waitSec(1000);
       setIsEditJobModalOpen(false);
 
       setShowError("");

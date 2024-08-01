@@ -104,7 +104,7 @@ const ApplicationsOnMyJob: React.FC<ApplicationParamsInterface> = ({
               return (
                 <div key={app.appId} className="">
                   <Link href={`/user/job-seeker/${app.seekerId}`}>
-                    <h3>Name:{app?.seekerUserName}</h3>
+                    <h3>{app?.seekerUserName}</h3>
                     <div>
                       <p>
                         Applied At:{" "}
@@ -120,11 +120,12 @@ const ApplicationsOnMyJob: React.FC<ApplicationParamsInterface> = ({
                     </div>
                     <div>
                       <p>
-                        Status: <span>{app?.appStatus}</span>
+                        Status:{" "}
+                        <span className="capitalize">{app?.appStatus}</span>
                       </p>
                     </div>
                   </Link>
-                  <div className="flex justify-between pt-4">
+                  <div className="flex justify-between gap-3 pt-4">
                     {app.appStatus == "accepted" ? (
                       <button
                         onClick={() => {

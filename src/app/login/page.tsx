@@ -89,6 +89,7 @@ function LoginPage() {
         {loginError && <p className="error">{loginError}</p>}
         <div className="user-type">
           <button
+            className={userType === "seeker" ? "selected" : ""}
             onClick={() => {
               setUserType("seeker");
             }}
@@ -96,6 +97,7 @@ function LoginPage() {
             Job Seeker
           </button>
           <button
+            className={userType === "employer" ? "selected" : ""}
             onClick={() => {
               setUserType("employer");
             }}

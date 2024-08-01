@@ -71,7 +71,7 @@ const CreateJobModal: React.FC<ModalProps> = ({
       console.log(response.data);
       setIsPostJobModalOpen(response.data?.message);
 
-      await waitSec(3000);
+      await waitSec(1000);
       setIsPostJobModalOpen(false);
 
       setShowError("");
