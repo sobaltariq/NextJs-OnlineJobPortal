@@ -19,7 +19,7 @@ interface FormValues {
 
 function RegisterPage() {
   const [userType, setUserType] = useState("admin");
-  const [registrationError, setRegistrationError] = useState(null);
+  const [registrationError, setRegistrationError] = useState<string>("");
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -43,7 +43,7 @@ function RegisterPage() {
       .required("Email is required")
       .transform((value) => value.toLowerCase()),
     password: Yup.string()
-      .min(6, "Password must be at least 6 characters")
+      .min(8, "Password must be at least 8 characters")
       .required("Password is required"),
     role: Yup.string().trim().required("Role is required"),
   });
@@ -84,18 +84,19 @@ function RegisterPage() {
 
       router.push("/");
     } catch (err: any) {
-      setRegistrationError(err.response.data?.error);
-      console.error(
-        "Register error:",
-        err.response.data?.error || err.response.data.errors[0].msg
-      );
+      const errorMessage =
+        err.response?.data?.error ||
+        err.response?.data?.errors?.[0]?.msg ||
+        "An unknown error occurred";
+      setRegistrationError(errorMessage);
+      console.error("Register error:", errorMessage);
     }
   };
 
   return (
     <div className="register-page">
       <div className="register-wrapper">
-        <h1>Register</h1>
+        <h1>Register </h1>
         {registrationError && <p className="error">{registrationError}</p>}
 
         <Formik

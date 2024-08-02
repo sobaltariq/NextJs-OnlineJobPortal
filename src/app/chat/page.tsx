@@ -2,7 +2,7 @@
 import MyApi from "@/api/MyApi";
 import * as Yup from "yup";
 import { RootState } from "@/redux/store";
-import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
+import { Field, Form, Formik, FormikHelpers } from "formik";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -53,6 +53,7 @@ const ChatPage = () => {
     []
   );
   const [isRoomJoined, setIsRoomJoined] = useState<boolean>(false);
+  const [msgLoaded, setMsgLoaded] = useState<boolean>(false);
   //  for name
   const [usersList, setUsersList] = useState<UserInterface[]>([]);
 
@@ -77,6 +78,8 @@ const ChatPage = () => {
 
         console.log("getMyChatHistory", response.data?.data);
         setMessagesList(response.data?.data?.messages);
+        await waitSec(10);
+        setMsgLoaded(true);
 
         const messages = response.data?.data?.messages || [];
         const uniqueSenders: string[] = Array.from(
@@ -148,7 +151,7 @@ const ChatPage = () => {
       };
 
       const handleMessageReceived = (message: ReceivedMessageInterface) => {
-        console.log("Received message:", message); // Debug log
+        console.log("Received message:", message);
         setMessagesList((prevMessages) => [...prevMessages, message]);
       };
 
@@ -179,11 +182,13 @@ const ChatPage = () => {
 
   useEffect(() => {
     const scrollToBottom = async () => {
-      await waitSec(2000);
+      if (!messagesEndRef.current) {
+        await waitSec(100);
+      }
       if (messagesEndRef.current) {
         messagesEndRef.current.scrollTo({
           top: messagesEndRef.current.scrollHeight,
-          behavior: "smooth",
+          // behavior: "smooth",
         });
       }
     };
@@ -238,7 +243,7 @@ const ChatPage = () => {
           {isRoomJoined && (
             <div className="chat-container">
               <div>
-                <div className="message-list s-bar" ref={messagesEndRef}>
+                <div className={`message-list s-bar`} ref={messagesEndRef}>
                   {messagesList.map((msg, i) => {
                     return (
                       <div
@@ -269,7 +274,12 @@ const ChatPage = () => {
                 {({ isSubmitting, values }) => (
                   <Form className="mt-8">
                     <div>
-                      <Field type="text" id="message" name="message" />
+                      <Field
+                        type="text"
+                        id="message"
+                        name="message"
+                        autofocus=""
+                      />
                       <button
                         type="submit"
                         disabled={isSubmitting || values.message.trim() === ""}

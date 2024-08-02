@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import DeleteJobModal from "../modals/DeleteJobModal";
 import EditJobModal from "../modals/EditJobModal";
 import MyApi from "@/api/MyApi";
+import { waitSec } from "@/utils/CommonWait";
 
 interface JobApplicationInterface {
   appId: string;
@@ -125,20 +126,36 @@ const JobCard: React.FC<JobPropsInterface> = ({
       </Link>
       {userType === "job seeker" &&
         !applications.some((app) => app.appJobSeeker === seekerId) && (
-          <div
-            className="card-bottom pt-4"
-            style={{ display: isApplied ? "none" : "block" }}
-          >
-            <button
-              className="apply-btn"
-              onClick={() => {
-                jobApplyNowHandler();
-              }}
-            >
-              Apply Now
-            </button>
+          <div className="card-bottom pt-4">
+            {isApplied ? (
+              <div>
+                <button className="apply-btn" disabled>
+                  Applied
+                </button>
+              </div>
+            ) : (
+              <button
+                className="apply-btn"
+                onClick={() => {
+                  jobApplyNowHandler();
+                }}
+              >
+                Apply Now
+              </button>
+            )}
           </div>
         )}
+      {userType === "job seeker" &&
+        applications.some((app) => app.appJobSeeker === seekerId) && (
+          <div className="card-bottom pt-4">
+            <div>
+              <button className="apply-btn" disabled>
+                Applied
+              </button>
+            </div>
+          </div>
+        )}
+
       {employerUserId === loggedInUserId && (
         <React.Fragment>
           <div className="card-bottom flex justify-between pt-4">
@@ -163,7 +180,7 @@ const JobCard: React.FC<JobPropsInterface> = ({
                   setIsEditJobModalOpen(true);
                 }}
               >
-                Edit Profile
+                Edit Job
               </button>
               <EditJobModal
                 jobId={jobId}

@@ -94,49 +94,51 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
             apiData.employerUserId === loggedInUser?.id ? "true" : "false"
           }
         >
-          <div>
-            <h1 className="capitalize">{apiData.jobTitle}</h1>
+          <div className="user-data">
+            <div>
+              <h1 className="capitalize">{apiData.jobTitle}</h1>
 
-            <div className="info-box">
-              <p>Date</p>
-              <p>{new Date(apiData?.jobCreatedAt).toLocaleDateString()}</p>
-            </div>
-            <div className="info-box">
-              <p>Salary</p>
-              <p>{apiData.jobSalary}</p>
-            </div>
-            <div className="info-box">
-              <p>Location</p>
-              <p>{apiData.jobLocation}</p>
-            </div>
-            <div className="info-box">
-              <p>Company</p>
-              <p className="capitalize">{apiData.jobCompany}</p>
-            </div>
-            <div className="info-box">
-              <p>Employer</p>
-              <p className="capitalize">{apiData.employerName}</p>
-            </div>
-            <div className="info-box">
-              <p>Applications</p>
-              <p>{apiData.applications.length}</p>
-            </div>
-            <div className="info-box">
-              <h4>About Job</h4>
-              <p>{apiData.jobDescription}</p>
-            </div>
+              <div className="info-box">
+                <p>Date</p>
+                <p>{new Date(apiData?.jobCreatedAt).toLocaleDateString()}</p>
+              </div>
+              <div className="info-box">
+                <p>Salary</p>
+                <p>{apiData.jobSalary}</p>
+              </div>
+              <div className="info-box">
+                <p>Location</p>
+                <p>{apiData.jobLocation}</p>
+              </div>
+              <div className="info-box">
+                <p>Company</p>
+                <p className="capitalize">{apiData.jobCompany}</p>
+              </div>
+              <div className="info-box">
+                <p>Employer</p>
+                <p className="capitalize">{apiData.employerName}</p>
+              </div>
+              <div className="info-box">
+                <p>Applications</p>
+                <p>{apiData.applications.length}</p>
+              </div>
+              <div className="info-box">
+                <h4>About Job</h4>
+                <p>{apiData.jobDescription}</p>
+              </div>
 
-            <div className="info-box mb-0">
-              <p>Requirements</p>
-              <p>
-                {apiData.jobRequirements.map((item, i) => {
-                  return (
-                    <Fragment key={i}>
-                      <span className="px-2 select-none ">{item}</span>{" "}
-                    </Fragment>
-                  );
-                })}
-              </p>
+              <div className="info-box mb-0">
+                <p>Requirements</p>
+                <p>
+                  {apiData.jobRequirements.map((item, i) => {
+                    return (
+                      <Fragment key={i}>
+                        <span className="px-2 select-none ">{item}</span>{" "}
+                      </Fragment>
+                    );
+                  })}
+                </p>
+              </div>
             </div>
           </div>
           {apiData.employerUserId === loggedInUser?.id && (
