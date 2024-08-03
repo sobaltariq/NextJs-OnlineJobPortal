@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-
+// import "../header/headerMedia.scss";
 import Link from "next/link";
 
 import { usePathname, useRouter } from "next/navigation";
@@ -10,6 +10,8 @@ import { RootState } from "@/redux/store";
 import { RxCross2 } from "react-icons/rx";
 import { IoSearchSharp } from "react-icons/io5";
 import MyApi from "@/api/MyApi";
+
+import { FiMenu } from "react-icons/fi";
 
 interface JobsInterface {
   jobId: string;
@@ -29,6 +31,9 @@ const Header: React.FC = () => {
   const [filteredData, setFilteredData] = useState<JobsInterface[] | []>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
+
+  const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
+  const menuContainerRef = useRef<HTMLDivElement>(null);
 
   const dispatch = useDispatch();
   const { isLoggedIn, userRole, isSearch } = useSelector(
@@ -102,143 +107,171 @@ const Header: React.FC = () => {
         setFilteredData([]);
       }
     };
+    const handleClickMenuOutside = (event: MouseEvent) => {
+      if (
+        menuContainerRef.current &&
+        !menuContainerRef.current.contains(event.target as Node)
+      ) {
+        setMenuOpen(false);
+      }
+    };
 
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickMenuOutside);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickMenuOutside);
     };
   }, [dispatch]);
 
   return (
     <header className="width-container">
-      <div className="header-wrapper">
-        <ul>
-          {isLoggedIn && (
-            <>
-              <li className={`link ${pathname === "/" ? "active" : ""}`}>
-                <Link href="/">Home</Link>
-              </li>
-              <li
-                className={`link ${
-                  pathname === "/user/employer" ? "active" : ""
-                }`}
-              >
-                <Link href="/user/employer">Employer</Link>
-              </li>
-              <li
-                className={`link ${
-                  pathname === "/user/job-seeker" ? "active" : ""
-                }`}
-              >
-                <Link href="/user/job-seeker">Job Seeker</Link>
-              </li>
-              {userRole === "employer" && (
+      <div
+        className="outer-wrapper"
+        ref={menuContainerRef}
+        onClick={() => {
+          isMenuOpen && setMenuOpen(false);
+        }}
+      >
+        <div
+          className="mobile"
+          onClick={() => {
+            setMenuOpen(true);
+          }}
+        >
+          <FiMenu />
+        </div>
+        <nav className="header-wrapper" data-is-menu-open={isMenuOpen}>
+          <ul>
+            {isLoggedIn && (
+              <>
+                <li className={`link ${pathname === "/" ? "active" : ""}`}>
+                  <Link href="/" className="">
+                    Home
+                  </Link>
+                </li>
                 <li
                   className={`link ${
-                    pathname === "/jobs/my-jobs" ? "active" : ""
+                    pathname === "/user/employer" ? "active" : ""
                   }`}
                 >
-                  <Link href="/jobs/my-jobs">My Jobs</Link>
+                  <Link href="/user/employer">Employer</Link>
                 </li>
-              )}
-              {userRole === "job seeker" && (
                 <li
                   className={`link ${
-                    pathname === "/applications" ? "active" : ""
+                    pathname === "/user/job-seeker" ? "active" : ""
                   }`}
                 >
-                  <Link href="/applications">My Applications</Link>
+                  <Link href="/user/job-seeker">Job Seeker</Link>
                 </li>
-              )}
-            </>
-          )}
-        </ul>
-        <div className="side-header">
-          {isLoggedIn && (
-            <div className="logged-in">
-              <div className="search-container" ref={searchContainerRef}>
-                <div className="search flex justify-between gap-2 items-center">
-                  <label
-                    htmlFor="search"
-                    className="flex justify-start items-center gap-2"
+                {userRole === "employer" && (
+                  <li
+                    className={`link ${
+                      pathname === "/jobs/my-jobs" ? "active" : ""
+                    }`}
                   >
-                    <IoSearchSharp />
+                    <Link href="/jobs/my-jobs">My Jobs</Link>
+                  </li>
+                )}
+                {userRole === "job seeker" && (
+                  <li
+                    className={`link ${
+                      pathname === "/applications" ? "active" : ""
+                    }`}
+                  >
+                    <Link href="/applications">My Applications</Link>
+                  </li>
+                )}
+              </>
+            )}
+          </ul>
+          <div className="side-header">
+            {isLoggedIn && (
+              <div className="logged-in">
+                <div className="search-container" ref={searchContainerRef}>
+                  <div className="search flex justify-between gap-2 items-center">
+                    <label
+                      htmlFor="search"
+                      className="flex justify-start items-center gap-2"
+                    >
+                      <IoSearchSharp />
 
-                    <input
-                      type="text"
-                      placeholder="Search Job..."
-                      id="search"
-                      ref={inputRef}
-                      value={searchValue}
-                      onChange={searchHandler}
-                    />
-                  </label>
+                      <input
+                        type="text"
+                        placeholder="Search Job..."
+                        id="search"
+                        ref={inputRef}
+                        value={searchValue}
+                        onChange={searchHandler}
+                      />
+                    </label>
+                    {isSearch && (
+                      <RxCross2
+                        onClick={() => {
+                          dispatch(setSearch(false));
+                          setSearchValue("");
+                          setFilteredData([]);
+                        }}
+                      />
+                    )}
+                  </div>
                   {isSearch && (
-                    <RxCross2
-                      onClick={() => {
-                        dispatch(setSearch(false));
-                        setSearchValue("");
-                        setFilteredData([]);
-                      }}
-                    />
+                    <div className="search-results ">
+                      <div className="s-bar">
+                        {filteredData.length <= 0 && (
+                          <p>
+                            <span>No Job Found</span>
+                          </p>
+                        )}
+                        <>
+                          {filteredData.map((job: JobsInterface, i) => {
+                            return (
+                              <p key={i}>
+                                <Link
+                                  href={`/jobs/${job.jobId}`}
+                                  onClick={() => {
+                                    dispatch(setSearch(false));
+                                    setFilteredData([]);
+                                    setSearchValue("");
+                                  }}
+                                >
+                                  <span>{job.jobTitle}</span>
+                                </Link>
+                              </p>
+                            );
+                          })}
+                        </>
+                      </div>
+                    </div>
                   )}
                 </div>
-                {isSearch && (
-                  <div className="search-results ">
-                    <div className="s-bar">
-                      {filteredData.length <= 0 && (
-                        <p>
-                          <span>No Job Found</span>
-                        </p>
-                      )}
-                      <>
-                        {filteredData.map((job: JobsInterface, i) => {
-                          return (
-                            <p key={i}>
-                              <Link
-                                href={`/jobs/${job.jobId}`}
-                                onClick={() => {
-                                  dispatch(setSearch(false));
-                                  setFilteredData([]);
-                                  setSearchValue("");
-                                }}
-                              >
-                                <span>{job.jobTitle}</span>
-                              </Link>
-                            </p>
-                          );
-                        })}
-                      </>
-                    </div>
-                  </div>
-                )}
+                <div
+                  className={`link ${pathname === "/profile" ? "active" : ""}`}
+                >
+                  <Link href="/profile">Profile</Link>
+                </div>
+                {isLoggedIn && <button onClick={logoutHandler}>Logout</button>}
               </div>
-              <div
-                className={`link ${pathname === "/profile" ? "active" : ""}`}
-              >
-                <Link href="/profile">Profile</Link>
+            )}
+            {!isLoggedIn && (
+              <div className="logged-out">
+                <Link
+                  href="/login"
+                  className={`link ${pathname === "/login" ? "active" : ""}`}
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/register"
+                  className={`link ${pathname === "/register" ? "active" : ""}`}
+                >
+                  Register
+                </Link>
               </div>
-              {isLoggedIn && <button onClick={logoutHandler}>Logout</button>}
-            </div>
-          )}
-          {!isLoggedIn && (
-            <div className="logged-out">
-              <Link
-                href="/login"
-                className={`link ${pathname === "/login" ? "active" : ""}`}
-              >
-                Login
-              </Link>
-              <Link
-                href="/register"
-                className={`link ${pathname === "/register" ? "active" : ""}`}
-              >
-                Register
-              </Link>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        </nav>
       </div>
     </header>
   );

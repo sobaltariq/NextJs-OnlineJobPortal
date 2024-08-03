@@ -15,6 +15,7 @@
 }
 
 body {
+  min-height: 100dvh;
   height: 100%;
   width: 100%;
   background-color: var(--color-white-1);
@@ -39,4 +40,10 @@ button {
   border: none;
   background: none;
   cursor: pointer;
+}
+
+@media (max-width: 500px) {
+  .width-container {
+    padding: 1.5rem 1rem;
+  }
 }

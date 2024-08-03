@@ -1,0 +1,105 @@
+@media screen and (max-width: 1085px) {
+  .link {
+    width: 100%;
+  }
+  header {
+    height: 5rem !important;
+    position: relative;
+    .outer-wrapper {
+      position: absolute;
+      top: 1rem;
+      padding: 0 1.5rem;
+      margin-left: -1.5rem;
+      width: 200px;
+      z-index: 5;
+
+      > .mobile {
+        display: block !important;
+        cursor: pointer;
+        width: min-content;
+        margin: 0 -3rem;
+        margin-left: 0.5rem;
+        user-select: none;
+
+        svg {
+          height: 3rem;
+          width: 3rem;
+        }
+      }
+
+      > nav.header-wrapper {
+        border-radius: 0 !important;
+        margin: 0 -1.5rem;
+        top: 7rem;
+        flex-direction: column;
+        border: none;
+
+        @media screen and (max-width: 500px) {
+          top: 6rem;
+        }
+
+        &[data-is-menu-open="true"] {
+          display: flex;
+        }
+        &[data-is-menu-open="false"] {
+          display: none;
+        }
+
+        > ul {
+          flex-direction: column;
+          width: 100%;
+
+          .link {
+            border-radius: 0 !important;
+            width: 100%;
+            a {
+              text-align: start;
+            }
+          }
+        }
+
+        > .side-header {
+          width: 100%;
+
+          .logged-in {
+            flex-direction: column;
+            gap: 0;
+            position: static;
+            padding: 0;
+
+            .search-container {
+              display: none;
+            }
+
+            > button {
+              margin-top: 1rem;
+              padding: 0.75rem 1rem;
+              border-radius: 0;
+              width: 100%;
+              text-align: start;
+
+              &:hover {
+                padding: 0.75rem 1rem;
+                border-radius: 0;
+                width: 100%;
+              }
+            }
+          }
+
+          .logged-out {
+            flex-direction: column;
+
+            > a.link {
+              border-radius: 0;
+
+              &:hover {
+                border-radius: 0;
+                background-color: var(--color-secondary-5);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

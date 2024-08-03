@@ -94,7 +94,7 @@ const AllJobsPage: React.FC = () => {
       )}
       {apiData.length > 0 ? (
         <div className="jobs-container">
-          <p>{showError}</p>
+          {showError && <p>{showError}</p>}
           <div className="jobs-wrapper grid grid-cols-2 gap-8">
             {apiData.map((jobData: JobsInterface) => {
               return (

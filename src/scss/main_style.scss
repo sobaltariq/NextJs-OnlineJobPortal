@@ -1,3 +1,5 @@
+@import "../components//header/headerMedia.scss";
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -113,6 +115,10 @@ body::-webkit-scrollbar-thumb,
 
 // header
 .link {
+  user-select: none;
+  > a {
+    text-align: start;
+  }
   &:hover {
     background-color: var(--color-secondary-5);
   }
@@ -125,134 +131,166 @@ body::-webkit-scrollbar-thumb,
 
 header {
   background-color: var(--color-secondary-2) !important;
-  .header-wrapper {
-    @include flex-center(space-between, center);
-    background-color: var(--color-secondary-3);
-    border-radius: 3rem;
-    border: 1px solid var(--color-secondary-3);
-    ul {
-      @include flex-center(space-between, center);
 
-      li {
-        &:first-child {
-          border-top-left-radius: 3rem;
-          border-bottom-left-radius: 3rem;
-        }
-        a {
-          padding: 1rem 2rem;
-          @include font-size-weight(18px, 400);
-          color: var(--color-white-1);
-          display: block;
-        }
-      }
+  .outer-wrapper {
+    > .mobile {
+      display: none;
     }
 
-    .side-header {
-      .logged-in {
+    .header-wrapper {
+      @include flex-center(space-between, center);
+      background-color: var(--color-secondary-3);
+      border-radius: 3rem;
+      border: 1px solid var(--color-secondary-3);
+
+      ul {
         @include flex-center(space-between, center);
-        gap: 2rem;
-        padding-right: 2rem;
-        position: relative;
 
-        .search-container {
-          .search-results {
-            position: absolute;
-            top: 50px;
-            background-color: var(--color-white-1);
-            border-radius: 0.5rem;
-            width: 275px;
-            box-shadow: var(--shadow);
-            z-index: 5;
-            padding: 0.75rem;
+        li {
+          &:first-child {
+            border-top-left-radius: 3rem;
+            border-bottom-left-radius: 3rem;
+          }
+          a {
+            padding: 1rem 2rem;
+            @include font-size-weight(18px, 400);
+            color: var(--color-white-1);
+            display: block;
 
-            > div {
-              overflow-y: scroll;
-              max-height: 200px;
-              padding-right: 5px;
+            @media screen and (max-width: 1280px) {
+              padding: 0.75rem 1rem;
+            }
+          }
+        }
+      }
 
-              > p {
-                border-bottom: 1px solid var(--color-secondary-5);
-                padding: 0.5rem 0;
-                transition: var(--transition-1);
+      .side-header {
+        .logged-in {
+          @include flex-center(space-between, center);
+          gap: 2rem;
+          padding-right: 2rem;
+          position: relative;
 
-                &:last-child {
-                  border: none;
-                  padding-bottom: 0;
-                }
-                &:first-child {
-                  padding-top: 0;
-                }
-                a {
-                  padding: 0.75rem 0.5rem;
-                  color: var(--color-black-2);
-                  border-radius: 0.5rem;
+          .search-container {
+            .search-results {
+              position: absolute;
+              top: 50px;
+              background-color: var(--color-white-1);
+              border-radius: 0.5rem;
+              width: 275px;
+              box-shadow: var(--shadow);
+              z-index: 5;
+              padding: 0.75rem;
 
-                  &:hover {
-                    background-color: var(--color-secondary-4);
+              > div {
+                overflow-y: scroll;
+                max-height: 200px;
+                padding-right: 5px;
+
+                > p {
+                  border-bottom: 1px solid var(--color-secondary-5);
+                  padding: 0.5rem 0;
+                  transition: var(--transition-1);
+
+                  &:last-child {
+                    border: none;
+                    padding-bottom: 0;
+                  }
+                  &:first-child {
+                    padding-top: 0;
+                  }
+                  a {
+                    padding: 0.75rem 0.5rem;
+                    color: var(--color-black-2);
+                    border-radius: 0.5rem;
+
+                    &:hover {
+                      background-color: var(--color-secondary-4);
+                    }
                   }
                 }
               }
             }
-          }
-          .search {
-            border-radius: 0.5rem;
-            border: 1px solid var(--color-secondary-3);
-            background-color: var(--color-white-1);
-            width: 275px;
-            justify-content: flex-start;
-            padding-right: 0.75rem;
+            .search {
+              border-radius: 0.5rem;
+              border: 1px solid var(--color-secondary-3);
+              background-color: var(--color-white-1);
+              width: 275px;
+              justify-content: flex-start;
+              padding-right: 0.75rem;
 
-            label {
-              padding: 0.2rem 0.75rem;
-              padding-right: 0;
-              flex: 1 1;
+              label {
+                padding: 0.2rem 0.75rem;
+                padding-right: 0;
+                flex: 1 1;
 
-              input {
-                background: transparent;
-                border: none;
-                border-radius: 0;
-                padding: 0;
-                width: 90%;
+                input {
+                  background: transparent;
+                  border: none;
+                  border-radius: 0;
+                  padding: 0;
+                  width: 90%;
+                }
+              }
+              > svg {
+                cursor: pointer;
               }
             }
-            > svg {
-              cursor: pointer;
+          }
+
+          a {
+            @include font-size-weight(18px, 400);
+            color: var(--color-white-1);
+            padding: 1rem 2rem;
+            display: block;
+
+            @media screen and (max-width: 1280px) {
+              padding: 0.75rem 1rem;
+            }
+          }
+          button {
+            @include common-button(--color-secondary-1);
+            padding: 2px 1rem;
+            font-size: 16px;
+            transition: var(--transition-1);
+
+            &:hover {
+              @include common-button(--color-secondary-3);
+              padding: 2px 1rem;
+              font-size: 16px;
             }
           }
         }
+        .logged-out {
+          @include flex-center(space-between, center);
+          margin-left: -2rem;
 
-        a {
-          @include font-size-weight(18px, 400);
-          color: var(--color-white-1);
-          padding: 1rem 2rem;
-          display: block;
-        }
-        button {
-          @include common-button(--color-secondary-1);
-          padding: 2px 1rem;
-          font-size: 16px;
-          transition: var(--transition-1);
+          a {
+            @include font-size-weight(18px, 400);
+            color: var(--color-white-1);
+            padding: 1rem 2rem;
+            display: block;
+            text-align: center;
 
-          &:hover {
-            @include common-button(--color-secondary-3);
-            padding: 2px 1rem;
-            font-size: 16px;
+            &:last-child {
+              border-top-right-radius: 3rem;
+              border-bottom-right-radius: 3rem;
+            }
+            @media screen and (max-width: 500px) {
+              width: 100%;
+              &:first-child {
+                border-top-left-radius: 3rem;
+                border-bottom-left-radius: 3rem;
+              }
+            }
+          }
+          @media screen and (max-width: 500px) {
+            margin: 0;
           }
         }
-      }
-      .logged-out {
-        @include flex-center(space-between, center);
-        margin-left: -2rem;
 
-        a {
-          @include font-size-weight(18px, 400);
-          color: var(--color-white-1);
-          padding: 1rem 2rem;
-          display: block;
-          &:last-child {
-            border-top-right-radius: 3rem;
-            border-bottom-right-radius: 3rem;
-          }
+        @media screen and (max-width: 500px) {
+          width: 100%;
         }
       }
     }
@@ -287,6 +325,7 @@ footer {
       @include flex-center(space-between, center);
       width: 100%;
       padding: 1rem 0;
+      gap: 0.5rem;
 
       .selected {
         @include common-button(--color-secondary-2);
@@ -419,6 +458,16 @@ footer {
           }
         }
       }
+
+      @media screen and (max-width: 630px) {
+        margin-top: 1rem;
+        flex-direction: column-reverse;
+        gap: 0.75rem;
+      }
+    }
+
+    @media screen and (max-width: 630px) {
+      width: 100%;
     }
   }
 }
@@ -430,6 +479,7 @@ footer {
   border-radius: 12px;
   transition: var(--transition-1);
   box-shadow: var(--shadow);
+  min-width: 300px;
   &:hover {
     background-color: var(--color-secondary-7);
   }
@@ -441,6 +491,14 @@ footer {
         @include font-size-weight(18px, 400);
         span {
           @include font-size-weight(18px, 300);
+        }
+      }
+
+      @media screen and (max-width: 500px) {
+        flex-direction: column;
+        padding: 0;
+        > p {
+          padding: 0.25rem;
         }
       }
     }
@@ -476,6 +534,16 @@ footer {
       }
     }
   }
+
+  @media screen and (max-width: 1100px) {
+    padding: 1rem;
+  }
+  @media screen and (max-width: 971px) {
+    width: 600px;
+  }
+  @media screen and (max-width: 650px) {
+    width: 100%;
+  }
 }
 
 // home for all jobs
@@ -492,11 +560,31 @@ footer {
       }
     }
   }
+
+  .jobs-container {
+    .jobs-wrapper {
+      @media screen and (max-width: 970px) {
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+      @media screen and (max-width: 500px) {
+        gap: 1.5rem;
+      }
+    }
+  }
 }
 
 // employer and seeker
 .users-page {
   min-height: 70dvh;
+  > div {
+    .grid {
+      @media screen and (max-width: 974px) {
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+    }
+  }
 }
 
 // seeker application page
@@ -519,7 +607,23 @@ footer {
             @include button-border(--color-secondary-1, --color-secondary-1);
             padding: 0.3rem 1.5rem;
           }
+
+          @media screen and (max-width: 565px) {
+            flex-direction: column;
+            padding: 0;
+            gap: 0;
+            > p {
+              padding: 0.25rem;
+            }
+          }
         }
+      }
+      @media screen and (max-width: 971px) {
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+      @media screen and (max-width: 500px) {
+        gap: 1.5rem;
       }
     }
   }
@@ -536,6 +640,10 @@ footer {
       grid-template-columns: 3fr 2fr;
       gap: 2rem;
       width: 100%;
+
+      @media screen and (max-width: 970px) {
+        grid-template-columns: 1fr;
+      }
     }
     &[data-is-employer="false"] {
       width: 700px;
@@ -551,6 +659,10 @@ footer {
     .user-data {
       position: sticky;
       top: 2rem;
+
+      @media screen and (max-width: 970px) {
+        position: static;
+      }
     }
     .my-job-applications {
       div {
@@ -597,6 +709,9 @@ footer {
                   );
                   font-weight: 600;
                 }
+              }
+              @media screen and (max-width: 500px) {
+                flex-direction: column;
               }
             }
           }
@@ -662,6 +777,23 @@ footer {
             }
           }
         }
+      }
+    }
+
+    @media screen and (max-width: 620px) {
+      min-width: auto;
+      width: 90%;
+    }
+  }
+}
+
+// my job page
+.my-job-page {
+  .my-job-wrapper {
+    .grid {
+      @media screen and (max-width: 970px) {
+        grid-template-columns: 1fr;
+        justify-items: center;
       }
     }
   }

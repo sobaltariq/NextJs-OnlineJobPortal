@@ -67,9 +67,9 @@ const MyJobsPage = () => {
   }, [jobDeleted]);
 
   return (
-    <div>
+    <div className="my-job-page">
       {apiData.length > 0 ? (
-        <div>
+        <div className="my-job-wrapper">
           <p>{showError}</p>
           <h2 className="pb-8">Total Jobs: {apiData.length}</h2>
           <div className="grid grid-cols-2 gap-8">
@@ -85,9 +85,9 @@ const MyJobsPage = () => {
           </div>
         </div>
       ) : (
-        <div>
+        <div className="my-job-wrapper">
           {showError ? (
-            <p>{showError}</p>
+            <p className="error">{showError}</p>
           ) : (
             <p
               className="flex justify-center items-center"
