@@ -7,12 +7,11 @@ export interface ChatInterface {
 }
 const initialState: ChatInterface = {
   isChat: false,
-  // isChat: true,
   chatApplicationId: "",
 };
 
 export const chatSlice = createSlice({
-  name: "counter",
+  name: "chat",
   initialState,
   reducers: {
     isChatEnabled: (state, action: PayloadAction<boolean>) => {

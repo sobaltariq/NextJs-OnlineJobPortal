@@ -19,7 +19,9 @@ const AllDataWrapper: React.FC<{ children: React.ReactNode }> = ({
   return (
     <>
       {!isChat && <Header />}
-      <div className="width-container">{children}</div>
+      <div className="width-container" data-chat={isChat}>
+        {children}
+      </div>
       {!isChat && <Footer />}
     </>
   );

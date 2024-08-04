@@ -84,7 +84,6 @@ const JobCard: React.FC<JobPropsInterface> = ({
       const seekerData = response.data.data;
       seekerData.map((seeker: any) => {
         if (loggedInUserId === seeker?.userId) {
-          // console.log(seeker?.seekerId);
           setSeekerId(seeker?.seekerId);
         }
       });

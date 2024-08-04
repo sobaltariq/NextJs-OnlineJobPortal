@@ -68,7 +68,6 @@ const UserTypePage: React.FC<ParamsData> = ({ params }) => {
 
   useEffect(() => {
     getAllUsers();
-    // console.log(userType);
   }, []);
   return (
     <div className="users-page">

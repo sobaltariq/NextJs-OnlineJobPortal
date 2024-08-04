@@ -789,6 +789,7 @@ footer {
 
 // my job page
 .my-job-page {
+  min-height: 70dvh;
   .my-job-wrapper {
     .grid {
       @media screen and (max-width: 970px) {
@@ -800,95 +801,145 @@ footer {
 }
 
 // chat
-.chat-page {
-  @include flex-center(center, center);
-  height: 90vh;
-
-  .chat-wrapper {
+.width-container {
+  &[data-chat="true"] {
+    height: 100dvh;
+    overflow: hidden;
+    @include flex-center(center, center);
+  }
+  .chat-page {
+    @include flex-center(center, center);
     height: 100%;
-    width: 800px;
-    background-color: var(--color-white-1);
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: var(--shadow);
-    @include flex-center(space-between, center);
-    flex-direction: column;
+    max-height: 800px;
+    width: 100%;
+    overflow: hidden;
+    margin: auto 0;
 
-    .chat-container {
-      flex: 1;
-      border: 2px solid var(--color-secondary-3);
-      padding: 0.5rem 1rem;
-      border-radius: 10px;
+    @media screen and (max-width: 700px) {
+      display: block;
       width: 100%;
+    }
+
+    .chat-wrapper {
       height: 100%;
-      display: flex;
+      width: 80dvw;
+      max-width: 800px;
+      overflow: hidden;
+      background-color: var(--color-white-1);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      @include flex-center(space-between, center);
       flex-direction: column;
 
-      > div {
-        flex: 1;
+      @media screen and (max-width: 800px) {
+        width: 90dvw;
+      }
+      @media screen and (max-width: 700px) {
         width: 100%;
-        min-height: 100px;
+        padding: 1.5rem;
+      }
+      @media screen and (max-width: 400px) {
+        padding: 0.75rem;
+      }
+
+      .chat-container {
+        flex: 1;
+        border: 2px solid var(--color-secondary-3);
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        width: 100%;
+        height: 100%;
         display: flex;
-        justify-content: flex-end;
         flex-direction: column;
 
-        .message-list {
-          overflow-y: auto;
-          padding-right: 0.5rem;
-          .my {
-            background-color: var(--color-secondary-4);
-          }
-          > div {
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            padding: 0.5rem 0.75rem;
-            border-radius: 5px;
-            background-color: var(--color-white-2);
-            box-shadow: var(--shadow);
-            min-width: 400px;
-            &:first-child {
-              margin-top: 0;
-            }
-            &:last-child {
-              margin-bottom: 0;
-            }
+        @media screen and (max-width: 400px) {
+          padding: 0.75rem;
+        }
 
-            .msg-top {
-              h5 {
-                @include font-size-weight(18px, 400);
+        > div {
+          flex: 1;
+          width: 100%;
+          min-height: 100px;
+          display: flex;
+          justify-content: flex-end;
+          flex-direction: column;
+
+          .message-list {
+            overflow-y: auto;
+            padding-right: 0.5rem;
+
+            > div.message {
+              margin-top: 2rem;
+              margin-bottom: 1rem;
+              padding: 0.5rem 0.75rem;
+              border-radius: 5px;
+              background-color: var(--color-white-2);
+              box-shadow: var(--shadow);
+              min-width: 400px;
+              margin-left: 5rem;
+              margin-right: 0;
+              &[data-user-margin="true"] {
+                margin-right: 5rem;
+                margin-left: 0;
+                background-color: var(--color-secondary-4);
+              }
+              &:first-child {
+                margin-top: 0;
+              }
+              &:last-child {
+                margin-bottom: 0;
+              }
+
+              @media screen and (max-width: 700px) {
+                min-width: fit-content;
+                margin: 0.75rem;
+                margin-right: 0;
+                margin-left: 1.2rem;
+                &[data-user-margin="true"] {
+                  margin-right: 1.2rem;
+                  margin-left: 0;
+                  background-color: var(--color-secondary-4);
+                }
+              }
+
+              .msg-top {
+                h5 {
+                  @include font-size-weight(18px, 400);
+                }
+                p {
+                  @include font-size-weight(16px, 400);
+                }
               }
               p {
-                @include font-size-weight(16px, 400);
+                @include font-size-weight(20px, 400);
               }
-            }
-            p {
-              @include font-size-weight(20px, 400);
             }
           }
         }
-      }
-      form {
-        width: 100%;
+        form {
+          width: 100%;
 
-        > div {
-          display: flex;
-          justify-content: space-between;
-          gap: 1rem;
-          border-top: 2px solid var(--color-secondary-3);
-          padding-top: 0.5rem;
-          // padding: 0.5rem 1rem;
-          // border-radius: 10px;
+          > div {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            border-top: 2px solid var(--color-secondary-3);
+            padding-top: 0.5rem;
+            // padding: 0.5rem 1rem;
+            // border-radius: 10px;
 
-          > input {
-            width: 100%;
-            border: none;
-            background-color: var(--color-secondary-4);
-          }
-          button {
-            @include common-button(--color-secondary-2);
+            > input {
+              width: 100%;
+              border: none;
+              background-color: var(--color-secondary-4);
+            }
+            button {
+              @include common-button(--color-secondary-2);
 
-            &:disabled {
-              @include common-button(--color-white-2);
+              &:disabled {
+                @include common-button(--color-white-2);
+              }
             }
           }
         }

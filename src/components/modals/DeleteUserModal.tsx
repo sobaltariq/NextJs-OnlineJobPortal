@@ -17,8 +17,6 @@ const DeleteUserModal: React.FC<ModalProps> = ({
     }
   };
 
-  //   useEffect(() => {}, [accountDeleteModal]);
-
   // Add event listener for escape key press to close modal
   useEffect(() => {
     document.addEventListener("keydown", handleEscape);

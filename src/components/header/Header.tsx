@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-// import "../header/headerMedia.scss";
 import Link from "next/link";
 
 import { usePathname, useRouter } from "next/navigation";
@@ -83,7 +82,7 @@ const Header: React.FC = () => {
           },
         });
         console.log("aaaaa", response.data?.data);
-        // response.data?.data.map((job: JobsInterface)=> job.jobTitle)
+
         setApiData(response.data?.data);
       } catch (err: any) {
         if (err.response) {

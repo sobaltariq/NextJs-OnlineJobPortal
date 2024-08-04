@@ -9,7 +9,7 @@ const initialState: JobsInterface = {
 };
 
 export const jobsSlice = createSlice({
-  name: "counter",
+  name: "jobs",
   initialState,
   reducers: {
     isJobDeleted: (state, action: PayloadAction<boolean>) => {

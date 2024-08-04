@@ -33,9 +33,6 @@ interface UserInterface {
   userId: string;
   userName: string;
 }
-// let socket: Socket | null = null;
-
-// const socket = io("http://localhost:5010");
 
 const ChatPage = () => {
   const router = useRouter();
@@ -119,7 +116,7 @@ const ChatPage = () => {
 
   useEffect(() => {
     if (chatApplicationId) {
-      const newSocket = io("http://localhost:5010", {
+      const newSocket = io(`${process.env.REACT_APP_BASE_URL}`, {
         transports: ["websocket"], // Use WebSocket transport
         auth: {
           token: `Bearer ${token}`,
@@ -147,7 +144,6 @@ const ChatPage = () => {
 
       const handleRoomJoined = () => {
         setIsRoomJoined(!isRoomJoined);
-        // setLoading(false);
       };
 
       const handleMessageReceived = (message: ReceivedMessageInterface) => {
@@ -188,7 +184,6 @@ const ChatPage = () => {
       if (messagesEndRef.current) {
         messagesEndRef.current.scrollTo({
           top: messagesEndRef.current.scrollHeight,
-          // behavior: "smooth",
         });
       }
     };
@@ -215,7 +210,6 @@ const ChatPage = () => {
     }
 
     resetForm();
-    // setNewMessage("");
     console.log(usersList);
   };
 
@@ -250,6 +244,7 @@ const ChatPage = () => {
                         className={`message ${
                           loggedInUser?.id === msg.sender ? "mr-20 my" : "ml-20"
                         } `}
+                        data-user-margin={loggedInUser?.id === msg.sender}
                         key={i}
                       >
                         {usersList && (
@@ -278,7 +273,7 @@ const ChatPage = () => {
                         type="text"
                         id="message"
                         name="message"
-                        autofocus=""
+                        autoFocus=""
                       />
                       <button
                         type="submit"

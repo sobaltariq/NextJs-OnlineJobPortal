@@ -8,9 +8,6 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  // isLoggedIn: !!localStorage.getItem("login_token"),
-  // loginToken: localStorage.getItem("login_token"),
-  // userRole: localStorage.getItem("user_role"),
   isLoggedIn: false,
   loginToken: null,
   userRole: null,
