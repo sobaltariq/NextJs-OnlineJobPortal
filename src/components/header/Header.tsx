@@ -70,7 +70,6 @@ const Header: React.FC = () => {
     if (!isSearch && inputRef.current) {
       inputRef.current.blur();
     }
-    // console.log(isSearch);
 
     const getAllJobs = async () => {
       try {
@@ -81,17 +80,18 @@ const Header: React.FC = () => {
             Authorization: `Bearer ${loginToken}`,
           },
         });
-        // console.log("aaaaa", response.data?.data);
 
         setApiData(response.data?.data);
       } catch (err: any) {
         if (err.response) {
-          console.error(`get jobs error: `, err.response.data?.error);
+          console.error(`get jobs error: `, err.response.data);
         }
       }
     };
 
-    getAllJobs();
+    if (isLoggedIn) {
+      getAllJobs();
+    }
   }, [isSearch, inputRef]);
 
   // Close search results when clicking outside

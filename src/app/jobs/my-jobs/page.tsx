@@ -5,10 +5,11 @@ import LoginAuth from "@/hocs/LoginAuth";
 import composeHOCs from "@/hocs/composeHOCs";
 import { RootState } from "@/redux/store";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import LoadingImg from "../../../assets/Loader.svg";
 import Image from "next/image";
+import { setAppStatus } from "@/redux/features/gobalSlicer";
 
 interface JobApplicationInterface {
   appId: string;
@@ -40,6 +41,9 @@ const MyJobsPage = () => {
   const [isLoading, setLoader] = useState<boolean>(true);
 
   const { jobDeleted } = useSelector((state: RootState) => state.jobs);
+  const { appStatus } = useSelector((state: RootState) => state.global);
+
+  const dispatch = useDispatch();
 
   const getMyJobs = async () => {
     try {
@@ -64,6 +68,7 @@ const MyJobsPage = () => {
     } catch (err: any) {
       setShowError(err.response.data?.message || err.response.data?.error);
       console.error("Get Single user:", err.response.data);
+      dispatch(setAppStatus(err.response.status));
     } finally {
       setLoader(false);
     }
@@ -73,7 +78,7 @@ const MyJobsPage = () => {
     getMyJobs();
   }, [jobDeleted]);
 
-  if (isLoading) {
+  if (isLoading || !(appStatus === 200)) {
     return (
       <div className="home-page flex justify-center items-center">
         <Image
@@ -106,16 +111,12 @@ const MyJobsPage = () => {
           </div>
         ) : (
           <div className="my-job-wrapper">
-            {showError ? (
-              <p className="error">{showError}</p>
-            ) : (
-              <p
-                className="flex justify-center items-center"
-                style={{ height: "70dvh" }}
-              >
-                No Job Found
-              </p>
-            )}
+            <p
+              className="flex justify-center items-center"
+              style={{ height: "70dvh" }}
+            >
+              {showError || "Job Not Found"}
+            </p>
           </div>
         )}
       </div>

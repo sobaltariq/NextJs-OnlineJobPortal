@@ -9,10 +9,12 @@ import { logout } from "@/redux/features/auth/authSlice";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { Fragment, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import LoadingImg from "../../assets/Loader.svg";
 import Image from "next/image";
+import { RootState } from "@/redux/store";
+import { setAppStatus } from "@/redux/features/gobalSlicer";
 
 interface JobPostings {
   jobPostId: string;
@@ -47,6 +49,8 @@ const ProfilePage: React.FC = () => {
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] =
     useState<boolean>(false);
 
+  const { appStatus } = useSelector((state: RootState) => state.global);
+
   const [isLoading, setLoader] = useState<boolean>(true);
 
   const router = useRouter();
@@ -78,6 +82,7 @@ const ProfilePage: React.FC = () => {
       console.log(err.response);
 
       console.error("Profile error:", err.response.data?.message);
+      dispatch(setAppStatus(err.response.status));
     } finally {
       setLoader(false);
     }
@@ -118,7 +123,7 @@ const ProfilePage: React.FC = () => {
   useEffect(() => {
     getProfileHandler();
   }, []);
-  if (isLoading) {
+  if (isLoading || !(appStatus === 200)) {
     return (
       <div className="home-page flex justify-center items-center">
         <Image
@@ -133,7 +138,6 @@ const ProfilePage: React.FC = () => {
   } else {
     return (
       <div className="user-profile-page">
-        {showError && <p>{showError}</p>}
         {apiData ? (
           <div className="profile-wrapper">
             <h1>Profile</h1>
@@ -280,7 +284,7 @@ const ProfilePage: React.FC = () => {
             className="flex justify-center items-center"
             style={{ height: "70dvh" }}
           >
-            Profile Not Found
+            {showError || "Profile Not Found"}
           </p>
         )}
       </div>

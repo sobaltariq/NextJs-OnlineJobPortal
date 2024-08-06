@@ -7,6 +7,9 @@ import { string } from "yup";
 
 import LoadingImg from "../../../../assets/Loader.svg";
 import Image from "next/image";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { setAppStatus } from "@/redux/features/gobalSlicer";
 
 interface UserProfile {
   params: {
@@ -38,10 +41,15 @@ interface ProfileData {
 
 const UserPage: React.FC<UserProfile> = ({ params }) => {
   const [userError, setUserError] = useState<string>("");
+  const [showError, setShowError] = useState<string>("");
 
   const [apiData, setApiData] = useState<ProfileData | null>(null);
 
   const [isLoading, setLoader] = useState<boolean>(true);
+
+  const { appStatus } = useSelector((state: RootState) => state.global);
+
+  const dispatch = useDispatch();
 
   const router = useRouter();
 
@@ -67,6 +75,8 @@ const UserPage: React.FC<UserProfile> = ({ params }) => {
     } catch (err: any) {
       setUserError(err.response.data?.message || "Get Single user");
       console.error("Get Single user:", err.response.data);
+      setShowError(err.response.data);
+      dispatch(setAppStatus(err.response.status));
     } finally {
       setLoader(false);
     }
@@ -76,7 +86,7 @@ const UserPage: React.FC<UserProfile> = ({ params }) => {
     getUserProfile();
   }, []);
 
-  if (isLoading) {
+  if (isLoading || !(appStatus === 200)) {
     return (
       <div className="home-page flex justify-center items-center">
         <Image
@@ -92,7 +102,7 @@ const UserPage: React.FC<UserProfile> = ({ params }) => {
     return (
       <div className="single-user-page">
         {userError && <p>{userError}</p>}
-        {apiData && (
+        {apiData ? (
           <div className="single-user-wrapper">
             <div className="info-box">
               <p>Name</p>
@@ -172,6 +182,13 @@ const UserPage: React.FC<UserProfile> = ({ params }) => {
               </>
             )}
           </div>
+        ) : (
+          <p
+            className="flex justify-center items-center"
+            style={{ height: "70dvh" }}
+          >
+            {showError || "Job Not Found."}
+          </p>
         )}
       </div>
     );

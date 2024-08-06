@@ -14,6 +14,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import LoadingImg from "../../assets/Loader.svg";
+import { setAppStatus } from "@/redux/features/gobalSlicer";
 
 interface MyApplicationsInterface {
   appId: string;
@@ -35,6 +36,7 @@ const MyApplicationsPage: React.FC = () => {
   const { isChat, chatApplicationId } = useSelector(
     (state: RootState) => state.chat
   );
+  const { appStatus } = useSelector((state: RootState) => state.global);
 
   const getMyApplications = async () => {
     try {
@@ -47,11 +49,11 @@ const MyApplicationsPage: React.FC = () => {
           Authorization: `Bearer ${loginToken}`,
         },
       });
-      console.log(response.data);
       setApiData(response.data?.data);
     } catch (err: any) {
       setShowError(err.response.data?.message || err.response.data?.error);
       console.error("Get Single Application:", err.response.data);
+      dispatch(setAppStatus(err.response.status));
     } finally {
       setLoader(false);
     }
@@ -67,7 +69,7 @@ const MyApplicationsPage: React.FC = () => {
     router.push("/chat");
   };
 
-  if (isLoading) {
+  if (isLoading || !(appStatus === 200)) {
     return (
       <div className="home-page flex justify-center items-center">
         <Image

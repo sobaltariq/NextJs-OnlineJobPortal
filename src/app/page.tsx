@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import LoadingImg from "../assets/Loader.svg";
+import { setAppStatus } from "@/redux/features/gobalSlicer";
 
 interface LoginInterface {
   id: string;
@@ -48,6 +49,9 @@ const AllJobsPage: React.FC = () => {
   const [isLoading, setLoader] = useState<boolean>(true);
 
   const { jobDeleted } = useSelector((state: RootState) => state.jobs);
+  const { appStatus } = useSelector((state: RootState) => state.global);
+
+  const dispatch = useDispatch();
 
   const getAllJobs = async () => {
     try {
@@ -59,13 +63,13 @@ const AllJobsPage: React.FC = () => {
           Authorization: `Bearer ${loginToken}`,
         },
       });
-      console.log(response.data?.data);
       setApiData(response.data?.data);
       setUserType(localStorage.getItem("user_role"));
       if (loggedIn) {
         const user: LoginInterface = JSON.parse(loggedIn);
         setLoggedInUser(user);
       }
+      dispatch(setAppStatus(200));
     } catch (err: any) {
       if (err.response) {
         setShowError(
@@ -74,6 +78,8 @@ const AllJobsPage: React.FC = () => {
             "something went wrong"
         );
         console.error(`get jobs error: `, err.response);
+        console.error(`get jobs error: `, typeof err.response.status);
+        dispatch(setAppStatus(err.response.status));
       }
     } finally {
       setLoader(false);
@@ -83,7 +89,12 @@ const AllJobsPage: React.FC = () => {
   useEffect(() => {
     getAllJobs();
   }, [isPostJobModalOpen, jobDeleted]);
-  if (isLoading) {
+
+  useEffect(() => {
+    console.log(appStatus);
+  }, []);
+
+  if (isLoading || !(appStatus === 200)) {
     return (
       <div className="home-page flex justify-center items-center">
         <Image
@@ -115,9 +126,8 @@ const AllJobsPage: React.FC = () => {
             </div>
           </div>
         )}
-        {apiData.length > 0 ? (
+        {apiData.length > 0 && !showError ? (
           <div className="jobs-container">
-            {showError && <p>{showError}</p>}
             <div className="jobs-wrapper grid grid-cols-2 gap-8">
               {apiData.map((jobData: JobsInterface) => {
                 return (
@@ -135,7 +145,7 @@ const AllJobsPage: React.FC = () => {
             style={{ height: "70dvh" }}
             className="flex justify-center items-center"
           >
-            Job Not Found
+            {showError || "Job Not Found"}
           </p>
         )}
       </div>

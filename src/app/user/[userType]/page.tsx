@@ -6,6 +6,9 @@ import React, { useEffect, useState } from "react";
 
 import LoadingImg from "../../../assets/Loader.svg";
 import Image from "next/image";
+import { setAppStatus } from "@/redux/features/gobalSlicer";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 interface ParamsData {
   params: {
@@ -46,6 +49,10 @@ const UserTypePage: React.FC<ParamsData> = ({ params }) => {
 
   const [isLoading, setLoader] = useState<boolean>(true);
 
+  const { appStatus } = useSelector((state: RootState) => state.global);
+
+  const dispatch = useDispatch();
+
   const router = useRouter();
 
   const { userType } = params;
@@ -68,6 +75,7 @@ const UserTypePage: React.FC<ParamsData> = ({ params }) => {
     } catch (err: any) {
       setShowError(err.response.data?.message);
       console.error(`${userType} error: `, err.response.data?.error);
+      dispatch(setAppStatus(err.response.status));
     } finally {
       setLoader(false);
     }
@@ -76,7 +84,7 @@ const UserTypePage: React.FC<ParamsData> = ({ params }) => {
   useEffect(() => {
     getAllUsers();
   }, []);
-  if (isLoading) {
+  if (isLoading || !(appStatus === 200)) {
     return (
       <div className="home-page flex justify-center items-center">
         <Image
@@ -91,7 +99,6 @@ const UserTypePage: React.FC<ParamsData> = ({ params }) => {
   } else {
     return (
       <div className="users-page">
-        {showError && <p>{showError}</p>}
         <div>
           {apiData.length > 0 ? (
             <div className="grid grid-cols-2 gap-8">
@@ -104,7 +111,7 @@ const UserTypePage: React.FC<ParamsData> = ({ params }) => {
               className="flex justify-center items-center"
               style={{ height: "70dvh" }}
             >
-              User Not Found.
+              {showError || "User Not Found."}
             </p>
           )}
         </div>

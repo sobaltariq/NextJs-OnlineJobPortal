@@ -4,10 +4,12 @@ import ApplicationsOnMyJob from "@/components/applications/ApplicationsOnMyJob";
 import { isChatEnabled } from "@/redux/features/chatSlicer";
 import { useRouter } from "next/navigation";
 import React, { Fragment, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import LoadingImg from "../../../assets/Loader.svg";
 import Image from "next/image";
+import { RootState } from "@/redux/store";
+import { setAppStatus } from "@/redux/features/gobalSlicer";
 
 interface JobParamsInterface {
   params: {
@@ -49,6 +51,8 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
 
   const [isLoading, setLoader] = useState<boolean>(true);
 
+  const { appStatus } = useSelector((state: RootState) => state.global);
+
   const dispatch = useDispatch();
 
   const router = useRouter();
@@ -82,6 +86,7 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
     } catch (err: any) {
       setShowError(err.response.data?.message || "Get Single Job");
       console.error("Get Single Job:", err.response);
+      dispatch(setAppStatus(err.response.status));
     } finally {
       setLoader(false);
     }
@@ -92,7 +97,7 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
 
     getOneJob();
   }, []);
-  if (isLoading) {
+  if (isLoading || !(appStatus === 200)) {
     return (
       <div className="home-page flex justify-center items-center">
         <Image

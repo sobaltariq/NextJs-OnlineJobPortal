@@ -44,6 +44,8 @@ const ChatPage = () => {
     (state: RootState) => state.chat
   );
 
+  const [showError, setShowError] = useState<string>("");
+
   const [loggedInUser, setLoggedInUser] = useState<LoginInterface | null>(null);
   const token = localStorage.getItem("login_token");
   const loggedIn = localStorage.getItem("logged_in");
@@ -62,6 +64,8 @@ const ChatPage = () => {
 
   const socket = useRef<Socket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const { appStatus } = useSelector((state: RootState) => state.global);
 
   useEffect(() => {
     const getMyChatHistory = async () => {
@@ -97,6 +101,7 @@ const ChatPage = () => {
         setUsersList(usersData);
       } catch (err: any) {
         console.error("Get Chat History:", err.response.data);
+        setShowError(err.response.data.message);
       } finally {
         setLoader(false);
       }
@@ -180,7 +185,6 @@ const ChatPage = () => {
   useEffect(() => {
     if (!isChat && !chatApplicationId) {
       router.push("/");
-      console.log(isChat);
     }
   }, [chatApplicationId, isChat, router]);
 
@@ -232,7 +236,7 @@ const ChatPage = () => {
     message: "",
   };
 
-  if (isLoading) {
+  if (isLoading || !(appStatus === 200)) {
     return (
       <div className="home-page flex justify-center items-center">
         <Image
@@ -313,6 +317,13 @@ const ChatPage = () => {
               </div>
             )}
           </div>
+        ) : showError ? (
+          <p
+            style={{ height: "70dvh" }}
+            className="flex justify-center items-center"
+          >
+            {showError}
+          </p>
         ) : (
           <p className="flex justify-center items-center h-full">
             Something went wrong
