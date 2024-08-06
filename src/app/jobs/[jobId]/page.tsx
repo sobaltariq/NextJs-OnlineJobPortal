@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
+import LoadingImg from "../../../assets/Loader.svg";
+import Image from "next/image";
+
 interface JobParamsInterface {
   params: {
     jobId: string;
@@ -44,6 +47,8 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
   const [userType, setUserType] = useState<string | null>(null);
   const [loggedInUser, setLoggedInUser] = useState<any>(null);
 
+  const [isLoading, setLoader] = useState<boolean>(true);
+
   const dispatch = useDispatch();
 
   const router = useRouter();
@@ -77,6 +82,8 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
     } catch (err: any) {
       setShowError(err.response.data?.message || "Get Single Job");
       console.error("Get Single Job:", err.response);
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -85,73 +92,87 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
 
     getOneJob();
   }, []);
-  return (
-    <div className="single-job-page">
-      {apiData ? (
-        <div
-          className="single-job-wrapper"
-          data-is-employer={
-            apiData.employerUserId === loggedInUser?.id ? "true" : "false"
-          }
-        >
-          <div className="user-data">
-            <div>
-              <h1 className="capitalize">{apiData.jobTitle}</h1>
+  if (isLoading) {
+    return (
+      <div className="home-page flex justify-center items-center">
+        <Image
+          src={LoadingImg}
+          alt="Loading"
+          height={100}
+          width={100}
+          priority
+        />
+      </div>
+    );
+  } else {
+    return (
+      <div className="single-job-page">
+        {apiData ? (
+          <div
+            className="single-job-wrapper"
+            data-is-employer={
+              apiData.employerUserId === loggedInUser?.id ? "true" : "false"
+            }
+          >
+            <div className="user-data">
+              <div>
+                <h1 className="capitalize">{apiData.jobTitle}</h1>
 
-              <div className="info-box">
-                <p>Date</p>
-                <p>{new Date(apiData?.jobCreatedAt).toLocaleDateString()}</p>
-              </div>
-              <div className="info-box">
-                <p>Salary</p>
-                <p>{apiData.jobSalary}</p>
-              </div>
-              <div className="info-box">
-                <p>Location</p>
-                <p>{apiData.jobLocation}</p>
-              </div>
-              <div className="info-box">
-                <p>Company</p>
-                <p className="capitalize">{apiData.jobCompany}</p>
-              </div>
-              <div className="info-box">
-                <p>Employer</p>
-                <p className="capitalize">{apiData.employerName}</p>
-              </div>
-              <div className="info-box">
-                <p>Applications</p>
-                <p>{apiData.applications.length}</p>
-              </div>
-              <div className="info-box">
-                <h4>About Job</h4>
-                <p>{apiData.jobDescription}</p>
-              </div>
+                <div className="info-box">
+                  <p>Date</p>
+                  <p>{new Date(apiData?.jobCreatedAt).toLocaleDateString()}</p>
+                </div>
+                <div className="info-box">
+                  <p>Salary</p>
+                  <p>{apiData.jobSalary}</p>
+                </div>
+                <div className="info-box">
+                  <p>Location</p>
+                  <p>{apiData.jobLocation}</p>
+                </div>
+                <div className="info-box">
+                  <p>Company</p>
+                  <p className="capitalize">{apiData.jobCompany}</p>
+                </div>
+                <div className="info-box">
+                  <p>Employer</p>
+                  <p className="capitalize">{apiData.employerName}</p>
+                </div>
+                <div className="info-box">
+                  <p>Applications</p>
+                  <p>{apiData.applications.length}</p>
+                </div>
+                <div className="info-box">
+                  <h4>About Job</h4>
+                  <p>{apiData.jobDescription}</p>
+                </div>
 
-              <div className="info-box mb-0">
-                <p>Requirements</p>
-                <p>
-                  {apiData.jobRequirements.map((item, i) => {
-                    return (
-                      <Fragment key={i}>
-                        <span className="px-2 select-none ">{item}</span>{" "}
-                      </Fragment>
-                    );
-                  })}
-                </p>
+                <div className="info-box mb-0">
+                  <p>Requirements</p>
+                  <p>
+                    {apiData.jobRequirements.map((item, i) => {
+                      return (
+                        <Fragment key={i}>
+                          <span className="px-2 select-none ">{item}</span>{" "}
+                        </Fragment>
+                      );
+                    })}
+                  </p>
+                </div>
               </div>
             </div>
+            {apiData.employerUserId === loggedInUser?.id && (
+              <ApplicationsOnMyJob jobIdParam={jobId} />
+            )}
           </div>
-          {apiData.employerUserId === loggedInUser?.id && (
-            <ApplicationsOnMyJob jobIdParam={jobId} />
-          )}
-        </div>
-      ) : (
-        <div className="single-job-wrapper">
-          <p>{showError || "Job Not Found"}</p>
-        </div>
-      )}
-    </div>
-  );
+        ) : (
+          <div className="single-job-wrapper">
+            <p>{showError || "Job Not Found"}</p>
+          </div>
+        )}
+      </div>
+    );
+  }
 };
 
 export default SingleJobPage;

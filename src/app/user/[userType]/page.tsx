@@ -4,6 +4,9 @@ import ProfileCard from "@/components/cards/ProfileCard";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
+import LoadingImg from "../../../assets/Loader.svg";
+import Image from "next/image";
+
 interface ParamsData {
   params: {
     userType: "employer" | "job-seeker";
@@ -41,6 +44,8 @@ const UserTypePage: React.FC<ParamsData> = ({ params }) => {
   const [apiData, setApiData] = useState<ProfileData[]>([]);
   const [showError, setShowError] = useState<string>("");
 
+  const [isLoading, setLoader] = useState<boolean>(true);
+
   const router = useRouter();
 
   const { userType } = params;
@@ -63,33 +68,49 @@ const UserTypePage: React.FC<ParamsData> = ({ params }) => {
     } catch (err: any) {
       setShowError(err.response.data?.message);
       console.error(`${userType} error: `, err.response.data?.error);
+    } finally {
+      setLoader(false);
     }
   };
 
   useEffect(() => {
     getAllUsers();
   }, []);
-  return (
-    <div className="users-page">
-      {showError && <p>{showError}</p>}
-      <div>
-        {apiData.length > 0 ? (
-          <div className="grid grid-cols-2 gap-8">
-            {apiData.map((user: ProfileData, index: number) => (
-              <ProfileCard key={index} profileData={user} />
-            ))}
-          </div>
-        ) : (
-          <p
-            className="flex justify-center items-center"
-            style={{ height: "70dvh" }}
-          >
-            User Not Found.
-          </p>
-        )}
+  if (isLoading) {
+    return (
+      <div className="home-page flex justify-center items-center">
+        <Image
+          src={LoadingImg}
+          alt="Loading"
+          height={100}
+          width={100}
+          priority
+        />
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className="users-page">
+        {showError && <p>{showError}</p>}
+        <div>
+          {apiData.length > 0 ? (
+            <div className="grid grid-cols-2 gap-8">
+              {apiData.map((user: ProfileData, index: number) => (
+                <ProfileCard key={index} profileData={user} />
+              ))}
+            </div>
+          ) : (
+            <p
+              className="flex justify-center items-center"
+              style={{ height: "70dvh" }}
+            >
+              User Not Found.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
 };
 
 export default UserTypePage;

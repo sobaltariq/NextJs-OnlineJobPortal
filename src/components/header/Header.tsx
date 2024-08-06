@@ -49,7 +49,7 @@ const Header: React.FC = () => {
 
   const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    console.log("value", value);
+    // console.log("value", value);
 
     setSearchValue(value);
     if (value) {
@@ -58,7 +58,7 @@ const Header: React.FC = () => {
       );
       setFilteredData(filtered);
 
-      console.log("fil", filtered);
+      // console.log("fil", filtered);
     } else {
       setFilteredData([]);
     }
@@ -70,7 +70,7 @@ const Header: React.FC = () => {
     if (!isSearch && inputRef.current) {
       inputRef.current.blur();
     }
-    console.log(isSearch);
+    // console.log(isSearch);
 
     const getAllJobs = async () => {
       try {
@@ -81,7 +81,7 @@ const Header: React.FC = () => {
             Authorization: `Bearer ${loginToken}`,
           },
         });
-        console.log("aaaaa", response.data?.data);
+        // console.log("aaaaa", response.data?.data);
 
         setApiData(response.data?.data);
       } catch (err: any) {

@@ -7,6 +7,9 @@ import { RootState } from "@/redux/store";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
+import LoadingImg from "../../../assets/Loader.svg";
+import Image from "next/image";
+
 interface JobApplicationInterface {
   appId: string;
   appJobSeeker: string;
@@ -34,6 +37,8 @@ const MyJobsPage = () => {
   const [userType, setUserType] = useState<string | null>(null);
   const [loggedInUser, setLoggedInUser] = useState<any>(null);
 
+  const [isLoading, setLoader] = useState<boolean>(true);
+
   const { jobDeleted } = useSelector((state: RootState) => state.jobs);
 
   const getMyJobs = async () => {
@@ -59,6 +64,8 @@ const MyJobsPage = () => {
     } catch (err: any) {
       setShowError(err.response.data?.message || err.response.data?.error);
       console.error("Get Single user:", err.response.data);
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -66,40 +73,54 @@ const MyJobsPage = () => {
     getMyJobs();
   }, [jobDeleted]);
 
-  return (
-    <div className="my-job-page">
-      {apiData.length > 0 ? (
-        <div className="my-job-wrapper">
-          <p>{showError}</p>
-          <h2 className="pb-8">Total Jobs: {apiData.length}</h2>
-          <div className="grid grid-cols-2 gap-8">
-            {apiData.map((jobData: MyJobsInterface) => {
-              return (
-                <JobCard
-                  key={jobData.jobId}
-                  loggedInUserId={loggedInUser?.id}
-                  {...jobData}
-                />
-              );
-            })}
+  if (isLoading) {
+    return (
+      <div className="home-page flex justify-center items-center">
+        <Image
+          src={LoadingImg}
+          alt="Loading"
+          height={100}
+          width={100}
+          priority
+        />
+      </div>
+    );
+  } else {
+    return (
+      <div className="my-job-page">
+        {apiData.length > 0 ? (
+          <div className="my-job-wrapper">
+            <p>{showError}</p>
+            <h2 className="pb-8">Total Jobs: {apiData.length}</h2>
+            <div className="grid grid-cols-2 gap-8">
+              {apiData.map((jobData: MyJobsInterface) => {
+                return (
+                  <JobCard
+                    key={jobData.jobId}
+                    loggedInUserId={loggedInUser?.id}
+                    {...jobData}
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="my-job-wrapper">
-          {showError ? (
-            <p className="error">{showError}</p>
-          ) : (
-            <p
-              className="flex justify-center items-center"
-              style={{ height: "70dvh" }}
-            >
-              No Job Found
-            </p>
-          )}
-        </div>
-      )}
-    </div>
-  );
+        ) : (
+          <div className="my-job-wrapper">
+            {showError ? (
+              <p className="error">{showError}</p>
+            ) : (
+              <p
+                className="flex justify-center items-center"
+                style={{ height: "70dvh" }}
+              >
+                No Job Found
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
 };
 
 export default composeHOCs(LoginAuth)(MyJobsPage);

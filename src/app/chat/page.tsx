@@ -8,6 +8,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { io, Socket } from "socket.io-client";
 import { waitSec } from "@/utils/CommonWait";
+import Image from "next/image";
+
+import LoadingImg from "../../assets/Loader.svg";
 
 interface LoginInterface {
   id: string;
@@ -51,6 +54,9 @@ const ChatPage = () => {
   );
   const [isRoomJoined, setIsRoomJoined] = useState<boolean>(false);
   const [msgLoaded, setMsgLoaded] = useState<boolean>(false);
+
+  const [isLoading, setLoader] = useState<boolean>(true);
+
   //  for name
   const [usersList, setUsersList] = useState<UserInterface[]>([]);
 
@@ -91,6 +97,8 @@ const ChatPage = () => {
         setUsersList(usersData);
       } catch (err: any) {
         console.error("Get Chat History:", err.response.data);
+      } finally {
+        setLoader(false);
       }
     };
 
@@ -224,77 +232,95 @@ const ChatPage = () => {
     message: "",
   };
 
-  return (
-    <div className="chat-page">
-      {isChat && chatApplicationId ? (
-        <div className="chat-wrapper">
-          {/* <h2>Chat Room: {chatApplicationId}</h2> */}
-          {!isRoomJoined && (
-            <p className="flex justify-center items-center h-full">
-              Joining room...
-            </p>
-          )}
-          {isRoomJoined && (
-            <div className="chat-container">
-              <div>
-                <div className={`message-list s-bar`} ref={messagesEndRef}>
-                  {messagesList.map((msg, i) => {
-                    return (
-                      <div
-                        className={`message ${
-                          loggedInUser?.id === msg.sender ? "mr-20 my" : "ml-20"
-                        } `}
-                        data-user-margin={loggedInUser?.id === msg.sender}
-                        key={i}
-                      >
-                        {usersList && (
-                          <div className="msg-top flex justify-between mb-2">
-                            <h5 className="capitalize">
-                              {usersList.find(
-                                (user: UserInterface) =>
-                                  user && user.userId === msg.sender
-                              )?.userName || "Unknown User"}
-                              :
-                            </h5>
-                            <p>{formatTime(msg.timestamp)}</p>
-                          </div>
-                        )}
-                        <p>{msg.content}</p>
-                      </div>
-                    );
-                  })}
+  if (isLoading) {
+    return (
+      <div className="home-page flex justify-center items-center">
+        <Image
+          src={LoadingImg}
+          alt="Loading"
+          height={100}
+          width={100}
+          priority
+        />
+      </div>
+    );
+  } else {
+    return (
+      <div className="chat-page">
+        {isChat && chatApplicationId ? (
+          <div className="chat-wrapper">
+            {/* <h2>Chat Room: {chatApplicationId}</h2> */}
+            {!isRoomJoined && (
+              <p className="flex justify-center items-center h-full">
+                Joining room...
+              </p>
+            )}
+            {isRoomJoined && (
+              <div className="chat-container">
+                <div>
+                  <div className={`message-list s-bar`} ref={messagesEndRef}>
+                    {messagesList.map((msg, i) => {
+                      return (
+                        <div
+                          className={`message ${
+                            loggedInUser?.id === msg.sender
+                              ? "mr-20 my"
+                              : "ml-20"
+                          } `}
+                          data-user-margin={loggedInUser?.id === msg.sender}
+                          key={i}
+                        >
+                          {usersList && (
+                            <div className="msg-top flex justify-between mb-2">
+                              <h5 className="capitalize">
+                                {usersList.find(
+                                  (user: UserInterface) =>
+                                    user && user.userId === msg.sender
+                                )?.userName || "Unknown User"}
+                                :
+                              </h5>
+                              <p>{formatTime(msg.timestamp)}</p>
+                            </div>
+                          )}
+                          <p>{msg.content}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
+                <Formik initialValues={initialValues} onSubmit={sendMessage}>
+                  {({ isSubmitting, values }) => (
+                    <Form className="mt-8">
+                      <div>
+                        <Field
+                          type="text"
+                          id="message"
+                          name="message"
+                          autoFocus=""
+                        />
+                        <button
+                          type="submit"
+                          disabled={
+                            isSubmitting || values.message.trim() === ""
+                          }
+                        >
+                          Send
+                        </button>
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
               </div>
-              <Formik initialValues={initialValues} onSubmit={sendMessage}>
-                {({ isSubmitting, values }) => (
-                  <Form className="mt-8">
-                    <div>
-                      <Field
-                        type="text"
-                        id="message"
-                        name="message"
-                        autoFocus=""
-                      />
-                      <button
-                        type="submit"
-                        disabled={isSubmitting || values.message.trim() === ""}
-                      >
-                        Send
-                      </button>
-                    </div>
-                  </Form>
-                )}
-              </Formik>
-            </div>
-          )}
-        </div>
-      ) : (
-        <p className="flex justify-center items-center h-full">
-          Something went wrong
-        </p>
-      )}
-    </div>
-  );
+            )}
+          </div>
+        ) : (
+          <p className="flex justify-center items-center h-full">
+            Something went wrong
+          </p>
+        )}
+      </div>
+    );
+  }
 };
 
 export default ChatPage;

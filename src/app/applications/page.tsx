@@ -7,10 +7,13 @@ import {
   setChatApplicationId,
 } from "@/redux/features/chatSlicer";
 import { RootState } from "@/redux/store";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+import LoadingImg from "../../assets/Loader.svg";
 
 interface MyApplicationsInterface {
   appId: string;
@@ -25,6 +28,8 @@ const MyApplicationsPage: React.FC = () => {
   const router = useRouter();
   const [showError, setShowError] = useState<string>("");
   const [apiData, setApiData] = useState<MyApplicationsInterface[]>([]);
+
+  const [isLoading, setLoader] = useState<boolean>(true);
 
   const dispatch = useDispatch();
   const { isChat, chatApplicationId } = useSelector(
@@ -47,6 +52,8 @@ const MyApplicationsPage: React.FC = () => {
     } catch (err: any) {
       setShowError(err.response.data?.message || err.response.data?.error);
       console.error("Get Single Application:", err.response.data);
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -60,71 +67,87 @@ const MyApplicationsPage: React.FC = () => {
     router.push("/chat");
   };
 
-  return (
-    <div className="applications-page">
-      {apiData.length > 0 ? (
-        <div className="applications-wrapper">
-          <h1>
-            My Applications: <span>{apiData.length}</span>
-          </h1>
-          <div className="grid grid-cols-2 gap-8">
-            {apiData.map((app: MyApplicationsInterface, i: number) => {
-              return (
-                <div key={i} className="job-card">
-                  <div>
-                    <h2 className="capitalize">
-                      <Link href={`/jobs/${app.jobId}`}>{app.jobTitle}</Link>
-                    </h2>
+  if (isLoading) {
+    return (
+      <div className="home-page flex justify-center items-center">
+        <Image
+          src={LoadingImg}
+          alt="Loading"
+          height={100}
+          width={100}
+          priority
+        />
+      </div>
+    );
+  } else {
+    return (
+      <div className="applications-page">
+        {apiData.length > 0 ? (
+          <div className="applications-wrapper">
+            <h1>
+              My Applications: <span>{apiData.length}</span>
+            </h1>
+            <div className="grid grid-cols-2 gap-8">
+              {apiData.map((app: MyApplicationsInterface, i: number) => {
+                return (
+                  <div key={i} className="job-card">
+                    <div>
+                      <h2 className="capitalize">
+                        <Link href={`/jobs/${app.jobId}`}>{app.jobTitle}</Link>
+                      </h2>
+                    </div>
+                    <div className="flex justify-between py-2">
+                      <p>
+                        Job Posted:{" "}
+                        <span>
+                          {new Date(app.jobCreatedAt).toLocaleDateString()}
+                        </span>
+                      </p>
+                      <p>
+                        Applied Date:{" "}
+                        <span>
+                          {new Date(app.appDate).toLocaleDateString()}
+                        </span>
+                      </p>
+                    </div>
+                    <div className="flex justify-between py-2">
+                      <p>
+                        Status:{" "}
+                        <span className="capitalize">{app.appStatus}</span>
+                      </p>
+                      {app.appStatus === "accepted" && (
+                        <button
+                          onClick={() => {
+                            chatHandler();
+                            dispatch(setChatApplicationId(app.appId));
+                          }}
+                        >
+                          Chat Now
+                        </button>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex justify-between py-2">
-                    <p>
-                      Job Posted:{" "}
-                      <span>
-                        {new Date(app.jobCreatedAt).toLocaleDateString()}
-                      </span>
-                    </p>
-                    <p>
-                      Applied Date:{" "}
-                      <span>{new Date(app.appDate).toLocaleDateString()}</span>
-                    </p>
-                  </div>
-                  <div className="flex justify-between py-2">
-                    <p>
-                      Status:{" "}
-                      <span className="capitalize">{app.appStatus}</span>
-                    </p>
-                    {app.appStatus === "accepted" && (
-                      <button
-                        onClick={() => {
-                          chatHandler();
-                          dispatch(setChatApplicationId(app.appId));
-                        }}
-                      >
-                        Chat Now
-                      </button>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
-      ) : (
-        <div>
-          {showError ? (
-            <p>{showError}</p>
-          ) : (
-            <p
-              className="flex justify-center items-center"
-              style={{ height: "70dvh" }}
-            >
-              No Application Found
-            </p>
-          )}
-        </div>
-      )}
-    </div>
-  );
+        ) : (
+          <div>
+            {showError ? (
+              <p>{showError}</p>
+            ) : (
+              <p
+                className="flex justify-center items-center"
+                style={{ height: "70dvh" }}
+              >
+                No Application Found
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
 };
 
 export default composeHOCs(LoginAuth)(MyApplicationsPage);

@@ -1,6 +1,7 @@
-@media screen and (max-width: 1085px) {
+@media screen and (max-width: 1025px) {
   .link {
     width: 100%;
+    padding-left: 1.5rem;
   }
   header {
     height: 5rem !important;
@@ -33,6 +34,7 @@
         top: 7rem;
         flex-direction: column;
         border: none;
+        box-shadow: var(--shadow);
 
         @media screen and (max-width: 500px) {
           top: 6rem;
@@ -74,6 +76,7 @@
             > button {
               margin-top: 1rem;
               padding: 0.75rem 1rem;
+              padding-left: 2.5rem;
               border-radius: 0;
               width: 100%;
               text-align: start;
