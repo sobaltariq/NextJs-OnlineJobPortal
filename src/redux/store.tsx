@@ -3,7 +3,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "@/redux/features/auth/authSlice";
 import chatReducer from "@/redux/features/chatSlicer";
 import jobsReducer from "@/redux/features/jobsSlicer";
-import globalReducer from "@/redux/features/gobalSlicer";
+import globalReducer from "@/redux/features/globalSlicer";
 
 const store = configureStore({
   reducer: {

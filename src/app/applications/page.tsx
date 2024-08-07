@@ -14,7 +14,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import LoadingImg from "../../assets/Loader.svg";
-import { setAppStatus } from "@/redux/features/gobalSlicer";
+import { setAppStatus } from "@/redux/features/globalSlicer";
 
 interface MyApplicationsInterface {
   appId: string;

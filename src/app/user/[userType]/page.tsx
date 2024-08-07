@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 
 import LoadingImg from "../../../assets/Loader.svg";
 import Image from "next/image";
-import { setAppStatus } from "@/redux/features/gobalSlicer";
+import { setAppStatus } from "@/redux/features/globalSlicer";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 

@@ -11,6 +11,7 @@ import { waitSec } from "@/utils/CommonWait";
 import Image from "next/image";
 
 import LoadingImg from "../../assets/Loader.svg";
+import { setAppStatus } from "@/redux/features/globalSlicer";
 
 interface LoginInterface {
   id: string;
@@ -102,6 +103,8 @@ const ChatPage = () => {
       } catch (err: any) {
         console.error("Get Chat History:", err.response.data);
         setShowError(err.response.data.message);
+
+        dispatch(setAppStatus(err.response.status));
       } finally {
         setLoader(false);
       }

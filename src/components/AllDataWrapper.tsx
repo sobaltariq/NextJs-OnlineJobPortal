@@ -8,7 +8,7 @@ import { initializeAuthState } from "@/redux/features/auth/authSlice";
 import Image from "next/image";
 
 import LoadingImg from "../assets/Loader.svg";
-import { setAppMainLoader } from "@/redux/features/gobalSlicer";
+import { setAppMainLoader } from "@/redux/features/globalSlicer";
 import { waitSec } from "@/utils/CommonWait";
 
 const AllDataWrapper: React.FC<{ children: React.ReactNode }> = ({

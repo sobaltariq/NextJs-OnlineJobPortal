@@ -9,7 +9,7 @@ import LoadingImg from "../../../../assets/Loader.svg";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { setAppStatus } from "@/redux/features/gobalSlicer";
+import { setAppStatus } from "@/redux/features/globalSlicer";
 
 interface UserProfile {
   params: {

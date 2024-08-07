@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import LoadingImg from "../assets/Loader.svg";
-import { setAppStatus } from "@/redux/features/gobalSlicer";
+import { setAppStatus } from "@/redux/features/globalSlicer";
 
 interface LoginInterface {
   id: string;
@@ -78,7 +78,6 @@ const AllJobsPage: React.FC = () => {
             "something went wrong"
         );
         console.error(`get jobs error: `, err.response);
-        console.error(`get jobs error: `, typeof err.response.status);
         dispatch(setAppStatus(err.response.status));
       }
     } finally {
@@ -89,10 +88,6 @@ const AllJobsPage: React.FC = () => {
   useEffect(() => {
     getAllJobs();
   }, [isPostJobModalOpen, jobDeleted]);
-
-  useEffect(() => {
-    console.log(appStatus);
-  }, []);
 
   if (isLoading || !(appStatus === 200)) {
     return (
