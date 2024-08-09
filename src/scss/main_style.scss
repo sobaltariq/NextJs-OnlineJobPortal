@@ -591,6 +591,9 @@ footer {
 .applications-page {
   min-height: 70dvh;
   .applications-wrapper {
+    h1 {
+      color: var(--color-white-1);
+    }
     div {
       .job-card {
         div {

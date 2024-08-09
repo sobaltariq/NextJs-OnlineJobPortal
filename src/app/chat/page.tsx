@@ -56,7 +56,6 @@ const ChatPage = () => {
     []
   );
   const [isRoomJoined, setIsRoomJoined] = useState<boolean>(false);
-  const [msgLoaded, setMsgLoaded] = useState<boolean>(false);
 
   const [isLoading, setLoader] = useState<boolean>(true);
 
@@ -86,8 +85,6 @@ const ChatPage = () => {
 
         console.log("getMyChatHistory", response.data?.data);
         setMessagesList(response.data?.data?.messages);
-        await waitSec(10);
-        setMsgLoaded(true);
 
         const messages = response.data?.data?.messages || [];
         const uniqueSenders: string[] = Array.from(
@@ -193,9 +190,6 @@ const ChatPage = () => {
 
   useEffect(() => {
     const scrollToBottom = async () => {
-      if (!messagesEndRef.current) {
-        await waitSec(100);
-      }
       if (messagesEndRef.current) {
         messagesEndRef.current.scrollTo({
           top: messagesEndRef.current.scrollHeight,
@@ -204,7 +198,7 @@ const ChatPage = () => {
     };
 
     scrollToBottom();
-  }, [messagesList, chatApplicationId, isChat]);
+  }, [messagesList, chatApplicationId, isChat, isRoomJoined]);
 
   const sendMessage = (
     values: FormValuesInterface,

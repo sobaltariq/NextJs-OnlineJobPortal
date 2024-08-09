@@ -24,9 +24,18 @@ body {
 .width-container {
   height: 100%;
   max-width: var(--max-width);
-  background-color: var(--color-secondary);
+  background-image: url("../assets//background.svg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: top;
+  background-size: cover;
   margin: 0 auto;
   padding: 2rem 1.5rem;
+}
+
+header.width-container,
+footer.width-container {
+  background-image: none;
 }
 
 ul {
