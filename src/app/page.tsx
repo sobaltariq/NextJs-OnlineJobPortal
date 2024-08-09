@@ -138,7 +138,7 @@ const AllJobsPage: React.FC = () => {
         ) : (
           <p
             style={{ height: "70dvh" }}
-            className="flex justify-center items-center"
+            className="msg-p flex justify-center items-center"
           >
             {showError || "Job Not Found"}
           </p>

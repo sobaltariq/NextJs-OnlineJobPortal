@@ -57,10 +57,10 @@ const UserTypePage: React.FC<ParamsData> = ({ params }) => {
 
   const { userType } = params;
 
+  const loginToken = localStorage?.getItem("login_token");
+
   const getAllUsers = async () => {
     try {
-      const loginToken = localStorage?.getItem("login_token");
-
       if (!loginToken) {
         router.push("/login");
       }
@@ -78,6 +78,9 @@ const UserTypePage: React.FC<ParamsData> = ({ params }) => {
       dispatch(setAppStatus(err.response.status));
     } finally {
       setLoader(false);
+      if (loginToken) {
+        dispatch(setAppStatus(200));
+      }
     }
   };
 
@@ -108,7 +111,7 @@ const UserTypePage: React.FC<ParamsData> = ({ params }) => {
             </div>
           ) : (
             <p
-              className="flex justify-center items-center"
+              className="msg-p flex justify-center items-center"
               style={{ height: "70dvh" }}
             >
               {showError || "User Not Found."}

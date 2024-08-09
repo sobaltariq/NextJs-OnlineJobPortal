@@ -44,10 +44,10 @@ const MyJobsPage = () => {
   const { appStatus } = useSelector((state: RootState) => state.global);
 
   const dispatch = useDispatch();
+  const loginToken = localStorage?.getItem("login_token");
 
   const getMyJobs = async () => {
     try {
-      const loginToken = localStorage?.getItem("login_token");
       const userRole = localStorage?.getItem("user_role");
       const loggedIn = localStorage.getItem("logged_in");
       if (loggedIn) {
@@ -71,6 +71,9 @@ const MyJobsPage = () => {
       dispatch(setAppStatus(err.response.status));
     } finally {
       setLoader(false);
+      if (loginToken) {
+        dispatch(setAppStatus(200));
+      }
     }
   };
 
@@ -112,7 +115,7 @@ const MyJobsPage = () => {
         ) : (
           <div className="my-job-wrapper">
             <p
-              className="flex justify-center items-center"
+              className="msg-p flex justify-center items-center"
               style={{ height: "70dvh" }}
             >
               {showError || "Job Not Found"}

@@ -317,12 +317,12 @@ const ChatPage = () => {
         ) : showError ? (
           <p
             style={{ height: "70dvh" }}
-            className="flex justify-center items-center"
+            className="error flex justify-center items-center"
           >
             {showError}
           </p>
         ) : (
-          <p className="flex justify-center items-center h-full">
+          <p className="msg-p flex justify-center items-center h-full">
             Something went wrong
           </p>
         )}

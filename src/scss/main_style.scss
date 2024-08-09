@@ -89,6 +89,10 @@ input {
   padding: 1rem 0;
 }
 
+.msg-p {
+  color: var(--color-white-1);
+}
+
 // scrollbar
 /* width */
 body::-webkit-scrollbar {
@@ -794,6 +798,9 @@ footer {
 .my-job-page {
   min-height: 70dvh;
   .my-job-wrapper {
+    h2 {
+      color: var(--color-white-1);
+    }
     .grid {
       @media screen and (max-width: 970px) {
         grid-template-columns: 1fr;

@@ -55,10 +55,10 @@ const UserPage: React.FC<UserProfile> = ({ params }) => {
 
   const { userId, userType } = params;
 
+  const loginToken = localStorage?.getItem("login_token");
+
   const getUserProfile = async () => {
     try {
-      const loginToken = localStorage?.getItem("login_token");
-
       if (!loginToken) {
         router.push("/login");
       }
@@ -79,6 +79,9 @@ const UserPage: React.FC<UserProfile> = ({ params }) => {
       dispatch(setAppStatus(err.response.status));
     } finally {
       setLoader(false);
+      if (loginToken) {
+        dispatch(setAppStatus(200));
+      }
     }
   };
 
@@ -184,7 +187,7 @@ const UserPage: React.FC<UserProfile> = ({ params }) => {
           </div>
         ) : (
           <p
-            className="flex justify-center items-center"
+            className="msg-p flex justify-center items-center"
             style={{ height: "70dvh" }}
           >
             {showError || "Job Not Found."}

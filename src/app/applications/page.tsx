@@ -38,10 +38,10 @@ const MyApplicationsPage: React.FC = () => {
   );
   const { appStatus } = useSelector((state: RootState) => state.global);
 
+  const loginToken = localStorage?.getItem("login_token");
+
   const getMyApplications = async () => {
     try {
-      const loginToken = localStorage?.getItem("login_token");
-
       const endPoint = `job-seeker/application/my-applications`;
 
       const response = await MyApi.get(endPoint, {
@@ -56,6 +56,9 @@ const MyApplicationsPage: React.FC = () => {
       dispatch(setAppStatus(err.response.status));
     } finally {
       setLoader(false);
+      if (loginToken) {
+        dispatch(setAppStatus(200));
+      }
     }
   };
 
@@ -136,10 +139,15 @@ const MyApplicationsPage: React.FC = () => {
         ) : (
           <div>
             {showError ? (
-              <p>{showError}</p>
+              <p
+                className="msg-p flex justify-center items-center"
+                style={{ height: "70dvh" }}
+              >
+                {showError}
+              </p>
             ) : (
               <p
-                className="flex justify-center items-center"
+                className="msg-p flex justify-center items-center"
                 style={{ height: "70dvh" }}
               >
                 No Application Found

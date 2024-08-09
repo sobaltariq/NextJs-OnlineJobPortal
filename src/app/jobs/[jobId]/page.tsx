@@ -89,6 +89,9 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
       dispatch(setAppStatus(err.response.status));
     } finally {
       setLoader(false);
+      if (loggedInUser) {
+        dispatch(setAppStatus(200));
+      }
     }
   };
 
@@ -172,7 +175,9 @@ const SingleJobPage: React.FC<JobParamsInterface> = ({ params }) => {
           </div>
         ) : (
           <div className="single-job-wrapper">
-            <p>{showError || "Job Not Found"}</p>
+            <p className="msg-p flex justify-center items-center">
+              {showError || "Job Not Found"}
+            </p>
           </div>
         )}
       </div>

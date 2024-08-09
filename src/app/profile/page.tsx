@@ -57,11 +57,11 @@ const ProfilePage: React.FC = () => {
 
   const dispatch = useDispatch();
 
+  const loginToken = localStorage?.getItem("login_token");
+  const userType = localStorage?.getItem("user_role");
+
   const getProfileHandler = async () => {
     try {
-      const loginToken = localStorage?.getItem("login_token");
-      const userType = localStorage?.getItem("user_role");
-
       const endPoint =
         userType === "admin"
           ? "/admin/"
@@ -85,6 +85,9 @@ const ProfilePage: React.FC = () => {
       dispatch(setAppStatus(err.response.status));
     } finally {
       setLoader(false);
+      if (loginToken) {
+        dispatch(setAppStatus(200));
+      }
     }
   };
 
@@ -281,7 +284,7 @@ const ProfilePage: React.FC = () => {
           </div>
         ) : (
           <p
-            className="flex justify-center items-center"
+            className="msg-p flex justify-center items-center"
             style={{ height: "70dvh" }}
           >
             {showError || "Profile Not Found"}
