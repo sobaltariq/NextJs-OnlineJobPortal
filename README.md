@@ -1,37 +1,57 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# OnlineJobPortal Frontend
 
-## Getting Started
+This is the frontend of the **OnlineJobPortal** application, built using Next.js. It serves as the user interface for job seekers and employers to interact with the job portal backend.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Responsive UI:** A clean and responsive design using Tailwind CSS and Sass.
+- **Authentication:** Register, login, Integration with the backend for user authentication and session management.
+- **Job Postings:** Employers can create and manage job postings.
+- **Job Listings:** Display job postings and allow users to apply for jobs.
+- **Real-Time Chat:** Communication between job seekers and employers using WebSocket.
+- **Form Handling:** Use of Formik and Yup for form management and validation.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technologies Used
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Next.js:** React framework for server-side rendering and static site generation.
+- **React:** JavaScript library for building user interfaces.
+- **Redux Toolkit:** State management for complex applications.
+- **Axios:** HTTP client for making API requests.
+- **Formik & Yup:** Form management and validation.
+- **Tailwind CSS & Sass:** Styling and CSS pre-processing.
+- **Socket.io-client:** Real-time, bidirectional communication between Employer and Seeker.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Installation
 
-## Learn More
+- **Node.js** and **npm** should be installed on your system.
 
-To learn more about Next.js, take a look at the following resources:
+### Steps
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1.  **Clone the Repository:**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+    `https://github.com/SobalWork/NextJs-OnlineJobPortal`
 
-## Deploy on Vercel
+2.  **Navigate to the Frontend Directory:**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    `cd ..`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# NextJs-OnlineJobPortal
+3.  **Install Dependencies:**
+
+    `npm install`
+
+4.  **Set Up Environment Variables:**
+
+    Create a `.env.local` file in the root directory and add the required environment variables:
+    `REACT_APP_BASE_URL=http://localhost:5000/`
+
+5.  **Run the Development Server:**
+
+    `npm run dev`
+
+## Frontend Repository
+
+The backend of this project is available at [NodeJs-OnlineJobPortal](https://github.com/SobalWork/NodeJs-OnlineJobPortal) Backend. It provides the API and real-time functionalities for this frontend.
+
+### By Sobal
+
+Connect with me on [LinkedIn](https://www.linkedin.com/in/sobal-tariq-308316204/).
