@@ -8,13 +8,28 @@ import {
   Formik,
   FormikHelpers,
 } from "formik";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import * as Yup from "yup";
 
 interface ModalProps {
+  jobDetails: JobPropsInterface;
   jobId: string;
   isEditJobModalOpen: boolean;
   setIsEditJobModalOpen: (value: boolean) => void;
+}
+
+interface JobPropsInterface {
+  jobId: string;
+  jobTitle: string;
+  jobCreatedAt: string;
+  jobDescription: string;
+  jobLocation: string;
+  jobRequirements: string[];
+  jobSalary: string;
+  jobCompany: string;
+  employerUserId: string;
+  employerName: string;
+  loggedInUserId?: string;
 }
 
 interface FormValues {
@@ -27,6 +42,7 @@ interface FormValues {
 }
 
 const EditJobModal: React.FC<ModalProps> = ({
+  jobDetails,
   jobId,
   isEditJobModalOpen,
   setIsEditJobModalOpen,
@@ -34,12 +50,12 @@ const EditJobModal: React.FC<ModalProps> = ({
   const [showError, setShowError] = useState<string>("");
 
   const initialValues: FormValues = {
-    title: "",
-    description: "",
-    companyName: "",
-    requirements: [""],
-    location: "",
-    salary: "",
+    title: jobDetails.jobTitle,
+    description: jobDetails.jobDescription,
+    companyName: jobDetails.jobCompany,
+    requirements: jobDetails.jobRequirements,
+    location: jobDetails.jobLocation,
+    salary: jobDetails.jobSalary,
   };
 
   const validationSchema = Yup.object().shape({
@@ -97,6 +113,8 @@ const EditJobModal: React.FC<ModalProps> = ({
 
   // Add event listener for escape key press to close modal
   useEffect(() => {
+    console.log(jobDetails);
+
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
   }, [isEditJobModalOpen]);
@@ -226,4 +244,4 @@ const EditJobModal: React.FC<ModalProps> = ({
   );
 };
 
-export default EditJobModal;
+export default memo(EditJobModal);

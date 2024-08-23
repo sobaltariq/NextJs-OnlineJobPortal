@@ -113,11 +113,21 @@ function LoginPage() {
           {({ isSubmitting }) => (
             <Form>
               <div>
-                <Field type="email" id="email" name="email" />
+                <Field
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Email"
+                />
                 <ErrorMessage name="email" component="div" />
               </div>
               <div className="mt-3 mb-3">
-                <Field type="password" id="password" name="password" />
+                <Field
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Password"
+                />
                 <ErrorMessage name="password" component="div" />
               </div>
               <button type="submit" disabled={isSubmitting}>

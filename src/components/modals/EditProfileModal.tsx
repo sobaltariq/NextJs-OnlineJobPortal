@@ -15,6 +15,9 @@ interface ModalProps {
   userId: string;
   isEditProfileModalOpen: boolean;
   setIsEditProfileModalOpen: (value: boolean) => void;
+  seekerEducation: string;
+  seekerWorkExperience: string;
+  seekerSkills: string[];
 }
 
 interface FormValues {
@@ -27,13 +30,16 @@ const EditProfileModal: React.FC<ModalProps> = ({
   userId,
   isEditProfileModalOpen,
   setIsEditProfileModalOpen,
+  seekerEducation,
+  seekerWorkExperience,
+  seekerSkills,
 }) => {
   const [changePassError, setChangePassError] = useState<string>("");
 
   const initialValues: FormValues = {
-    education: "",
-    skills: [""],
-    workExperience: "",
+    education: seekerEducation,
+    skills: seekerSkills,
+    workExperience: seekerWorkExperience,
   };
 
   const validationSchema = Yup.object().shape({

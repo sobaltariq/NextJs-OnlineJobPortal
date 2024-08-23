@@ -298,6 +298,7 @@ const ChatPage = () => {
                           id="message"
                           name="message"
                           autoFocus=""
+                          placeholder="Type here..."
                         />
                         <button
                           type="submit"

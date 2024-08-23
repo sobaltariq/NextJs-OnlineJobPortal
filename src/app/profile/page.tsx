@@ -125,7 +125,7 @@ const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     getProfileHandler();
-  }, []);
+  }, [isEditProfileModalOpen]);
   if (isLoading || !(appStatus === 200)) {
     return (
       <div className="home-page flex justify-center items-center">
@@ -277,6 +277,9 @@ const ProfilePage: React.FC = () => {
                     userId={apiData.seekerId}
                     isEditProfileModalOpen={isEditProfileModalOpen}
                     setIsEditProfileModalOpen={setIsEditProfileModalOpen}
+                    seekerEducation={apiData.seekerEducation}
+                    seekerWorkExperience={apiData.seekerWorkExperience}
+                    seekerSkills={apiData.seekerSkills}
                   />
                 </div>
               )}

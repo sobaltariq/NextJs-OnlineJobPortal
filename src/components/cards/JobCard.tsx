@@ -28,20 +28,7 @@ interface JobPropsInterface {
   loggedInUserId?: string;
 }
 
-const JobCard: React.FC<JobPropsInterface> = ({
-  jobId,
-  jobTitle,
-  jobCreatedAt,
-  jobDescription,
-  jobLocation,
-  jobRequirements,
-  jobSalary,
-  jobCompany,
-  employerUserId,
-  employerName,
-  applications,
-  loggedInUserId,
-}) => {
+const JobCard: React.FC<JobPropsInterface> = (props) => {
   const [jobDeleteModal, setJobDeleteModal] = useState<boolean>(false);
   const [isEditJobModalOpen, setIsEditJobModalOpen] = useState<boolean>(false);
 
@@ -53,7 +40,7 @@ const JobCard: React.FC<JobPropsInterface> = ({
 
   const jobApplyNowHandler = async () => {
     const postValue = {
-      jobPosting: `${jobId}`,
+      jobPosting: `${props.jobId}`,
     };
     try {
       const response = await MyApi.post(`/job-seeker/application/`, postValue, {
@@ -83,39 +70,43 @@ const JobCard: React.FC<JobPropsInterface> = ({
       });
       const seekerData = response.data.data;
       seekerData.map((seeker: any) => {
-        if (loggedInUserId === seeker?.userId) {
+        if (props.loggedInUserId === seeker?.userId) {
           setSeekerId(seeker?.seekerId);
         }
       });
     };
     callSeekerForId();
-  }, [loggedInUserId, loginToken]);
+  }, [props.loggedInUserId, loginToken]);
 
   return (
     <div className="job-card">
-      <Link href={`/jobs/${jobId}`} key={jobId} className="job-card-link">
-        <h3 className="capitalize">{jobTitle}</h3>
+      <Link
+        href={`/jobs/${props.jobId}`}
+        key={props.jobId}
+        className="job-card-link"
+      >
+        <h3 className="capitalize">{props.jobTitle}</h3>
         <div className="flex justify-between py-1">
           <p>
-            Salary: <span>{jobSalary}</span>
+            Salary: <span>{props.jobSalary}</span>
           </p>
           <p>
-            Location: <span>{jobLocation}</span>
+            Location: <span>{props.jobLocation}</span>
           </p>
         </div>
         <div className="flex justify-between">
           <p>
-            Total Applications: <span>{applications.length}</span>
+            Total Applications: <span>{props.applications.length}</span>
           </p>
           <p>
             Posted at:{" "}
-            <span>{new Date(jobCreatedAt).toLocaleDateString()}</span>
+            <span>{new Date(props.jobCreatedAt).toLocaleDateString()}</span>
           </p>
         </div>
         <div>
           <p className="py-1">
             Requirements:{" "}
-            {jobRequirements.map((item, i) => (
+            {props.jobRequirements.map((item, i) => (
               <span key={i} className="item">
                 {item}{" "}
               </span>
@@ -124,7 +115,7 @@ const JobCard: React.FC<JobPropsInterface> = ({
         </div>
       </Link>
       {userType === "job seeker" &&
-        !applications.some((app) => app.appJobSeeker === seekerId) && (
+        !props.applications.some((app) => app.appJobSeeker === seekerId) && (
           <div className="card-bottom pt-4">
             {isApplied ? (
               <div>
@@ -145,7 +136,7 @@ const JobCard: React.FC<JobPropsInterface> = ({
           </div>
         )}
       {userType === "job seeker" &&
-        applications.some((app) => app.appJobSeeker === seekerId) && (
+        props.applications.some((app) => app.appJobSeeker === seekerId) && (
           <div className="card-bottom pt-4">
             <div>
               <button className="apply-btn" disabled>
@@ -155,7 +146,7 @@ const JobCard: React.FC<JobPropsInterface> = ({
           </div>
         )}
 
-      {employerUserId === loggedInUserId && (
+      {props.employerUserId === props.loggedInUserId && (
         <React.Fragment>
           <div className="card-bottom flex justify-between pt-4">
             <div>
@@ -170,7 +161,7 @@ const JobCard: React.FC<JobPropsInterface> = ({
               <DeleteJobModal
                 jobDeleteModal={jobDeleteModal}
                 setJobDeleteModal={setJobDeleteModal}
-                jobId={jobId}
+                jobId={props.jobId}
               />
             </div>
             <div>
@@ -182,7 +173,8 @@ const JobCard: React.FC<JobPropsInterface> = ({
                 Edit Job
               </button>
               <EditJobModal
-                jobId={jobId}
+                jobDetails={props}
+                jobId={props.jobId}
                 isEditJobModalOpen={isEditJobModalOpen}
                 setIsEditJobModalOpen={setIsEditJobModalOpen}
               />
